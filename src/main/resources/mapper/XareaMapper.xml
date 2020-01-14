@@ -272,7 +272,7 @@
         </if>
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
-        and s.sys_staff_id = xl.staff_id
+        and s.sys_section_id = st.sys_section_id
         GROUP BY s.sys_staff_id
     </select>
 
@@ -297,8 +297,9 @@
             and x.battalion = #{battalion}
         </if>
         and (x.station = '机动岗' or x.station = '固定岗' or x.gridding like '%网格%' or x.station = '高速岗' or x.conment = '4')
-        and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id
+        and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
+        and s.sys_section_id = st.sys_section_id
         GROUP BY s.sys_staff_id
     </select>
 
