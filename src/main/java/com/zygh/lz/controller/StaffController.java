@@ -65,4 +65,10 @@ public class StaffController {
     public ResultBean selectStaffXareaByid(Integer id){
        return staffService.selectStaffXareaByid(id);
     }
+
+    //返回在线民警GPS
+    @GetMapping("selectStaffZx")
+    public ResultBean selectStaffZx(Integer id){
+        return staffService.selectStaffZx(id);
+    }
 }

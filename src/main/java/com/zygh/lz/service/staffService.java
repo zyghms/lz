@@ -45,6 +45,7 @@ public interface staffService {
 
     //根据职位判断看的在线人数
     ResultBean selectStaffInfoByid(Integer id);
+    ResultBean selectStaffZx(Integer id);
 
     ResultBean selectStaffYdByAll(String changeShifts,Integer SectionId);
 

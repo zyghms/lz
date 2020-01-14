@@ -331,14 +331,13 @@ public class staffServiceImpl implements staffService {
                 for (int q = 0; q < staffglys.size(); q++) {
                     if (staffglyy.get(i).getSysStaffId().equals(staffglys.get(q).getSysStaffId())) {
                         staffglyy.get(i).setStaffOnline("1");
-                        System.out.println();
                         Gps gps = gpsMapper.gpsEnd(staffglyy.get(i).getSysStaffId());
                         staffglyy.get(i).setGps(gps);
                     }
                 }
             }
             return ResultUtil.setOK("success", staffglyy);
-        } else if (staff.getStaffPost().equals("中队长")) {
+        } /*else if (staff.getStaffPost().equals("中队长")) {
             //应到人
             List<Staff> staffglyy = staffMapper.selectStaffYdByAll(null,null,staff.getSysSectionId());
             //实到
@@ -354,6 +353,36 @@ public class staffServiceImpl implements staffService {
                 }
             }
             return ResultUtil.setOK("success", staffglyy);
+        }*/
+        return ResultUtil.setError(SystemCon.RERROR1, "error", null);
+    }
+
+
+    @Override
+    public ResultBean selectStaffZx(Integer id) {
+        Staff staff = staffMapper.selectInfoByid(id);
+        if (staff == null) {
+            return ResultUtil.setError(SystemCon.RERROR1, "error", null);
+        }
+        if (staff.getStaffPost().equals("管理员") || staff.getStaffPost().equals("支队领导")) {
+            //实到
+            List<Staff> staffglys = staffMapper.selectStaffByzg(null, null, null);
+            for(int i=0;i<staffglys.size();i++){
+
+                staffglys.get(i).setStaffOnline("1");
+                Gps gps = gpsMapper.gpsEnd(staffglys.get(i).getSysStaffId());
+                staffglys.get(i).setGps(gps);
+            }
+            return ResultUtil.setOK("success", staffglys);
+        } else if (staff.getStaffPost().equals("大队长") || staff.getStaffPost().equals("副大队长")) {
+            //实到
+            List<Staff> staffglys = staffMapper.selectStaffByzg(null,null, staff.getSectionName());
+            for(int i=0;i<staffglys.size();i++){
+                staffglys.get(i).setStaffOnline("1");
+                Gps gps = gpsMapper.gpsEnd(staffglys.get(i).getSysStaffId());
+                staffglys.get(i).setGps(gps);
+            }
+            return ResultUtil.setOK("success", staffglys);
         }
         return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }

@@ -150,4 +150,20 @@
       conment = #{conment,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <!--全部应到-->
+  <select id="selectorderlyAll" resultType="map">
+    	SELECT SUM(number) as number  FROM xlevelservice
+  </select>
+  <!--一级应到-->
+  <select id="selectorderlyoneyd" resultType="map">
+      SELECT s.section_name as sectionName,SUM(number) as YDnumber  FROM xlevelservice x,section s WHERE x.section_id=s.sys_section_id AND hierarchy =1 GROUP BY x.section_id
+  </select>
+  <!--二级应到-->
+  <select id="selectorderlytweyd" resultType="map">
+	SELECT s.section_name as sectionName,SUM(number) as YDnumber  FROM xlevelservice x,section s WHERE x.section_id=s.sys_section_id AND hierarchy =2 GROUP BY x.section_id
+  </select>
+  <!--三级应到-->
+  <select id="selectorderlythreeyd" resultType="map">
+	SELECT s.section_name as sectionName,SUM(number) as YDnumber  FROM xlevelservice x,section s WHERE x.section_id=s.sys_section_id AND hierarchy =3 GROUP BY x.section_id
+  </select>
 </mapper>
