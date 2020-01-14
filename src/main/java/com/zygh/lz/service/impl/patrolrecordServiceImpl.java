@@ -9,10 +9,12 @@ import com.zygh.lz.mapper.*;
 import com.zygh.lz.service.patrolrecordService;
 import com.zygh.lz.util.DataTime;
 import com.zygh.lz.util.ResultUtil;
+import com.zygh.lz.util.StringUtil;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -502,7 +504,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         return childList;
     }
 
-
+    @Override
     public List<HashMap> theDaySum(String battalion) throws Exception{
         List<HashMap> daySumList = new ArrayList<>();
 
@@ -524,7 +526,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //夜巡 3   铁骑2
         List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
-        int yxYDsum = yxPeoples.size();
+        int yxYDsum = yxPeoples.size()/2;
 
         //高峰应到数
         List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion);
@@ -532,7 +534,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //日常勤务
         List<HashMap> rcPeoples = xareaMapper.countRcYDsum(battalion);
-        int rcYDsum = (rcPeoples.size())/2;
+        int rcYDsum = rcPeoples.size();
 
 
         int yxSDsum = patrolrecordMapper.countYxSDsum(battalion).size();
@@ -630,9 +632,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 tsMap.put("gfSDsum",0);
                 tsMap.put("gfZXL",0);
 
-
-
-
                 //daySumList.add(wgfMap);
                 daySumList.add(gdMap);
                 daySumList.add(tsMap);
@@ -689,7 +688,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     }
 
 
-
+    @Override
     public List<HashMap> typeSum(String battalion) throws Exception{
         List<HashMap> typeSumList = new ArrayList<>();
         //固定组数、应到数
@@ -781,7 +780,232 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         return typeSumList;
     }
 
+    @Override
+    public List<HashMap> countZD(String battalion) throws Exception{
+        List<HashMap> brigadeList = new ArrayList<>();
 
+        SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        String dayTime=df.format(new Date());// new Date()为获取当前系统时间
+
+        Date startTime = ft.parse(dayTime+" 07:30:00");
+        Date endTime = ft.parse(dayTime+" 09:00:00");
+        Date startTime2 = ft.parse(dayTime+" 17:30:00");
+        Date endTime2 = ft.parse(dayTime+" 18:30:00");
+        Date startTime3 = ft.parse(dayTime+" 07:00:00");
+        Date endTime3 = ft.parse(dayTime+" 20:00:00");
+        Date nowTime = new Date();
+        //早高峰
+        boolean effectiveDate = isEffectiveDate(nowTime, startTime, endTime);
+        //晚高峰
+        boolean effectiveDate2 = isEffectiveDate(nowTime, startTime2, endTime2);
+        //固定岗
+        boolean effectiveDate3 = isEffectiveDate(nowTime, startTime3, endTime3);
+
+        // 创建一个数值格式化对象
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        // 设置精确到小数点后2位
+        numberFormat.setMaximumFractionDigits(2);
+        
+        if (effectiveDate3){
+            //如果在早高峰
+            if (effectiveDate || effectiveDate2){
+                //早高峰
+                if (StringUtils.isEmpty(battalion)){
+                    List<String> ddNames = xareaMapper.findDd();
+                    //大队名字
+                    for (String ddName : ddNames) {
+                        List<String> zdNames = xareaMapper.findZd(ddName,null);
+
+                        HashMap<String, Object> ddMap = new HashMap<>();
+                        ddMap.put("ddName",ddName);
+
+                        List<HashMap> zDList = new ArrayList<>();
+                        //中队名字
+                        for (String zdName : zdNames) {
+                            HashMap<String, Object> zdMap = new HashMap<>();
+
+                            int rcYDSum = xareaMapper.countZDRc(ddName, zdName, null).size()/2;
+                            int gfYDSum = xareaMapper.countZDRc(ddName, zdName, "高峰岗").size()-rcYDSum;
+                            int gfSDSum = patrolrecordMapper.countZDRcSDsum(ddName, zdName, "高峰岗").size();
+
+                            zdMap.put("name",zdName);
+                            zdMap.put("YDnum",gfYDSum);
+                            zdMap.put("SDnum",gfSDSum);
+                            zdMap.put("gfZXL",numberFormat.format((float)gfSDSum/(float)gfYDSum*100));
+
+                            zDList.add(zdMap);
+                        }
+                        ddMap.put("zdCount",zDList);
+                        brigadeList.add(ddMap);
+                    }
+
+
+                }else {
+                    List<String> ddNames = xareaMapper.findDd();
+                    //大队名字
+
+                    List<String> zdNames = xareaMapper.findZd(battalion,null);
+
+                    HashMap<String, Object> ddMap = new HashMap<>();
+                    ddMap.put("ddName",battalion);
+
+                    List<HashMap> zDList = new ArrayList<>();
+                    //中队名字
+                    for (String zdName : zdNames) {
+                        HashMap<String, Object> zdMap = new HashMap<>();
+
+                        int rcYDSum = xareaMapper.countZDRc(battalion, zdName, null).size()/2;
+                        int gfYDSum = xareaMapper.countZDRc(battalion, zdName, "高峰岗").size()-rcYDSum;
+                        int gfSDSum = patrolrecordMapper.countZDRcSDsum(battalion, zdName, "高峰岗").size();
+
+                        zdMap.put("name",zdName);
+                        zdMap.put("YDnum",gfYDSum);
+                        zdMap.put("SDnum",gfSDSum);
+                        zdMap.put("gfZXL",numberFormat.format((float)gfSDSum/(float)gfYDSum*100));
+
+                        zDList.add(zdMap);
+                    }
+                    ddMap.put("zdCount",zDList);
+                    brigadeList.add(ddMap);
+
+                }
+            }else {
+                //平峰期
+                if (StringUtils.isEmpty(battalion)){
+                    List<String> ddNames = xareaMapper.findDd();
+                    //大队名字
+                    for (String ddName : ddNames) {
+                        List<String> zdNames = xareaMapper.findZd(ddName,null);
+
+                        HashMap<String, Object> ddMap = new HashMap<>();
+                        ddMap.put("ddName",ddName);
+
+                        List<HashMap> zDList = new ArrayList<>();
+                        //中队名字
+                        for (String zdName : zdNames) {
+                            HashMap<String, Object> zdMap = new HashMap<>();
+
+                            int rcYDSum = xareaMapper.countZDRc(ddName, zdName, null).size();
+                            if (rcYDSum%2 != 0){
+                                rcYDSum = (rcYDSum/2)+1;
+                            }else {
+                                rcYDSum = rcYDSum/2;
+                            }
+
+                            int rcSDSum = patrolrecordMapper.countZDRcSDsum(ddName, zdName, null).size();
+
+                            zdMap.put("name",zdName);
+                            zdMap.put("YDnum",rcYDSum);
+                            zdMap.put("SDnum",rcSDSum);
+                            zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+
+                            zDList.add(zdMap);
+                        }
+                        ddMap.put("zdCount",zDList);
+                        brigadeList.add(ddMap);
+                    }
+
+
+                }else {
+                    //大队名字
+
+                    List<String> zdNames = xareaMapper.findZd(battalion,null);
+
+                    HashMap<String, Object> ddMap = new HashMap<>();
+                    ddMap.put("ddName",battalion);
+
+                    List<HashMap> zDList = new ArrayList<>();
+                    //中队名字
+                    for (String zdName : zdNames) {
+                        HashMap<String, Object> zdMap = new HashMap<>();
+
+                        int rcYDSum = xareaMapper.countZDRc(battalion, zdName, null).size();
+                        if (rcYDSum%2 != 0){
+                            rcYDSum = (rcYDSum/2)+1;
+                        }else {
+                            rcYDSum = rcYDSum/2;
+                        }
+                        int rcSDSum = patrolrecordMapper.countZDRcSDsum(battalion, zdName, null).size();
+
+                        zdMap.put("name",zdName);
+                        zdMap.put("YDnum",rcYDSum);
+                        zdMap.put("SDnum",rcSDSum);
+                        zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+
+                        zDList.add(zdMap);
+                    }
+                    ddMap.put("zdCount",zDList);
+                    brigadeList.add(ddMap);
+
+                }
+
+            }
+        }else {
+            //夜巡
+            if (StringUtils.isEmpty(battalion)){
+                List<String> ddNames = xareaMapper.findDd();
+                //大队名字
+                for (String ddName : ddNames) {
+                    List<String> zdNames = xareaMapper.findZd(ddName,"3");
+
+                    HashMap<String, Object> ddMap = new HashMap<>();
+                    ddMap.put("ddName",ddName);
+
+                    List<HashMap> zDList = new ArrayList<>();
+                    //中队名字
+                    for (String zdName : zdNames) {
+                        HashMap<String, Object> zdMap = new HashMap<>();
+
+                        int rcYDSum = xareaMapper.countZDYxorTq("3",ddName,zdName).size();
+
+                        int rcSDSum = patrolrecordMapper.countZDYxSDsum(ddName, zdName).size();
+
+                        zdMap.put("name",zdName);
+                        zdMap.put("YDnum",rcYDSum);
+                        zdMap.put("SDnum",rcSDSum);
+                        zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+
+                        zDList.add(zdMap);
+                    }
+                    ddMap.put("zdCount",zDList);
+                    brigadeList.add(ddMap);
+                }
+
+
+            }else {
+                //大队名字
+
+                List<String> zdNames = xareaMapper.findZd(battalion,"3");
+
+                HashMap<String, Object> ddMap = new HashMap<>();
+                ddMap.put("ddName",battalion);
+
+                List<HashMap> zDList = new ArrayList<>();
+                //中队名字
+                for (String zdName : zdNames) {
+                    HashMap<String, Object> zdMap = new HashMap<>();
+
+                    int rcYDSum = xareaMapper.countZDYxorTq("3",battalion,zdName).size();
+
+                    int rcSDSum = patrolrecordMapper.countZDYxSDsum(battalion, zdName).size();
+
+                    zdMap.put("name",zdName);
+                    zdMap.put("YDnum",rcYDSum);
+                    zdMap.put("SDnum",rcSDSum);
+                    zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+
+                    zDList.add(zdMap);
+                }
+                ddMap.put("zdCount",zDList);
+                brigadeList.add(ddMap);
+
+            }
+
+        }
+
+        return brigadeList;
+    }
 
 
 

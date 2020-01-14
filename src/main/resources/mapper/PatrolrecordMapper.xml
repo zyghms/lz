@@ -402,4 +402,34 @@
         AND p.sys_staff_id=#{id}
         ORDER BY p.patrol_record_begintime DESC LIMIT 1
     </select>
+
+
+    <!--统计日常勤务实到在线人数-->
+    <select id="countZDRcSDsum" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select p.sys_staff_id from patrolrecord p,staff s,xarea x,xrelation xl
+        where to_days(p.patrol_record_begintime) = to_days(now())
+        and x.battalion = #{battalion}
+        and x.detachment = #{detachment}
+        and  p.sys_staff_id = s.sys_staff_id
+        and s.sys_staff_id = xl.staff_id
+        and xl.xarea_id = x.id
+        and x.conment != '3' and (x.station = '机动岗' or x.station = '固定岗' or x.gridding like '%网格%' or x.station = '高速岗' or x.conment = '4'
+        <if test="battalion != null and battalion != ''" >
+            or x.station = #{station}
+        </if>)
+        and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
+    </select>
+
+    <!--统计夜巡实到在线人数-->
+    <select id="countZDYxSDsum" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select p.sys_staff_id from patrolrecord p,staff s,xarea x,xrelation xl
+        where (to_days(p.patrol_record_begintime) = to_days(now()) or to_days(p.patrol_record_begintime) = to_days(now())-1)
+        and x.battalion = #{battalion}
+        and x.detachment = #{detachment}
+        and  p.sys_staff_id = s.sys_staff_id
+        and s.sys_staff_id = xl.staff_id
+        and xl.xarea_id = x.id
+        and x.conment = '3'
+        and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
+    </select>
 </mapper>

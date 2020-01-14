@@ -111,14 +111,21 @@ public class PatrolrecordController {
         return patrolrecordService.selectAllPatrolrecordById(id);
     }
 
-    //查询当天高峰岗和固定岗 实到、应到人数
+    //查询当天日常勤务各时间段 实到、应到人数
     @GetMapping("theDaySum")
     public List<HashMap> theDaySum(String battalion)throws Exception{
         return patrolrecordService.theDaySum(battalion);
     }
+    //统计各个岗位应到实到人
     @GetMapping("typeSum")
     public List<HashMap> typeSum(String battalion)throws Exception{
         return patrolrecordService.typeSum(battalion);
+    }
+
+    //查询当天各大队各中队日常勤务各时间段 实到、应到人数
+    @GetMapping("countZD")
+    public List<HashMap> countZD(String battalion)throws Exception{
+        return patrolrecordService.countZD(battalion);
     }
 
 }

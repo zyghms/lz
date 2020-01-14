@@ -98,4 +98,8 @@ public interface PatrolrecordMapper {
     //其他岗实到
     public List<Integer> countQtSDsum(String battalion);
 
+    public List<Integer> countZDRcSDsum(@Param("battalion")String battalion,@Param("detachment")String detachment,@Param("station")String station);
+
+    public List<Integer> countZDYxSDsum(@Param("battalion")String battalion,@Param("detachment")String detachment);
+
 }

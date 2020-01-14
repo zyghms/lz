@@ -50,4 +50,9 @@ public interface XareaMapper {
     public int countWgZSum(String battalion);
     public int countZdZSum(String battalion);
     public int countQtZSum(String battalion);
+
+    public List<Integer> countZDRc(@Param("battalion")String battalion,@Param("detachment")String detachment,@Param("station")String station);
+    public List<HashMap> countZDYxorTq(@Param("conment")String conment,@Param("battalion")String battalion,@Param("detachment")String detachment);
+    public List<String> findDd();
+    public List<String> findZd(@Param("battalion")String battalion,@Param("conment")String conment);
 }

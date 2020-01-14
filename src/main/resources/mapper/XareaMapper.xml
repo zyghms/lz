@@ -292,11 +292,12 @@
     <!--统计日常勤务应到在线人数-->
     <select id="countRcYDsum" resultType="java.util.Map"  parameterType="java.lang.String">
         select s.*,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
-        where x.conment != '3' and (station = '机动岗' or station = '固定岗' or gridding like '%网格%')
-        and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id
+        where x.conment != '3'
         <if test="battalion != null and battalion != ''" >
             and x.battalion = #{battalion}
         </if>
+        and (x.station = '机动岗' or x.station = '固定岗' or x.gridding like '%网格%' or x.station = '高速岗' or x.conment = '4')
+        and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id
         and s.sys_staff_id = xl.staff_id
         GROUP BY s.sys_staff_id
     </select>
@@ -378,4 +379,45 @@
             and battalion = #{battalion}
         </if>
     </select>
+
+
+    <select id="countZDRc" resultType="java.lang.Integer"  parameterType="java.lang.String">
+        select s.sys_staff_id from xarea x,staff s ,xrelation xl
+        where x.conment != '3'
+        and x.battalion = #{battalion}
+        and x.detachment = #{detachment}
+        and (x.station = '机动岗' or x.station = '固定岗' or x.gridding like '%网格%' or x.station = '高速岗' or x.conment = '4'
+        <if test="station != null and station != ''" >
+            or x.station = #{station}
+        </if>)
+        and x.id = xl.xarea_id
+        and s.sys_staff_id = xl.staff_id
+        GROUP BY  s.sys_staff_id
+    </select>
+
+    <select id="countZDYxorTq" resultType="java.lang.Integer"  parameterType="java.lang.String">
+        select s.sys_staff_id from xarea x,staff s ,xrelation xl
+        where x.conment = #{conment}
+        and x.battalion = #{battalion}
+        and x.detachment = #{detachment}
+        and x.id = xl.xarea_id
+        and s.sys_staff_id = xl.staff_id
+        GROUP BY  s.sys_staff_id
+    </select>
+
+    <select id="findDd" resultType="java.lang.String">
+        select battalion from xarea GROUP BY battalion
+    </select>
+
+    <select id="findZd" resultType="java.lang.String" parameterType="java.lang.String">
+        select detachment from xarea where battalion = #{battalion}
+        <if test="conment = null and conment = ''" >
+            and conment != '3'
+        </if>
+        <if test="conment != null and conment != ''" >
+            and conment = #{conment}
+        </if>
+        GROUP BY detachment
+    </select>
+
 </mapper>
