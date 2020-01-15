@@ -528,7 +528,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //夜巡 3   铁骑2
         List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
-        int yxYDsum = yxPeoples.size()/2;
+        int yxYDsum = yxPeoples.size();
 
         //高峰应到数
         List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion);
@@ -536,7 +536,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //日常勤务
         List<HashMap> rcPeoples = xareaMapper.countRcYDsum(battalion);
-        int rcYDsum = rcPeoples.size();
+        int rcYDsum = rcPeoples.size()/2;
 
 
         int yxSDsum = patrolrecordMapper.countYxSDsum(battalion).size();
@@ -588,7 +588,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 gdMap.put("time","早高峰");
                 gdMap.put("gfYDsum",zgfYDsum);
                 gdMap.put("gfSDsum",zgfSDsum);
-                gdMap.put("gfZXL",numberFormat.format((float)zgfSDsum/(float)zgfYDsum*100));
+                if (zgfYDsum==0){
+                    gdMap.put("gfZXL",0);
+                }else {
+                    gdMap.put("gfZXL",numberFormat.format((float)zgfSDsum/(float)zgfYDsum*100));
+                }
                 gdMap.put("people",peopleList);
 
                 tsMap.put("type","特殊勤务");
@@ -596,8 +600,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 tsMap.put("gfYDsum",0);
                 tsMap.put("gfSDsum",0);
                 tsMap.put("gfZXL",0);
-
-
 
 
                 //daySumList.add(zgfMap);
@@ -625,7 +627,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 gdMap.put("time","晚高峰");
                 gdMap.put("gfYDsum",wgfYDsum);
                 gdMap.put("gfSDsum",wgfSDsum);
-                gdMap.put("gfZXL",numberFormat.format((float)wgfSDsum/(float)wgfYDsum*100));
+                if (wgfYDsum==0){
+                    gdMap.put("gfZXL",0);
+                }else {
+                    gdMap.put("gfZXL",numberFormat.format((float)wgfSDsum/(float)wgfYDsum*100));
+                }
                 gdMap.put("people",peopleList);
 
                 tsMap.put("type","特殊勤务");
@@ -646,7 +652,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 gdMap.put("time","平峰期");
                 gdMap.put("gfYDsum",rcYDsum);
                 gdMap.put("gfSDsum",rcSDsum);
-                gdMap.put("gfZXL",numberFormat.format((float)rcSDsum/(float)rcYDsum*100));
+                if (rcYDsum==0){
+                    gdMap.put("gfZXL",0);
+                }else {
+                    gdMap.put("gfZXL",numberFormat.format((float)rcSDsum/(float)rcYDsum*100));
+                }
                 gdMap.put("people",peopleList);
 
 
@@ -670,7 +680,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             yxMap.put("time","20:00-次日07:00");
             yxMap.put("gfYDsum",yxYDsum);
             yxMap.put("gfSDsum",yxSDsum);
-            yxMap.put("gfZXL",numberFormat.format((float)yxSDsum/(float)yxYDsum*100));
+            if (yxYDsum==0){
+                gdMap.put("gfZXL",0);
+            }else {
+                gdMap.put("gfZXL",numberFormat.format((float)yxSDsum/(float)yxYDsum*100));
+            }
             yxMap.put("people",peopleList);
 
             tsMap.put("type","特殊勤务");
@@ -848,10 +862,31 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                     List<String> ddNames = xareaMapper.findDd();
                     //大队名字
                     for (String ddName : ddNames) {
+                        if (ddName.equals("高架大队")){
+                            continue;
+                        }
+
                         List<String> zdNames = xareaMapper.findZd(ddName,null);
 
                         HashMap<String, Object> ddMap = new HashMap<>();
+
+                        //统计大队应到 实到
+
+                        //高峰、日常勤务应到
+                        int gfYDsum = xareaMapper.countYDSum("高峰岗", ddName).size();
+                        int rcYDsum = xareaMapper.countRcYDsum(ddName).size()/2;
+                        //高峰、日常勤务实到
+                        int gfSDsum = patrolrecordMapper.countGdorGfSDsum("高峰岗",ddName).size();
+                        int rcSDsum = patrolrecordMapper.countRcSDsum(ddName).size();
+
+                        ddMap.put("ddYDnum",gfYDsum+rcYDsum);
+                        ddMap.put("ddSDnum",gfSDsum+rcSDsum);
                         ddMap.put("ddName",ddName);
+                        if ((gfYDsum+rcYDsum)==0){
+                            ddMap.put("gfZXL",0);
+                        }else {
+                            ddMap.put("gfZXL",numberFormat.format((float)(gfSDsum+rcSDsum)/(float)(gfYDsum+rcYDsum)*100));
+                        }
 
                         List<HashMap> zDList = new ArrayList<>();
                         //中队名字
@@ -865,7 +900,12 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                             zdMap.put("name",zdName);
                             zdMap.put("YDnum",gfYDSum);
                             zdMap.put("SDnum",gfSDSum);
-                            zdMap.put("gfZXL",numberFormat.format((float)gfSDSum/(float)gfYDSum*100));
+                            if (gfYDSum==0){
+                                zdMap.put("gfZXL",0);
+                            }else {
+                                zdMap.put("gfZXL",numberFormat.format((float)gfSDSum/(float)gfYDSum*100));
+                            }
+
 
                             zDList.add(zdMap);
                         }
@@ -875,13 +915,26 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
 
                 }else {
-                    List<String> ddNames = xareaMapper.findDd();
                     //大队名字
-
                     List<String> zdNames = xareaMapper.findZd(battalion,null);
 
                     HashMap<String, Object> ddMap = new HashMap<>();
+
+                    //高峰、日常勤务应到
+                    int gfYDsum = xareaMapper.countYDSum("高峰岗", battalion).size();
+                    int rcYDsum = xareaMapper.countRcYDsum(battalion).size()/2;
+                    //高峰、日常勤务实到
+                    int gfSDsum = patrolrecordMapper.countGdorGfSDsum("高峰岗",battalion).size();
+                    int rcSDsum = patrolrecordMapper.countRcSDsum(battalion).size();
+
+                    ddMap.put("ddYDnum",gfYDsum+rcYDsum);
+                    ddMap.put("ddSDnum",gfSDsum+rcSDsum);
                     ddMap.put("ddName",battalion);
+                    if ((gfYDsum+rcYDsum)==0){
+                        ddMap.put("gfZXL",0);
+                    }else {
+                        ddMap.put("gfZXL",numberFormat.format((float)(gfSDsum+rcSDsum)/(float)(gfYDsum+rcYDsum)*100));
+                    }
 
                     List<HashMap> zDList = new ArrayList<>();
                     //中队名字
@@ -895,7 +948,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         zdMap.put("name",zdName);
                         zdMap.put("YDnum",gfYDSum);
                         zdMap.put("SDnum",gfSDSum);
-                        zdMap.put("gfZXL",numberFormat.format((float)gfSDSum/(float)gfYDSum*100));
+                        if (gfYDSum==0){
+                            zdMap.put("gfZXL",0);
+                        }else {
+                            zdMap.put("gfZXL",numberFormat.format((float)gfSDSum/(float)gfYDSum*100));
+                        }
 
                         zDList.add(zdMap);
                     }
@@ -909,10 +966,26 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                     List<String> ddNames = xareaMapper.findDd();
                     //大队名字
                     for (String ddName : ddNames) {
+                        if (ddName.equals("高架大队")){
+                            continue;
+                        }
                         List<String> zdNames = xareaMapper.findZd(ddName,null);
 
                         HashMap<String, Object> ddMap = new HashMap<>();
+
+                        //日常勤务应到
+                        int rcYDsum = xareaMapper.countRcYDsum(ddName).size()/2;
+                        //日常勤务实到
+                        int rcSDsum = patrolrecordMapper.countRcSDsum(ddName).size();
+
+                        ddMap.put("ddYDnum",rcYDsum);
+                        ddMap.put("ddSDnum",rcSDsum);
                         ddMap.put("ddName",ddName);
+                        if (rcYDsum==0){
+                            ddMap.put("gfZXL",0);
+                        }else {
+                            ddMap.put("gfZXL",numberFormat.format((float)rcSDsum/(float)rcYDsum*100));
+                        }
 
                         List<HashMap> zDList = new ArrayList<>();
                         //中队名字
@@ -931,7 +1004,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                             zdMap.put("name",zdName);
                             zdMap.put("YDnum",rcYDSum);
                             zdMap.put("SDnum",rcSDSum);
-                            zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+                            if (rcYDSum==0){
+                                zdMap.put("gfZXL",0);
+                            }else {
+                                zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+                            }
 
                             zDList.add(zdMap);
                         }
@@ -946,7 +1023,20 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                     List<String> zdNames = xareaMapper.findZd(battalion,null);
 
                     HashMap<String, Object> ddMap = new HashMap<>();
+
+                    //日常勤务应到
+                    int rcYDsum = xareaMapper.countRcYDsum(battalion).size()/2;
+                    //日常勤务实到
+                    int rcSDsum = patrolrecordMapper.countRcSDsum(battalion).size();
+
+                    ddMap.put("ddYDnum",rcYDsum);
+                    ddMap.put("ddSDnum",rcSDsum);
                     ddMap.put("ddName",battalion);
+                    if (rcYDsum==0){
+                        ddMap.put("gfZXL",0);
+                    }else {
+                        ddMap.put("gfZXL",numberFormat.format((float)rcSDsum/(float)rcYDsum*100));
+                    }
 
                     List<HashMap> zDList = new ArrayList<>();
                     //中队名字
@@ -964,7 +1054,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         zdMap.put("name",zdName);
                         zdMap.put("YDnum",rcYDSum);
                         zdMap.put("SDnum",rcSDSum);
-                        zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+                        if (rcYDSum==0){
+                            zdMap.put("gfZXL",0);
+                        }else {
+                            zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+                        }
 
                         zDList.add(zdMap);
                     }
@@ -980,24 +1074,41 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 List<String> ddNames = xareaMapper.findDd();
                 //大队名字
                 for (String ddName : ddNames) {
+                    if (ddName.equals("九大队")){
+                        continue;
+                    }
                     List<String> zdNames = xareaMapper.findZd(ddName,"3");
 
                     HashMap<String, Object> ddMap = new HashMap<>();
+                    //夜巡 3   铁骑2
+                    int yxYDsum = xareaMapper.countYxSum("3", ddName).size();
+                    int yxSDsum = patrolrecordMapper.countYxSDsum(ddName).size();
+                    ddMap.put("ddYDnum",yxYDsum);
+                    ddMap.put("ddSDnum",yxSDsum);
                     ddMap.put("ddName",ddName);
+                    if (yxYDsum==0){
+                        ddMap.put("gfZXL",0);
+                    }else {
+                        ddMap.put("gfZXL",numberFormat.format((float)yxSDsum/(float)yxYDsum*100));
+                    }
 
                     List<HashMap> zDList = new ArrayList<>();
                     //中队名字
                     for (String zdName : zdNames) {
                         HashMap<String, Object> zdMap = new HashMap<>();
 
-                        int rcYDSum = xareaMapper.countZDYxorTq("3",ddName,zdName).size();
+                        int yxYDSum = xareaMapper.countZDYxorTq("3",ddName,zdName).size();
 
-                        int rcSDSum = patrolrecordMapper.countZDYxSDsum(ddName, zdName).size();
+                        int yxSDSum = patrolrecordMapper.countZDYxSDsum(ddName, zdName).size();
 
                         zdMap.put("name",zdName);
-                        zdMap.put("YDnum",rcYDSum);
-                        zdMap.put("SDnum",rcSDSum);
-                        zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+                        zdMap.put("YDnum",yxYDSum);
+                        zdMap.put("SDnum",yxSDSum);
+                        if (yxYDSum==0){
+                            zdMap.put("gfZXL",0);
+                        }else {
+                            zdMap.put("gfZXL",numberFormat.format((float)yxSDSum/(float)yxYDSum*100));
+                        }
 
                         zDList.add(zdMap);
                     }
@@ -1012,21 +1123,36 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 List<String> zdNames = xareaMapper.findZd(battalion,"3");
 
                 HashMap<String, Object> ddMap = new HashMap<>();
+
+                //夜巡 3   铁骑2
+                int yxYDsum = xareaMapper.countYxSum("3", battalion).size();
+                int yxSDsum = patrolrecordMapper.countYxSDsum(battalion).size();
+                ddMap.put("ddYDnum",yxYDsum);
+                ddMap.put("ddSDnum",yxSDsum);
                 ddMap.put("ddName",battalion);
+                if (yxYDsum==0){
+                    ddMap.put("gfZXL",0);
+                }else {
+                    ddMap.put("gfZXL",numberFormat.format((float)yxSDsum/(float)yxYDsum*100));
+                }
 
                 List<HashMap> zDList = new ArrayList<>();
                 //中队名字
                 for (String zdName : zdNames) {
                     HashMap<String, Object> zdMap = new HashMap<>();
 
-                    int rcYDSum = xareaMapper.countZDYxorTq("3",battalion,zdName).size();
+                    int yxYDSum = xareaMapper.countZDYxorTq("3",battalion,zdName).size();
 
-                    int rcSDSum = patrolrecordMapper.countZDYxSDsum(battalion, zdName).size();
+                    int yxSDSum = patrolrecordMapper.countZDYxSDsum(battalion, zdName).size();
 
                     zdMap.put("name",zdName);
-                    zdMap.put("YDnum",rcYDSum);
-                    zdMap.put("SDnum",rcSDSum);
-                    zdMap.put("gfZXL",numberFormat.format((float)rcSDSum/(float)rcYDSum*100));
+                    zdMap.put("YDnum",yxYDSum);
+                    zdMap.put("SDnum",yxSDSum);
+                    if (yxYDSum==0){
+                        zdMap.put("gfZXL",0);
+                    }else {
+                        zdMap.put("gfZXL",numberFormat.format((float)yxYDSum/(float)yxSDSum*100));
+                    }
 
                     zDList.add(zdMap);
                 }
