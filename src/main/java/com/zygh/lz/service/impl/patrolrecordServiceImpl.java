@@ -33,6 +33,8 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     private ProblemMapper problemMapper;
     @Autowired
     private XareaMapper xareaMapper;
+    @Autowired
+    private XlevelserviceMapper xlevelserviceMapper;
 
     /**
      * 新增巡查记录
@@ -724,6 +726,10 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         //其他
         int qtYDsum = xareaMapper.countQtYDSum(battalion).size();
 
+        int gsYDsum = xareaMapper.countGsOrKsYDSum("高速岗",battalion).size();
+        int ksYDsum = xareaMapper.countGsOrKsYDSum("快速岗",battalion).size();
+        int TQYDsum = xlevelserviceMapper.selectorderlyAll();
+
 
         int tqZnum = xareaMapper.countTqZSum(battalion).size();
         int gdZnum = xareaMapper.countggZSum("固定岗",battalion);
@@ -731,6 +737,9 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int wgZnum = xareaMapper.countWgZSum(battalion);
         int zdZnum = xareaMapper.countZdZSum(battalion);//重点岗
         int qtZnum = xareaMapper.countQtZSum(battalion);//其他岗
+        int gsZnum = xareaMapper.countGsOrKsZ("高速岗",battalion).size();
+        int ksZnum = xareaMapper.countGsOrKsZ("快速岗",battalion).size();
+        int TQZnum = xareaMapper.countTQZ(battalion).size();
 
 
         int gdSD = patrolrecordMapper.countGdorGfSDsum("固定岗",battalion).size();
@@ -739,6 +748,8 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int wgSD = patrolrecordMapper.countWgSDsum(battalion).size();
         int zdSD = patrolrecordMapper.countZdSDsum(battalion).size();//重点
         int qtSD = patrolrecordMapper.countQtSDsum(battalion).size();
+        int gsSD = patrolrecordMapper.countGdorGfSDsum("高速岗",battalion).size();
+        int ksSD = patrolrecordMapper.countGdorGfSDsum("快速岗",battalion).size();
 
 
         gdMap.put("name","固定岗");
@@ -771,12 +782,34 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         qtMap.put("Znum",qtZnum);
         qtMap.put("SDnum",qtSD);
 
+        gsMap.put("name","高速");
+        gsMap.put("YDnum",gsYDsum);
+        gsMap.put("Znum",gsZnum);
+        gsMap.put("SDnum",gsSD);
+
+        ksMap.put("name","快速");
+        ksMap.put("YDnum",ksYDsum);
+        ksMap.put("Znum",ksZnum);
+        ksMap.put("SDnum",ksSD);
+
+        if (TQZnum == 0){
+            TQYDsum = 0;
+
+        }
+        TQMap.put("name","特勤");
+        TQMap.put("YDnum",TQYDsum);
+        TQMap.put("Znum",TQZnum);
+        TQMap.put("SDnum",0);
+
         typeSumList.add(gdMap);
         typeSumList.add(gfMap);
         typeSumList.add(tqMap);
         typeSumList.add(wgMap);
         typeSumList.add(zdMap);
         typeSumList.add(qtMap);
+        typeSumList.add(gsMap);
+        typeSumList.add(ksMap);
+        typeSumList.add(TQMap);
         return typeSumList;
     }
 

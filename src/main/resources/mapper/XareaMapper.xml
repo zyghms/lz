@@ -434,18 +434,28 @@
         select id
         from xarea
         where station = #{station}
+        <if test="battalion != null and battalion != ''" >
+            and battalion = #{battalion}
+        </if>
         and name is not null and name != ''
         and detachment != '' and detachment is not null
         GROUP BY name,battalion
     </select>
 
     <select id="countTQZ" resultType="java.lang.Integer">
-        select id from xlevelservice GROUP BY place ORDER BY place
+        select id from xlevelservice
+        <if test="battalion != null and battalion != ''" >
+            where battalion = #{battalion}
+        </if>
+        GROUP BY place ORDER BY place
     </select>
 
-    <select id="countGsYDSum" resultType="java.lang.Integer" parameterType="java.lang.String">
+    <select id="countGsOrKsYDSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s,xrelation xl
         where station = #{station}
+        <if test="battalion != null and battalion != ''" >
+            and battalion = #{battalion}
+        </if>
         and xl.xarea_id = x.id
         and xl.staff_id = s.sys_staff_id
         GROUP BY s.sys_staff_id
