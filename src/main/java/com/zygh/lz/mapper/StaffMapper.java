@@ -5,6 +5,7 @@ import com.zygh.lz.admin.Staff;
 import com.zygh.lz.admin.Xarea;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface StaffMapper {
@@ -81,5 +82,10 @@ public interface StaffMapper {
 
     //查询直系领导
     Staff selectStaffBypid(Integer id);
+
+    //查询昨日总警力
+    int selecttotalforces();
+    //按大队查询昨日总警力
+    List<HashMap> selecttotalforceszr();
 
 }

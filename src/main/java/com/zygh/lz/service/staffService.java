@@ -5,6 +5,7 @@ import com.zygh.lz.admin.Staff;
 import com.zygh.lz.vo.ResultBean;
 import org.omg.PortableInterceptor.INACTIVE;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface staffService {
@@ -56,4 +57,9 @@ public interface staffService {
 
     //根据id查询民警应巡查路段
     ResultBean selectStaffXareaByid(Integer id);
+
+    //查询昨日总警力
+    ResultBean selecttotalforces();
+    //按大队查询昨日总警力
+    ResultBean selecttotalforceszr();
 }

@@ -71,4 +71,15 @@ public class StaffController {
     public ResultBean selectStaffZx(Integer id){
         return staffService.selectStaffZx(id);
     }
+
+    //查询昨日总警力
+    @GetMapping("selecttotalforces")
+    public ResultBean selecttotalforces(){
+        return staffService.selecttotalforces();
+    }
+    //按大队查询昨日总警力
+    @GetMapping("selecttotalforceszr")
+    public ResultBean selecttotalforceszr(){
+        return staffService.selecttotalforceszr();
+    }
 }

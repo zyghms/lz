@@ -524,4 +524,30 @@ public class staffServiceImpl implements staffService {
         return ResultUtil.setOK("success",staff);
     }
 
+
+    @Override
+    public ResultBean selecttotalforces() {
+        Integer selecttotalforces = staffMapper.selecttotalforces();
+        if(selecttotalforces!=null ||selecttotalforces!=null){
+            return ResultUtil.setOK("success",staffMapper.selecttotalforces());
+        }
+        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+    }
+
+    @Override
+    public ResultBean selecttotalforceszr() {
+        List<HashMap> selecttotalforceszr = staffMapper.selecttotalforceszr();
+        if(selecttotalforceszr.size()>=0){
+            for (int i=0;i<selecttotalforceszr.size();i++){
+                String sectionName = selecttotalforceszr.get(i).get("sectionName").toString();
+                if(sectionName.indexOf("大队")!=-1){
+                    String sectionName1 = selecttotalforceszr.get(i).get("sectionName").toString().substring(0, 3);
+                    selecttotalforceszr.get(i).put("sectionName",sectionName1);
+                }
+            }
+            return ResultUtil.setOK("success",selecttotalforceszr);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1,"success",null);
+    }
+
 }
