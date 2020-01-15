@@ -22,8 +22,8 @@ public class xlevelserviceServiceImpl implements xlevelserviceService {
      */
     @Override
     public ResultBean selectorderlyAll() {
-        List<HashMap> maps = xlevelserviceMapper.selectorderlyAll();
-        return ResultUtil.setOK("success",maps);
+        int success = xlevelserviceMapper.selectorderlyAll();
+        return ResultUtil.setOK("success",success);
     }
 
     /**
