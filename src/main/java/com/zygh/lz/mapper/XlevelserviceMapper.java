@@ -20,7 +20,7 @@ public interface XlevelserviceMapper {
     int updateByPrimaryKey(Xlevelservice record);
 
     //等级勤务所有应到人数
-    List<HashMap> selectorderlyAll();
+    int selectorderlyAll();
 
     //一级勤务按大队应到人数
     List<HashMap> selectorderlyoneyd();

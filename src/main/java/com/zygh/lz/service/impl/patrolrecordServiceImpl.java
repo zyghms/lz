@@ -526,7 +526,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //夜巡 3   铁骑2
         List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
-        int yxYDsum = yxPeoples.size()/2;
+        int yxYDsum = yxPeoples.size();
 
         //高峰应到数
         List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion);
@@ -534,8 +534,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //日常勤务
         List<HashMap> rcPeoples = xareaMapper.countRcYDsum(battalion);
-        int rcYDsum = rcPeoples.size();
-
+        int rcYDsum = rcPeoples.size()/2;
 
         int yxSDsum = patrolrecordMapper.countYxSDsum(battalion).size();
         int gfSDsum = patrolrecordMapper.countGdorGfSDsum("高峰岗",battalion).size();
