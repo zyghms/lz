@@ -381,6 +381,15 @@
         </if>
     </select>
 
+    <!--统计高速、快速岗组数-->
+    <select id="countGsOrKsZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+        select id from xarea
+        where station = #{station}
+        and name is not null and name != ''
+        and detachment != '' and detachment is not null
+        GROUP BY name,battalion
+    </select>
+
 
     <select id="countZDRc" resultType="java.lang.Integer"  parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s ,xrelation xl
@@ -421,4 +430,24 @@
         GROUP BY detachment
     </select>
 
+    <select id="countGsOrKsZ" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select id
+        from xarea
+        where station = #{station}
+        and name is not null and name != ''
+        and detachment != '' and detachment is not null
+        GROUP BY name,battalion
+    </select>
+
+    <select id="countTQZ" resultType="java.lang.Integer">
+        select id from xlevelservice GROUP BY place ORDER BY place
+    </select>
+
+    <select id="countGsYDSum" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select s.sys_staff_id from xarea x,staff s,xrelation xl
+        where station = #{station}
+        and xl.xarea_id = x.id
+        and xl.staff_id = s.sys_staff_id
+        GROUP BY s.sys_staff_id
+    </select>
 </mapper>
