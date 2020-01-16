@@ -1121,7 +1121,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         ddSDSum += yxSDSum;
                         zDList.add(zdMap);
                     }
-                    ddMap.put("ddName",battalion);
+                    ddMap.put("ddName",ddName);
                     ddMap.put("ddYDnum",ddYDSum);
                     ddMap.put("ddSDnum",ddSDSum);
                     if ((ddYDSum)==0){

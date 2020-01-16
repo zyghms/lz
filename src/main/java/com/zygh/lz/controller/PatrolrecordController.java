@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.HashMap;
 import java.util.List;
+
 
 /**
  * 巡查记录
@@ -133,4 +133,6 @@ public class PatrolrecordController {
     public List<HashMap> yXtypeSum(String battalion)throws Exception{
         return patrolrecordService.yXtypeSum(battalion);
     }
+
+
  }
