@@ -48,7 +48,7 @@ public interface XareaMapper {
 
     List<Integer> countZdYDSum(String battalion);
 
-    List<Integer> countQtYDSum(String battalion);
+    List<Integer> countQtYDSum(@Param("battalion") String battalion,@Param("conment") String conment);
 
     List<Integer> countTqZSum(String battalion);
 
@@ -66,16 +66,21 @@ public interface XareaMapper {
 
     List<String> findDd();
 
-    List<String> findZd(@Param("battalion") String battalion, @Param("conment") String conment);
+    List<String> findZd(@Param("battalion") String battaliont, @Param("conment") String conmen);
 
     List<Integer> countGsOrKsZ(@Param("station") String station, @Param("battalion") String battalion);
 
     List<Integer> countTQZ(String battalion);
 
-    List<Integer> countGsOrKsYDSum(@Param("station") String station, @Param("battalion") String battalion);
+    List<Integer> countGsOrKsYDSum(@Param("station") String station, @Param("battalion") String battalion, @Param("conment") String conmen);
 
     //查询夜间快速大队警组，警员
     List<Xarea> selectks();
+
+    //夜巡组数
+    List<Integer> countYxZ(String battalion);
+    //夜巡应到
+    List<Integer> countYxYDsum(String battalion);
 
 
 

@@ -331,7 +331,7 @@
         <if test="battalion != null and battalion != ''" >
             and battalion = #{battalion}
         </if>
-        and station != '高峰岗'
+        and type != '点'
         GROUP BY name
     </select>
     <!--统计高峰岗 、固定岗组数-->
@@ -369,6 +369,12 @@
         <if test="battalion != null and battalion != ''" >
             and x.battalion = #{battalion}
         </if>
+        <if test="conment == null and conment == ''" >
+            and x.conment != 3
+        </if>
+        <if test="conment != null and conment != ''" >
+            and x.conment = #{conment}
+        </if>
         GROUP BY s.sys_staff_id
 
     </select>
@@ -390,7 +396,7 @@
         GROUP BY name,battalion
     </select>
 
-
+    <!--日常组数-->
     <select id="countZDRc" resultType="java.lang.Integer"  parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s ,xrelation xl
         where x.conment != '3'
@@ -405,6 +411,7 @@
         GROUP BY  s.sys_staff_id
     </select>
 
+    <!--中队夜巡或者铁骑-->
     <select id="countZDYxorTq" resultType="java.lang.Integer"  parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s ,xrelation xl
         where x.conment = #{conment}
@@ -415,21 +422,25 @@
         GROUP BY  s.sys_staff_id
     </select>
 
+    <!--各大队-->
     <select id="findDd" resultType="java.lang.String">
-        select battalion from xarea GROUP BY battalion
+        select battalion from xarea x,section st where x.battalion = st.section_name GROUP BY battalion ORDER BY st.sys_section_id
     </select>
-
+    <!--各中队-->
     <select id="findZd" resultType="java.lang.String" parameterType="java.lang.String">
-        select detachment from xarea where battalion = #{battalion}
-        <if test="conment = null and conment = ''" >
-            and conment != '3'
+        select x.detachment from xarea x,section st
+        where x.battalion = #{battalion}
+        <if test="conment == null and conment == ''" >
+            and x.conment != '3'
         </if>
         <if test="conment != null and conment != ''" >
-            and conment = #{conment}
+            and x.conment = #{conment}
         </if>
-        GROUP BY detachment
+        and x.battalion = st.section_name
+        GROUP BY detachment ORDER BY st.sys_section_id
     </select>
 
+    <!--高速或者快速组数-->
     <select id="countGsOrKsZ" resultType="java.lang.Integer" parameterType="java.lang.String">
         select id
         from xarea
@@ -442,6 +453,7 @@
         GROUP BY name,battalion
     </select>
 
+    <!--特勤组数-->
     <select id="countTQZ" resultType="java.lang.Integer">
         select id from xlevelservice
         <if test="battalion != null and battalion != ''" >
@@ -450,17 +462,52 @@
         GROUP BY place ORDER BY place
     </select>
 
+    <!--高速或者快速应到数-->
     <select id="countGsOrKsYDSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s,xrelation xl
         where station = #{station}
         <if test="battalion != null and battalion != ''" >
             and battalion = #{battalion}
         </if>
+        <if test="conment == null and conment == ''" >
+            and x.conment != 3
+        </if>
+        <if test="conment != null and conment != ''" >
+            and x.conment = #{conment}
+        </if>
         and xl.xarea_id = x.id
         and xl.staff_id = s.sys_staff_id
         GROUP BY s.sys_staff_id
     </select>
+
+    <!--快速数-->
     <select id="selectks" resultMap="BaseResultMap">
         select * from xarea where station = '快速岗' GROUP BY `name`
     </select>
+
+    <!--统计夜巡组-->
+    <select id="countYxZ" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select id from xarea
+        where conment = '3'
+        <if test="battalion != null and battalion != ''" >
+            and battalion = #{battalion}
+        </if>
+        and (detachment like '%夜巡%' or gridding like '%夜巡%')
+        GROUP BY name
+    </select>
+
+    <select id="countYxYDsum" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select s.sys_staff_id from xarea x,staff s,xrelation xl
+        where x.conment = '3'
+        <if test="battalion != null and battalion != ''" >
+            and battalion = #{battalion}
+        </if>
+        and (x.detachment like '%夜巡%' or x.gridding like '%夜巡%')
+        and xl.xarea_id = x.id
+        and xl.staff_id = s.sys_staff_id
+        GROUP BY s.sys_staff_id
+    </select>
+
+
+
 </mapper>

@@ -101,5 +101,6 @@ public interface PatrolrecordMapper {
     public List<Integer> countZDRcSDsum(@Param("battalion")String battalion,@Param("detachment")String detachment,@Param("station")String station);
 
     public List<Integer> countZDYxSDsum(@Param("battalion")String battalion,@Param("detachment")String detachment);
-
+    //统计固定岗/高峰岗实到
+    public List<Integer> countGsorKsSDsum(@Param("station")String station,@Param("battalion")String battalion, @Param("conment") String conmen);
 }

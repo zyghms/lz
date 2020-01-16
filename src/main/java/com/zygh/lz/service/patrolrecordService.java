@@ -64,4 +64,7 @@ public interface patrolrecordService {
     public List<HashMap> theDaySum(String battalion) throws Exception;
     public List<HashMap> typeSum(String battalion) throws Exception;
     public List<HashMap> countZD(String battalion) throws Exception;
+    public List<HashMap> yXtypeSum(String battalion) throws Exception;
+
+
 }

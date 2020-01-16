@@ -128,4 +128,9 @@ public class PatrolrecordController {
         return patrolrecordService.countZD(battalion);
     }
 
-}
+    //统计夜间各个岗位应到实到人
+    @GetMapping("yXtypeSum")
+    public List<HashMap> yXtypeSum(String battalion)throws Exception{
+        return patrolrecordService.yXtypeSum(battalion);
+    }
+ }
