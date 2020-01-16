@@ -34,4 +34,8 @@ public interface XlevelserviceMapper {
     List<HashMap> selectorderlythreeyd(String sectionName);
     Integer selectsjyd(String sectionName);
 
+    //按等级大队查询区域
+    List<Xlevelservice> selectxleveBydj(@Param("hierarchy") Integer hierarchy,
+                                        @Param("sectionName") String sectionName);
+
 }

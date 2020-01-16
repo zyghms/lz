@@ -1,5 +1,6 @@
 package com.zygh.lz.service.impl;
 
+import com.zygh.lz.admin.Xlevelservice;
 import com.zygh.lz.mapper.XlevelserviceMapper;
 import com.zygh.lz.service.xlevelserviceService;
 import com.zygh.lz.util.ResultUtil;
@@ -93,6 +94,15 @@ public class xlevelserviceServiceImpl implements xlevelserviceService {
         map.put("second",selectorderlytweyd);
         map.put("three",selectorderlythreeyd);*/
         return ResultUtil.setOK("success",list);
+    }
+
+    @Override
+    public ResultBean selectxleveBydj(Integer hierarchy, String sectionName) {
+        List<Xlevelservice> xlevelservices = xlevelserviceMapper.selectxleveBydj(hierarchy, sectionName);
+        if(xlevelservices.size()>=0){
+            return ResultUtil.setOK("success",xlevelservices);
+        }
+        return null;
     }
 
 }

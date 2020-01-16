@@ -1,5 +1,6 @@
 package com.zygh.lz.service;
 
+import com.zygh.lz.admin.Xlevelservice;
 import com.zygh.lz.vo.ResultBean;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface xlevelserviceService {
     //一级勤务按大队应到人数
     ResultBean selectorderlydjyd(String sectionName);
 
-
+    ResultBean selectxleveBydj(Integer hierarchy,String sectionName);
 }

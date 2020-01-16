@@ -211,6 +211,19 @@
             and s.section_name=#{sectionName}
         </if>
         GROUP BY x.section_id) sb
+    </select>
+    <select id="selectxleveBydj" resultType="map">
+        SELECT * from xlevelservice
+        <where>
+            <if test="hierarchy!=null and hierarchy!='' ">
+                hierarchy =#{hierarchy}
+            </if>
+            <if test="sectionName!=null and sectionName!='' ">
+                AND section_id=(SELECT sys_section_id from section
+                WHERE section_name=#{sectionName})
+            </if>
+        </where>
+
 
     </select>
 </mapper>

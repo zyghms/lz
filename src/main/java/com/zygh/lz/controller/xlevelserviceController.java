@@ -11,15 +11,21 @@ public class xlevelserviceController {
     @Autowired
     private xlevelserviceService xlevelserviceService;
 
-    //等级勤务所有应到人数
+    //按大队统计等级勤务所有应到人数
     @GetMapping("selectorderlyAllqw")
     public ResultBean selectorderlyAll(String sectionName){
         return xlevelserviceService.selectorderlyAll(sectionName);
     }
-
+    //
     @GetMapping("selectorderlydjyd")
     public ResultBean selectorderlydjyd(String sectionName){
         return xlevelserviceService.selectorderlydjyd(sectionName);
+    }
+
+    //按等级按大队查询等级勤务
+    @GetMapping("selectxleveBydj")
+    public ResultBean selectxleveBydj(Integer hierarchy,String sectionName){
+        return xlevelserviceService.selectxleveBydj(hierarchy,sectionName);
     }
 
 
