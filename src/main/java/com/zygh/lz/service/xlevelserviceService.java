@@ -11,7 +11,7 @@ public interface xlevelserviceService {
     ResultBean selectorderlyAll();
 
     //一级勤务按大队应到人数
-    ResultBean selectorderlydjyd();
+    ResultBean selectorderlydjyd(String sectionName);
 
 
 }

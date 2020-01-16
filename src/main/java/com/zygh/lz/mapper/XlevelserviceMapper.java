@@ -1,6 +1,7 @@
 package com.zygh.lz.mapper;
 
 import com.zygh.lz.admin.Xlevelservice;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,16 +21,16 @@ public interface XlevelserviceMapper {
     int updateByPrimaryKey(Xlevelservice record);
 
     //等级勤务所有应到人数
-    int selectorderlyAll();
+    Integer selectorderlyAll();
 
     //一级勤务按大队应到人数
-    List<HashMap> selectorderlyoneyd();
-
+    List<HashMap> selectorderlyoneyd(String sectionName);
+    Integer selectyjyd(String sectionName);
     //二级勤务按大队应到人数
-    List<HashMap> selectorderlytweyd();
-
+    List<HashMap> selectorderlytweyd(String sectionName);
+    Integer selectejyd(String sectionName);
     //三级勤务按大队应到人数
-    List<HashMap> selectorderlythreeyd();
-
+    List<HashMap> selectorderlythreeyd(String sectionName);
+    Integer selectsjyd(String sectionName);
 
 }

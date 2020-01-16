@@ -548,6 +548,7 @@ public class staffServiceImpl implements staffService {
                     selecttotalforceszr.get(i).put("sectionName",sectionName1);
                 }
             }
+
             return ResultUtil.setOK("success",selecttotalforceszr);
         }
         return ResultUtil.setError(SystemCon.RERROR1,"success",null);

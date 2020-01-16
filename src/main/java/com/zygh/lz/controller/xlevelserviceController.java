@@ -18,8 +18,8 @@ public class xlevelserviceController {
     }
 
     @GetMapping("selectorderlydjyd")
-    public ResultBean selectorderlydjyd(){
-        return xlevelserviceService.selectorderlydjyd();
+    public ResultBean selectorderlydjyd(String sectionName){
+        return xlevelserviceService.selectorderlydjyd(sectionName);
     }
 
 
