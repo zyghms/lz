@@ -512,12 +512,8 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         List<HashMap> peopleList = new ArrayList<>();
 
-        //早高峰实到应到在线率
-        HashMap<String, Object> zgfMap = new HashMap<>();
         //固定岗。。。。。。。
         HashMap<String, Object> gdMap = new HashMap<>();
-        //晚高峰。。。。。。。
-        HashMap<String, Object> wgfMap = new HashMap<>();
         //夜巡。。。。。。。
         HashMap<String, Object> yxMap = new HashMap<>();
         //特殊
@@ -538,11 +534,14 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         List<HashMap> rcPeoples = xareaMapper.countRcYDsum(battalion);
         int rcYDsum = rcPeoples.size()/2;
 
+        Integer TQYDsum = xlevelserviceMapper.selectorderlyAll(battalion);
+        if (TQYDsum == null){
+            TQYDsum = 0;
+        }
 
         int yxSDsum = patrolrecordMapper.countYxSDsum(battalion).size();
         int gfSDsum = patrolrecordMapper.countGdorGfSDsum("高峰岗",battalion).size();
         int rcSDsum = patrolrecordMapper.countRcSDsum(battalion).size();
-
 
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
@@ -588,7 +587,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 peopleList.addAll(rcPeoples);
 
                 gdMap.put("type","日常勤务");
-                gdMap.put("time","早高峰\n7:30-8:30");
+                gdMap.put("time","早高峰7:30-8:30");
                 gdMap.put("gfYDsum",zgfYDsum);
                 gdMap.put("gfSDsum",zgfSDsum);
                 if (zgfYDsum==0){
@@ -600,7 +599,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                 tsMap.put("type","特殊勤务");
                 tsMap.put("time","08:00-20:00");
-                tsMap.put("gfYDsum",0);
+                tsMap.put("gfYDsum",TQYDsum);
                 tsMap.put("gfSDsum",0);
                 tsMap.put("gfZXL",0);
 
@@ -627,7 +626,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                 //晚高峰
                 gdMap.put("type","日常勤务");
-                gdMap.put("time","晚高峰\n17:30-18:30");
+                gdMap.put("time","晚高峰17:30-18:30");
                 gdMap.put("gfYDsum",wgfYDsum);
                 gdMap.put("gfSDsum",wgfSDsum);
                 if (wgfYDsum==0){
@@ -639,7 +638,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                 tsMap.put("type","特殊勤务");
                 tsMap.put("time","08:00-20:00");
-                tsMap.put("gfYDsum",0);
+                tsMap.put("gfYDsum",TQYDsum);
                 tsMap.put("gfSDsum",0);
                 tsMap.put("gfZXL",0);
 
@@ -653,9 +652,9 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                 gdMap.put("type","日常勤务");
                 if (effectiveDate4){
-                    gdMap.put("time","平峰期\n18:30-20:00");
+                    gdMap.put("time","平峰期18:30-20:00");
                 }else {
-                    gdMap.put("time","平峰期\n8:30-17:30");
+                    gdMap.put("time","平峰期8:30-17:30");
                 }
                 gdMap.put("gfYDsum",rcYDsum);
                 gdMap.put("gfSDsum",rcSDsum);
@@ -669,12 +668,9 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                 tsMap.put("type","特殊勤务");
                 tsMap.put("time","08:00-20:00");
-                tsMap.put("gfYDsum",0);
+                tsMap.put("gfYDsum",TQYDsum);
                 tsMap.put("gfSDsum",0);
                 tsMap.put("gfZXL",0);
-
-
-
 
                 daySumList.add(gdMap);
                 daySumList.add(tsMap);
@@ -751,7 +747,10 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         //日间快速应到
         int ksYDsum = xareaMapper.countGsOrKsYDSum("快速岗",battalion,null).size();
         //特勤应道
-        int TQYDsum = xlevelserviceMapper.selectorderlyAll(battalion);
+        Integer TQYDsum = xlevelserviceMapper.selectorderlyAll(battalion);
+        if (TQYDsum == null){
+            TQYDsum = 0;
+        }
 
 
         int tqZnum = xareaMapper.countTqZSum(battalion).size();
