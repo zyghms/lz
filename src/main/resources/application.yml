@@ -10,7 +10,7 @@ spring:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
   datasource:
-    url:  jdbc:mysql://192.168.100.124:3307/lz?useSSL=false&characterEncoding=utf-8
+    url:  jdbc:mysql://127.0.0.1:3307/lz?useSSL=false&characterEncoding=utf-8
     driver-class-name:  com.mysql.jdbc.Driver
     username:  root
     password:  123456

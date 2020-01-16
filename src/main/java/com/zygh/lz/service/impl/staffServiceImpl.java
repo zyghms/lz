@@ -524,7 +524,10 @@ public class staffServiceImpl implements staffService {
         return ResultUtil.setOK("success",staff);
     }
 
-
+    /**
+     * 查询昨日在岗警力人数
+     * @return
+     */
     @Override
     public ResultBean selecttotalforces() {
         Integer selecttotalforces = staffMapper.selecttotalforces();

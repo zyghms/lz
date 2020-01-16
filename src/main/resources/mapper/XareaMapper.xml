@@ -445,7 +445,7 @@
     <select id="countTQZ" resultType="java.lang.Integer">
         select id from xlevelservice
         <if test="battalion != null and battalion != ''" >
-            where battalion = #{battalion}
+            where section_id = (select sys_section_id from section where section_name = #{battalion})
         </if>
         GROUP BY place ORDER BY place
     </select>
@@ -459,5 +459,8 @@
         and xl.xarea_id = x.id
         and xl.staff_id = s.sys_staff_id
         GROUP BY s.sys_staff_id
+    </select>
+    <select id="selectks" resultMap="BaseResultMap">
+        select * from xarea where station = '快速岗' GROUP BY `name`
     </select>
 </mapper>

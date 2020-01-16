@@ -151,7 +151,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <!--全部应到-->
-  <select id="selectorderlyAll" resultType="map">
+  <select id="selectorderlyAll" resultType="java.lang.Integer">
     	SELECT SUM(number) as number  FROM xlevelservice
   </select>
   <!--一级应到-->

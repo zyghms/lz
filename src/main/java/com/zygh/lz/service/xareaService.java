@@ -24,4 +24,7 @@ public interface xareaService {
 
     ResultBean selectpolice();
 
+    //夜间快速岗
+    ResultBean selectks();
+
 }

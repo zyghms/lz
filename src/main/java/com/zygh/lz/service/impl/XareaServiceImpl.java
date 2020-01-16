@@ -209,5 +209,11 @@ public class XareaServiceImpl implements xareaService {
         return ResultUtil.setOK("success",list);
     }
 
+    @Override
+    public ResultBean selectks() {
+        List<Xarea> selectks = xareaMapper.selectks();
+        return null;
+    }
+
 
 }

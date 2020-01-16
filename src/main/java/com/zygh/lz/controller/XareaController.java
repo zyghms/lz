@@ -61,4 +61,5 @@ public class XareaController {
     public ResultBean selectpolice(){
         return xareaService.selectpolice();
     }
+
 }

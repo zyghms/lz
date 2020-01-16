@@ -38,25 +38,45 @@ public interface XareaMapper {
 
     List<Xarea> selectXareaZgByStaffId(Integer id);
 
-    public List<HashMap> countYDSum(@Param("station")String station, @Param("battalion")String battalion);
-    public List<HashMap> countYxSum(@Param("conment")String conment,@Param("battalion")String battalion);
-    public List<HashMap> countRcYDsum(String battalion);
-    public List<Integer> countWgSum(String battalion);
-    public List<Integer> countZdYDSum(String battalion);
-    public List<Integer> countQtYDSum(String battalion);
+    List<HashMap> countYDSum(@Param("station") String station, @Param("battalion") String battalion);
 
-    public List<Integer> countTqZSum(String battalion);
-    public int countggZSum(@Param("station")String station,@Param("battalion")String battalion);
-    public int countWgZSum(String battalion);
-    public int countZdZSum(String battalion);
-    public int countQtZSum(String battalion);
+    List<HashMap> countYxSum(@Param("conment") String conment, @Param("battalion") String battalion);
 
-    public List<Integer> countZDRc(@Param("battalion")String battalion,@Param("detachment")String detachment,@Param("station")String station);
-    public List<HashMap> countZDYxorTq(@Param("conment")String conment,@Param("battalion")String battalion,@Param("detachment")String detachment);
-    public List<String> findDd();
-    public List<String> findZd(@Param("battalion")String battalion,@Param("conment")String conment);
+    List<HashMap> countRcYDsum(String battalion);
 
-    public List<Integer> countGsOrKsZ(@Param("station")String station,@Param("battalion")String battalion);
-    public List<Integer> countTQZ(String battalion);
-    public List<Integer> countGsOrKsYDSum(@Param("station")String station,@Param("battalion")String battalion);
+    List<Integer> countWgSum(String battalion);
+
+    List<Integer> countZdYDSum(String battalion);
+
+    List<Integer> countQtYDSum(String battalion);
+
+    List<Integer> countTqZSum(String battalion);
+
+    int countggZSum(@Param("station") String station, @Param("battalion") String battalion);
+
+    int countWgZSum(String battalion);
+
+    int countZdZSum(String battalion);
+
+    int countQtZSum(String battalion);
+
+    List<Integer> countZDRc(@Param("battalion") String battalion, @Param("detachment") String detachment, @Param("station") String station);
+
+    List<HashMap> countZDYxorTq(@Param("conment") String conment, @Param("battalion") String battalion, @Param("detachment") String detachment);
+
+    List<String> findDd();
+
+    List<String> findZd(@Param("battalion") String battalion, @Param("conment") String conment);
+
+    List<Integer> countGsOrKsZ(@Param("station") String station, @Param("battalion") String battalion);
+
+    List<Integer> countTQZ(String battalion);
+
+    List<Integer> countGsOrKsYDSum(@Param("station") String station, @Param("battalion") String battalion);
+
+    //查询夜间快速大队警组，警员
+    List<Xarea> selectks();
+
+
+
 }
