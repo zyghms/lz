@@ -13,8 +13,8 @@ public class xlevelserviceController {
 
     //等级勤务所有应到人数
     @GetMapping("selectorderlyAllqw")
-    public ResultBean selectorderlyAll(){
-        return xlevelserviceService.selectorderlyAll();
+    public ResultBean selectorderlyAll(String sectionName){
+        return xlevelserviceService.selectorderlyAll(sectionName);
     }
 
     @GetMapping("selectorderlydjyd")

@@ -152,8 +152,12 @@
   </update>
     <!--全部应到-->
     <select id="selectorderlyAll" resultType="java.lang.Integer">
-    	SELECT SUM(number) as number  FROM xlevelservice
-  </select>
+        SELECT SUM(number) as number FROM xlevelservice
+        <if test="sectionName!=null and sectionName!='' ">
+            where section_id=(SELECT sys_section_id FROM section WHERE section_name=#{sectionName})
+        </if>
+
+    </select>
     <!--一级应到-->
     <select id="selectorderlyoneyd" resultType="map">
         SELECT s.section_name as name,SUM(number) as YDnum FROM xlevelservice x,section s

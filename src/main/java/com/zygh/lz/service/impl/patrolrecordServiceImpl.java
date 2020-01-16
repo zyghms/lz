@@ -751,7 +751,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         //日间快速应到
         int ksYDsum = xareaMapper.countGsOrKsYDSum("快速岗",battalion,null).size();
         //特勤应道
-        int TQYDsum = xlevelserviceMapper.selectorderlyAll();
+        int TQYDsum = xlevelserviceMapper.selectorderlyAll(battalion);
 
 
         int tqZnum = xareaMapper.countTqZSum(battalion).size();
