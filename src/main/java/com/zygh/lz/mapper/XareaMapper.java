@@ -42,6 +42,7 @@ public interface XareaMapper {
 
     List<HashMap> countYxSum(@Param("conment") String conment, @Param("battalion") String battalion);
 
+    List<HashMap> countRcYDsumC2(String battalion);
     List<HashMap> countRcYDsum(String battalion);
 
     List<Integer> countWgSum(String battalion);
@@ -58,9 +59,10 @@ public interface XareaMapper {
 
     int countZdZSum(String battalion);
 
-    int countQtZSum(String battalion);
+    int countQtZSum(@Param("battalion")String battalion,@Param("conment")String conment);
 
     List<Integer> countZDRc(@Param("battalion") String battalion, @Param("detachment") String detachment, @Param("station") String station);
+    List<Integer> countZDRcC2(@Param("battalion") String battalion, @Param("detachment") String detachment);
 
     List<HashMap> countZDYxorTq(@Param("conment") String conment, @Param("battalion") String battalion, @Param("detachment") String detachment);
 

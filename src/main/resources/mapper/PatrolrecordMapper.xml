@@ -319,11 +319,14 @@
     <select id="countYxSDsum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select p.sys_staff_id
         from patrolrecord p,staff s,xarea x,xrelation xl
-        where (to_days(p.patrol_record_begintime) = to_days(now()) or to_days(p.patrol_record_begintime) = to_days(now())-1)
+        where to_days(p.patrol_record_begintime) = to_days(now())
         <if test="battalion != null and battalion != ''" >
             and x.battalion = #{battalion}
         </if>
-        and  p.sys_staff_id = s.sys_staff_id and s.sys_staff_id = xl.staff_id and xl.xarea_id = x.id and x.conment = '3' and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
+        and  p.sys_staff_id = s.sys_staff_id
+        and s.sys_staff_id = xl.staff_id
+        and xl.xarea_id = x.id and x.conment = '3'
+        and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>
 
 
@@ -337,9 +340,10 @@
         </if>
         and p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id
-        and xl.xarea_id = x.id and x.conment = '2'
+        and xl.xarea_id = x.id and x.conment = '2' and type != '点'
         and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>
+
     <!--统计网格实到在线人数-->
     <select id="countWgSDsum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select p.sys_staff_id
@@ -357,13 +361,15 @@
     <select id="countRcSDsum" resultType="java.lang.Integer">
         select p.sys_staff_id from patrolrecord p,staff s,xarea x,xrelation xl
         where to_days(p.patrol_record_begintime) = to_days(now())
-        <if test="battalion != null and battalion != ''" >
-            and x.battalion = #{battalion}
-        </if>
         and  p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id
         and xl.xarea_id = x.id
-        and x.conment != '3' and (station = '机动岗' or station = '固定岗' or gridding like '%网格%')
+        and x.conment != '3'
+        <if test="battalion != null and battalion != ''" >
+            and x.battalion = #{battalion}
+        </if>
+        and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2' or x.station = '固定岗' or conment = '4')
+        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station is not null))
         and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>
     <!--统计重点岗实到在线人数-->
@@ -389,7 +395,9 @@
         <if test="battalion != null and battalion != ''" >
             and x.battalion = #{battalion}
         </if>
-        and (station = '机动岗' or station = '高速岗' or station = '快速岗' or conment = '2')
+        and x.station != '固定岗' and x.station != '高峰岗'
+        and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
+        and x.station != '快速岗' and x.station is not null
         and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
 
     </select>
@@ -414,10 +422,11 @@
         and  p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id
         and xl.xarea_id = x.id
-        and x.conment != '3' and (x.station = '机动岗' or x.station = '固定岗' or x.gridding like '%网格%' or x.station = '高速岗' or x.conment = '4'
+        and ((x.gridding like '%网格%' or x.station = '高速岗' or x.conment = '2' or x.station = '固定岗' or x.conment = '4'
         <if test="battalion != null and battalion != ''" >
             or x.station = #{station}
         </if>)
+        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station is not null))
         and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>
 
