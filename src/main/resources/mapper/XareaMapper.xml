@@ -300,11 +300,52 @@
         <if test="battalion != null and battalion != ''" >
             and x.battalion = #{battalion}
         </if>
-        and (x.station = '机动岗' or x.station = '固定岗' or x.gridding like '%网格%' or x.station = '高速岗' or x.conment = '4')
+        and (x.gridding = '固定岗' or conment = '4')
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
         and s.sys_section_id = st.sys_section_id
         GROUP BY s.sys_staff_id
+    </select>
+    <!--统计日常勤务应到在线人数 上下午班-->
+    <select id="countRcYDsumC2" resultType="java.util.Map"  parameterType="java.lang.String">
+        select s.*,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
+        where x.conment != '3'
+        <if test="battalion != null and battalion != ''" >
+            and x.battalion = #{battalion}
+        </if>
+        and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2')
+        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station is not null))
+        and x.id = xl.xarea_id
+        and s.sys_staff_id = xl.staff_id
+        and s.sys_section_id = st.sys_section_id
+        GROUP BY s.sys_staff_id
+    </select>
+
+    <!--中队日常组数 上下午班-->
+    <select id="countZDRcC2" resultType="java.lang.Integer"  parameterType="java.lang.String">
+        select s.sys_staff_id from xarea x,staff s ,xrelation xl
+        where x.conment != '3'
+        and x.battalion = #{battalion}
+        and x.detachment = #{detachment}
+        and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2')
+        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station is not null))
+        and x.id = xl.xarea_id
+        and s.sys_staff_id = xl.staff_id
+        GROUP BY  s.sys_staff_id
+    </select>
+    <!--统计中队日常勤务应到在线人数-->
+    <select id="countZDRc" resultType="java.lang.Integer"  parameterType="java.lang.String">
+        select s.sys_staff_id from xarea x,staff s ,xrelation xl
+        where x.conment != '3'
+        and x.battalion = #{battalion}
+        and x.detachment = #{detachment}
+        and (x.gridding = '固定岗' or x.conment = '4'
+        <if test="station != null and station != ''" >
+            or x.station = #{station}
+        </if>)
+        and x.id = xl.xarea_id
+        and s.sys_staff_id = xl.staff_id
+        GROUP BY  s.sys_staff_id
     </select>
 
     <!--统计网格应到人数-->
@@ -336,7 +377,6 @@
             and battalion = #{battalion}
         </if>
         and type != '点'
-        GROUP BY name
     </select>
     <!--统计高峰岗 、固定岗组数-->
     <select id="countggZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
@@ -346,7 +386,8 @@
             and battalion = #{battalion}
         </if>
     </select>
-    <!--统计高峰岗 、固定岗组数-->
+
+    <!--统计网格组数-->
     <select id="countWgZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
         select count(*) from xarea
         where gridding like '%网格%'
@@ -354,6 +395,31 @@
             and battalion = #{battalion}
         </if>
     </select>
+
+    <!--统计其他岗组数-->
+    <select id="countQtZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+        select count(*) from xarea where station != '固定岗' and station != '高峰岗'
+        and station != '高速岗' and conment != '2' and conment != '4'
+        and station != '快速岗' and station is not null
+        <if test="conment == null and conment == ''" >
+            and conment != '3'
+        </if>
+        <if test="conment != null and conment != ''" >
+            and conment = '3'
+        </if>
+        <if test="battalion != null and battalion != ''" >
+            and battalion = #{battalion}
+        </if>
+    </select>
+
+    <!--统计夜巡组-->
+    <select id="countYxZ" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select * from xarea where conment = 3 and battalion != '高架大队'
+        <if test="battalion != null and battalion != ''" >
+            and battalion = #{battalion}
+        </if>
+    </select>
+
     <!--统计重点保障岗组数-->
     <select id="countZdZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
         select count(*) from xarea
@@ -367,7 +433,9 @@
     <!--统计其他岗应到数-->
     <select id="countQtYDSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s,xrelation xl
-        where (x.station = '机动岗' or x.conment = '2' or x.station = '高速岗' or x.station = '快速岗')
+        where x.station != '固定岗' and x.station != '高峰岗'
+        and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
+        and x.station != '快速岗' and x.station is not null
         and xl.xarea_id = x.id
         and xl.staff_id = s.sys_staff_id
         <if test="battalion != null and battalion != ''" >
@@ -383,14 +451,6 @@
 
     </select>
 
-    <!--统计其他岗组数-->
-    <select id="countQtZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
-        select count(*) from xarea where (station = '机动岗' or station = '高速岗' or station = '快速岗' or conment = '2')
-        <if test="battalion != null and battalion != ''" >
-            and battalion = #{battalion}
-        </if>
-    </select>
-
     <!--统计高速、快速岗组数-->
     <select id="countGsOrKsZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
         select id from xarea
@@ -400,20 +460,7 @@
         GROUP BY name,battalion
     </select>
 
-    <!--日常组数-->
-    <select id="countZDRc" resultType="java.lang.Integer"  parameterType="java.lang.String">
-        select s.sys_staff_id from xarea x,staff s ,xrelation xl
-        where x.conment != '3'
-        and x.battalion = #{battalion}
-        and x.detachment = #{detachment}
-        and (x.station = '机动岗' or x.station = '固定岗' or x.gridding like '%网格%' or x.station = '高速岗' or x.conment = '4'
-        <if test="station != null and station != ''" >
-            or x.station = #{station}
-        </if>)
-        and x.id = xl.xarea_id
-        and s.sys_staff_id = xl.staff_id
-        GROUP BY  s.sys_staff_id
-    </select>
+
 
     <!--中队夜巡或者铁骑-->
     <select id="countZDYxorTq" resultType="java.lang.Integer"  parameterType="java.lang.String">
@@ -487,17 +534,6 @@
     <!--快速数-->
     <select id="selectks" resultMap="BaseResultMap">
         select * from xarea where station = '快速岗' GROUP BY `name`
-    </select>
-
-    <!--统计夜巡组-->
-    <select id="countYxZ" resultType="java.lang.Integer" parameterType="java.lang.String">
-        select id from xarea
-        where conment = '3'
-        <if test="battalion != null and battalion != ''" >
-            and battalion = #{battalion}
-        </if>
-        and (detachment like '%夜巡%' or gridding like '%夜巡%')
-        GROUP BY name
     </select>
 
     <select id="countYxYDsum" resultType="java.lang.Integer" parameterType="java.lang.String">

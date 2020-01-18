@@ -134,5 +134,11 @@ public class PatrolrecordController {
         return patrolrecordService.yXtypeSum(battalion);
     }
 
+    //按时间段统计日间各个岗位应到实到人
+    @GetMapping("typeSumByTime")
+    public List<HashMap> typeSumByTime(String battalion)throws Exception{
+        return patrolrecordService.typeSumByTime(battalion);
+    }
+
 
  }
