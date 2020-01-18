@@ -50,8 +50,8 @@ public class StaffController {
 
     //在线民警
     @GetMapping("selectpoliceZx")
-    public ResultBean selectpoliceZx() {
-        return staffService.selectpoliceZx();
+    public ResultBean selectpoliceZx(String station)throws Exception {
+        return staffService.selectpoliceZx(station);
     }
 
     //查询该人的直系领导
@@ -62,7 +62,7 @@ public class StaffController {
 
     //根据民警id查询该民警所负责的路段
     @GetMapping("selectStaffXareaByid")
-    public ResultBean selectStaffXareaByid(Integer id){
+    public ResultBean selectStaffXareaByid(Integer id)throws Exception{
        return staffService.selectStaffXareaByid(id);
     }
 
@@ -82,4 +82,7 @@ public class StaffController {
     public ResultBean selecttotalforceszr(){
         return staffService.selecttotalforceszr();
     }
+
+
+
 }

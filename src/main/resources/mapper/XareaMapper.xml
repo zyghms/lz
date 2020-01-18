@@ -260,6 +260,10 @@
     <!--根据人员id查他的岗位-->
     <select id="selectXareaZgByStaffId" resultMap="BaseResultMap">
         SELECT * FROM xarea a,xrelation x WHERE a.id=x.xarea_id AND x.staff_id=#{id}
+        <if test="station != null and station != ''" >
+            and a.station=#{station}
+        </if>
+
     </select>
 
 
@@ -508,7 +512,17 @@
         GROUP BY s.sys_staff_id
     </select>
 
-
-
+    <!--其他-->
+    <select id="selectqt" resultMap="BaseResultMap">
+        select x.* from xarea x,staff s,xrelation xl,section st
+        where (x.station = '机动岗' or x.conment = '2' or x.station = '高速岗' or x.station = '快速岗')
+        and xl.xarea_id = x.id
+        and xl.staff_id = s.sys_staff_id
+        and s.sys_section_id = st.sys_section_id
+        <if test="conment!=null and conment!=''">
+            and x.conment = #{conment}
+        </if>
+        GROUP BY s.sys_staff_id
+    </select>
 
 </mapper>

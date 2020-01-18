@@ -125,6 +125,7 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Patrolrecord">
         update patrolrecord
         <set>
+
             <if test="sysStaffId != null">
                 sys_staff_id = #{sysStaffId,jdbcType=INTEGER},
             </if>
@@ -471,4 +472,38 @@
         and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>
 
+    <!--修改单独-->
+    <update id="updateByPrimaryKeySelectives" parameterType="com.zygh.lz.admin.Patrolrecord">
+        update patrolrecord
+        <set>
+            <if test="patrolRecordEndtime == null">
+                patrol_record_endtime = null,
+            </if>
+            <if test="sysStaffId != null">
+                sys_staff_id = #{sysStaffId,jdbcType=INTEGER},
+            </if>
+            <if test="patrolRecordBegintime != null">
+                patrol_record_begintime = #{patrolRecordBegintime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="patrolRecordEndtime != null">
+                patrol_record_endtime = #{patrolRecordEndtime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="patrolRecordPicture != null">
+                patrol_record_picture = #{patrolRecordPicture,jdbcType=VARCHAR},
+            </if>
+            <if test="patrolRecordVideo != null">
+                patrol_record_video = #{patrolRecordVideo,jdbcType=VARCHAR},
+            </if>
+            <if test="patrolRecordGps != null">
+                patrol_record_gps = #{patrolRecordGps,jdbcType=VARCHAR},
+            </if>
+            <if test="patrolRecordDetail != null">
+                patrol_record_detail = #{patrolRecordDetail,jdbcType=VARCHAR},
+            </if>
+            <if test="roadName != null">
+                roadName = #{roadName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where sys_patrol_record_id = #{sysPatrolRecordId,jdbcType=INTEGER}
+    </update>
 </mapper>

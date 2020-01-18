@@ -17,6 +17,7 @@ public interface PatrolrecordMapper {
     Patrolrecord selectByPrimaryKey(Integer sysPatrolRecordId);
 
     int updateByPrimaryKeySelective(Patrolrecord record);
+    int updateByPrimaryKeySelectives(Patrolrecord record);
 
     int updateByPrimaryKey(Patrolrecord record);
 

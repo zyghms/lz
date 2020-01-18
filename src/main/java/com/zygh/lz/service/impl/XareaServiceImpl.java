@@ -146,59 +146,59 @@ public class XareaServiceImpl implements xareaService {
     //按大队显示所有警力
     @Override
     public ResultBean selectpolice() {
-        Map<String,Object> map1=new HashMap<>();
-        Map<String,Object> map2=new HashMap<>();
-        Map<String,Object> map3=new HashMap<>();
-        Map<String,Object> map4=new HashMap<>();
-        Map<String,Object> map5=new HashMap<>();
-        Map<String,Object> map6=new HashMap<>();
-        Map<String,Object> map7=new HashMap<>();
+        Map<String, Object> map1 = new HashMap<>();
+        Map<String, Object> map2 = new HashMap<>();
+        Map<String, Object> map3 = new HashMap<>();
+        Map<String, Object> map4 = new HashMap<>();
+        Map<String, Object> map5 = new HashMap<>();
+        Map<String, Object> map6 = new HashMap<>();
+        Map<String, Object> map7 = new HashMap<>();
 
 
-        List<Staff> staff1 = staffMapper.selectStaffYdByAll(null, 25,null);
+        List<Staff> staff1 = staffMapper.selectStaffYdByAll(null, 25, null);
 
         List<Staff> staffsd1 = staffMapper.selectStaffByzg(null, null, "一大队");
-        List<Staff> staff2 = staffMapper.selectStaffYdByAll(null, 26,null);
+        List<Staff> staff2 = staffMapper.selectStaffYdByAll(null, 26, null);
         List<Staff> staffsd2 = staffMapper.selectStaffByzg(null, null, "二大队");
-        List<Staff> staff3 = staffMapper.selectStaffYdByAll(null, 27,null);
+        List<Staff> staff3 = staffMapper.selectStaffYdByAll(null, 27, null);
         List<Staff> staffsd3 = staffMapper.selectStaffByzg(null, null, "三大队");
-        List<Staff> staff4 = staffMapper.selectStaffYdByAll(null, 28,null);
+        List<Staff> staff4 = staffMapper.selectStaffYdByAll(null, 28, null);
         List<Staff> staffsd4 = staffMapper.selectStaffByzg(null, null, "四大队");
-        List<Staff> staff5 = staffMapper.selectStaffYdByAll(null, 29,null);
+        List<Staff> staff5 = staffMapper.selectStaffYdByAll(null, 29, null);
         List<Staff> staffsd5 = staffMapper.selectStaffByzg(null, null, "五大队");
-        List<Staff> staff6 = staffMapper.selectStaffYdByAll(null, 30,null);
+        List<Staff> staff6 = staffMapper.selectStaffYdByAll(null, 30, null);
         List<Staff> staffsd6 = staffMapper.selectStaffByzg(null, null, "六大队");
 
-        map1.put("id",25);
-        map1.put("name","一大队");
-        map1.put("ydnum",staff1.size());
-        map1.put("sdnum",staffsd1.size());
-        map2.put("id",26);
-        map2.put("name","二大队");
-        map2.put("ydnum",staff2.size());
-        map2.put("sdnum",staffsd2.size());
-        map3.put("id",27);
-        map3.put("name","三大队");
-        map3.put("ydnum",staff3.size());
-        map3.put("sdnum",staffsd3.size());
-        map4.put("id",28);
-        map4.put("name","四大队");
-        map4.put("ydnum",staff4.size());
-        map4.put("sdnum",staffsd4.size());
-        map5.put("id",29);
-        map5.put("name","五大队");
-        map5.put("ydnum",staff5.size());
-        map5.put("sdnum",staffsd5.size());
-        map6.put("id",30);
-        map6.put("name","六大队");
-        map6.put("ydnum",staff6.size());
-        map6.put("sdnum",staffsd6.size());
-        map7.put("id",222);
-        map7.put("name","港区大队");
-        map7.put("ydnum",0);
-        map7.put("sdnum",0);
+        map1.put("id", 25);
+        map1.put("name", "一大队");
+        map1.put("ydnum", staff1.size());
+        map1.put("sdnum", staffsd1.size());
+        map2.put("id", 26);
+        map2.put("name", "二大队");
+        map2.put("ydnum", staff2.size());
+        map2.put("sdnum", staffsd2.size());
+        map3.put("id", 27);
+        map3.put("name", "三大队");
+        map3.put("ydnum", staff3.size());
+        map3.put("sdnum", staffsd3.size());
+        map4.put("id", 28);
+        map4.put("name", "四大队");
+        map4.put("ydnum", staff4.size());
+        map4.put("sdnum", staffsd4.size());
+        map5.put("id", 29);
+        map5.put("name", "五大队");
+        map5.put("ydnum", staff5.size());
+        map5.put("sdnum", staffsd5.size());
+        map6.put("id", 30);
+        map6.put("name", "六大队");
+        map6.put("ydnum", staff6.size());
+        map6.put("sdnum", staffsd6.size());
+        map7.put("id", 222);
+        map7.put("name", "港区大队");
+        map7.put("ydnum", 0);
+        map7.put("sdnum", 0);
 
-        List<Object> list=new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         list.add(map1);
         list.add(map2);
         list.add(map3);
@@ -206,7 +206,7 @@ public class XareaServiceImpl implements xareaService {
         list.add(map5);
         list.add(map6);
         list.add(map7);
-        return ResultUtil.setOK("success",list);
+        return ResultUtil.setOK("success", list);
     }
 
     @Override
@@ -215,5 +215,41 @@ public class XareaServiceImpl implements xareaService {
         return null;
     }
 
+    @Override
+    public ResultBean selectqt(String conment) {
+//查询出来的区域
+        List<Xarea> xareas = xareaMapper.selectqt(conment);
+        List<Staff> zg = new ArrayList<>();
+        List<Patrolrecord> ydr = new ArrayList<>();
+        if (xareas.size() == 0) {
+            return ResultUtil.setError(SystemCon.RERROR1, "error", null);
+        }
+        int conments = 0;
+        int num = 0;
+        List<Staff> staff = null;
+        //查询该区域的所有民警
+        for (int i = 0; i < xareas.size(); i++) {
+            //区域内应在岗人数
+            staff = staffMapper.selectStaffByxarea(xareas.get(i).getId());
+            for (int k = 0; k < staff.size(); k++) {
+                //实际在岗人数
+                Patrolrecord patrolrecords = patrolrecordMapper.selectPatrolrecordByStaffId(staff.get(k).getSysStaffId());
+
+                if (patrolrecords != null) {
+                    if (staff.get(k).getSysStaffId() == patrolrecords.getSysStaffId()) {
+                        staff.get(k).setStaffOnline("1");
+                        //获取gps点
+                        Gps gps = gpsMapper.gpsEnd(staff.get(k).getSysStaffId());
+                        num++;
+                        staff.get(k).setGps(gps);
+                    }
+
+                }
+            }
+            conments += staff.size();
+            xareas.get(i).setStaff(staff);
+        }
+        return ResultUtil.setOK("success", xareas);
+    }
 
 }

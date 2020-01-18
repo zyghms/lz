@@ -309,7 +309,7 @@ public class staffServiceImpl implements staffService {
         }
         if (staff.getStaffPost().equals("管理员") || staff.getStaffPost().equals("支队领导")) {
             //应到人
-            List<Staff> staffglyy = staffMapper.selectStaffYdByAll(null,null,null);
+            List<Staff> staffglyy = staffMapper.selectStaffYdByAll(null, null, null);
             //实到
             List<Staff> staffglys = staffMapper.selectStaffByzg(null, null, null);
             for (int i = 0; i < staffglyy.size(); i++) {
@@ -324,9 +324,9 @@ public class staffServiceImpl implements staffService {
             return ResultUtil.setOK("success", staffglyy);
         } else if (staff.getStaffPost().equals("大队长") || staff.getStaffPost().equals("副大队长")) {
             //应到人
-            List<Staff> staffglyy = staffMapper.selectStaffYdByAll(null,staff.getSysSectionId(),null);
+            List<Staff> staffglyy = staffMapper.selectStaffYdByAll(null, staff.getSysSectionId(), null);
             //实到
-            List<Staff> staffglys = staffMapper.selectStaffByzg(null,null, staff.getSectionName());
+            List<Staff> staffglys = staffMapper.selectStaffByzg(null, null, staff.getSectionName());
             for (int i = 0; i < staffglyy.size(); i++) {
                 for (int q = 0; q < staffglys.size(); q++) {
                     if (staffglyy.get(i).getSysStaffId().equals(staffglys.get(q).getSysStaffId())) {
@@ -367,7 +367,7 @@ public class staffServiceImpl implements staffService {
         if (staff.getStaffPost().equals("管理员") || staff.getStaffPost().equals("支队领导")) {
             //实到
             List<Staff> staffglys = staffMapper.selectStaffByzg(null, null, null);
-            for(int i=0;i<staffglys.size();i++){
+            for (int i = 0; i < staffglys.size(); i++) {
 
                 staffglys.get(i).setStaffOnline("1");
                 Gps gps = gpsMapper.gpsEnd(staffglys.get(i).getSysStaffId());
@@ -376,8 +376,8 @@ public class staffServiceImpl implements staffService {
             return ResultUtil.setOK("success", staffglys);
         } else if (staff.getStaffPost().equals("大队长") || staff.getStaffPost().equals("副大队长")) {
             //实到
-            List<Staff> staffglys = staffMapper.selectStaffByzg(null,null, staff.getSectionName());
-            for(int i=0;i<staffglys.size();i++){
+            List<Staff> staffglys = staffMapper.selectStaffByzg(null, null, staff.getSectionName());
+            for (int i = 0; i < staffglys.size(); i++) {
                 staffglys.get(i).setStaffOnline("1");
                 Gps gps = gpsMapper.gpsEnd(staffglys.get(i).getSysStaffId());
                 staffglys.get(i).setGps(gps);
@@ -395,9 +395,9 @@ public class staffServiceImpl implements staffService {
      * @return
      */
     @Override
-    public ResultBean selectStaffYdByAll(String changeShifts,Integer SectionId) {
+    public ResultBean selectStaffYdByAll(String changeShifts, Integer SectionId) {
         //应到
-        List<Staff> staff = staffMapper.selectStaffYdByAll(null,SectionId,null);
+        List<Staff> staff = staffMapper.selectStaffYdByAll(null, SectionId, null);
         //实到
         List<Staff> staff1 = staffMapper.selectpoliceZx();
         for (int i = 0; i < staff.size(); i++) {
@@ -413,56 +413,95 @@ public class staffServiceImpl implements staffService {
 
     //在线
     @Override
-    public ResultBean selectpoliceZx() {
+    public ResultBean selectpoliceZx(String station) throws Exception {
         List<Staff> staff = staffMapper.selectpoliceZx();
-        for(int i=0;i<staff.size();i++){
-            String hour = DataTime.hour();
+        for (int i = 0; i < staff.size(); i++) {
+            SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+            String dayTime = df.format(new Date());// new Date()为获取当前系统时间
+
+            Date startTime = ft.parse(dayTime + " 07:30:00");
+            Date endTime = ft.parse(dayTime + " 08:30:00");
+            Date startTime2 = ft.parse(dayTime + " 17:30:00");
+            Date endTime2 = ft.parse(dayTime + " 18:30:00");
+            Date startTime3 = ft.parse(dayTime + " 08:30:00");
+            Date endTime3 = ft.parse(dayTime + " 17:30:00");
+            Date nowTime = new Date();
+            //早高峰
+            boolean effectiveDate = DataTime.hour(nowTime, startTime, endTime);
+            //晚高峰
+            boolean effectiveDate2 = DataTime.hour(nowTime, startTime2, endTime2);
+            //固定岗 平峰期
+            boolean effectiveDate3 = DataTime.hour(nowTime, startTime3, endTime3);
 
             //根据人查出来的岗位
-            List<Xarea> xareas = xareaMapper.selectXareaZgByStaffId(staff.get(i).getSysStaffId());
-                for (int f=0;f<xareas.size();f++) {
-                    if (hour.equals("早高峰") && xareas.get(f).getStation().equals("高峰岗")) {
-                        staff.get(i).setXarea(xareas.get(f));
-                    }else if(hour.equals("晚高峰") && xareas.get(f).getStation().equals("高峰岗")){
-                        staff.get(i).setXarea(xareas.get(f));
-                    }else {
-                        staff.get(i).setXareaList(xareas);
-                    }
+            List<Xarea> xareas = xareaMapper.selectXareaZgByStaffId(staff.get(i).getSysStaffId(),station);
+            for (int f = 0; f < xareas.size(); f++) {
+                staff.get(i).setXarea(xareas.get(f));
+                    /*if (effectiveDate==true && xareas.get(f).getStation().equals("高峰岗")) {
+                        System.out.println("111111111111");
 
-                }
+                    } else if (effectiveDate2==true && xareas.get(f).getStation().equals("高峰岗")) {
+                        System.out.println("222222222222222222");
+                        staff.get(i).setXarea(xareas.get(f));
+                    } else if (effectiveDate3==true && xareas.get(f).getStation().equals("固定岗")) {
+                        System.out.println("3333333333333333333");
+                        staff.get(i).setXareaList(xareas);
+                    } else {
+                        System.out.println("44444444444444444444");
+                        staff.get(i).setXareaList(null);
+                    }*/
+
+            }
             Gps gps = gpsMapper.gpsEnd(staff.get(i).getSysStaffId());
             staff.get(i).setStaffOnline("1");
             staff.get(i).setGps(gps);
         }
-        return ResultUtil.setOK("success",staff);
+        return ResultUtil.setOK("success", staff);
     }
 
     //根据id查询
     @Override
     public ResultBean selectStaffByid(Integer id) {
         Staff staff = staffMapper.selectStaffBypid(id);
-        if(staff!=null){
-            return ResultUtil.setOK("success",staff);
+        if (staff != null) {
+            return ResultUtil.setOK("success", staff);
         }
-        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+        return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
 
     /**
      * 按id查询民警应巡查路段
+     *
      * @param id
      * @return
      */
     @Override
-    public ResultBean selectStaffXareaByid(Integer id) {
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String hour = DataTime.hour();
+    public ResultBean selectStaffXareaByid(Integer id) throws Exception {
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        String dayTime = df.format(new Date());// new Date()为获取当前系统时间
+
+        Date startTime = ft.parse(dayTime + " 07:30:00");
+        Date endTime = ft.parse(dayTime + " 09:00:00");
+        Date startTime2 = ft.parse(dayTime + " 17:30:00");
+        Date endTime2 = ft.parse(dayTime + " 18:30:00");
+        Date startTime3 = ft.parse(dayTime + " 07:00:00");
+        Date endTime3 = ft.parse(dayTime + " 20:00:00");
+        Date nowTime = new Date();
+        //早高峰
+        boolean effectiveDate = DataTime.hour(nowTime, startTime, endTime);
+        //晚高峰
+        boolean effectiveDate2 = DataTime.hour(nowTime, startTime2, endTime2);
+        //固定岗
+        boolean effectiveDate3 = DataTime.hour(nowTime, startTime3, endTime3);
         //根据人查出来的岗位
         Staff staff = staffMapper.selectInfoByid(id);
-        List<Xarea> xareas = xareaMapper.selectXareaZgByStaffId(id);
+        List<Xarea> xareas = xareaMapper.selectXareaZgByStaffId(id,null);
         List<Xarea> xareas1 = new ArrayList<>();
         //计算民警的上班时长跟巡查轨迹
         Patrolrecord patrolrecords = patrolrecordMapper.selectrecordByid(id);
-        if(patrolrecords!=null){
+        if (patrolrecords != null) {
             String patrolRecordGps = patrolrecords.getPatrolRecordGps();
             Date date = new Date();
            /* String start=df.format(date);
@@ -470,7 +509,7 @@ public class staffServiceImpl implements staffService {
             //上班时长
             String duration = DataTime.getDatePoor(date, patrolrecords.getPatrolRecordBegintime());
 
-            DecimalFormat dub   = new DecimalFormat("######0.00");
+            DecimalFormat dub = new DecimalFormat("######0.00");
             //切割GPS点
             String[] split = patrolRecordGps.split(",");
            /* Double num=0.0;
@@ -497,7 +536,7 @@ public class staffServiceImpl implements staffService {
             String[] s1 = split[split.length-1].split(" ");
             Double endgp1=Double.parseDouble(s1[0]);
             Double endgp2=Double.parseDouble(s1[1]);*/
-            int num=split.length*10;
+            int num = split.length * 10;
             //巡查距离
             staff.setDuration(duration);
             //num = (double) Math.round(num * 100) / 100;
@@ -506,14 +545,14 @@ public class staffServiceImpl implements staffService {
         }
 
 
-        for (int f=0;f<xareas.size();f++) {
-            if (hour.equals("早高峰") && xareas.get(f).getStation().equals("高峰岗")) {
+        for (int f = 0; f < xareas.size(); f++) {
+            if (effectiveDate && xareas.get(f).getStation().equals("高峰岗")) {
                 xareas1.add(xareas.get(f));
                 staff.setXareaList(xareas1);
-            }else if(hour.equals("晚高峰") && xareas.get(f).getStation().equals("高峰岗")){
+            } else if (effectiveDate2 && xareas.get(f).getStation().equals("高峰岗")) {
                 xareas1.add(xareas.get(f));
                 staff.setXareaList(xareas1);
-            }else {
+            } else if (effectiveDate3 && xareas.get(f).getStation().equals("固定岗")) {
                 staff.setXareaList(xareas);
             }
 
@@ -521,37 +560,39 @@ public class staffServiceImpl implements staffService {
         //staff.setXareaList(xareas);
         Gps gps = gpsMapper.gpsEnd(staff.getSysStaffId());
         staff.setGps(gps);
-        return ResultUtil.setOK("success",staff);
+        return ResultUtil.setOK("success", staff);
     }
 
     /**
      * 查询昨日在岗警力人数
+     *
      * @return
      */
     @Override
     public ResultBean selecttotalforces() {
         Integer selecttotalforces = staffMapper.selecttotalforces();
-        if(selecttotalforces!=null ||selecttotalforces!=null){
-            return ResultUtil.setOK("success",staffMapper.selecttotalforces());
+        if (selecttotalforces != null || selecttotalforces != null) {
+            return ResultUtil.setOK("success", staffMapper.selecttotalforces());
         }
-        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+        return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
 
     @Override
     public ResultBean selecttotalforceszr() {
         List<HashMap> selecttotalforceszr = staffMapper.selecttotalforceszr();
-        if(selecttotalforceszr.size()>=0){
-            for (int i=0;i<selecttotalforceszr.size();i++){
+        if (selecttotalforceszr.size() >= 0) {
+            for (int i = 0; i < selecttotalforceszr.size(); i++) {
                 String sectionName = selecttotalforceszr.get(i).get("sectionName").toString();
-                if(sectionName.indexOf("大队")!=-1){
+                if (sectionName.indexOf("大队") != -1) {
                     String sectionName1 = selecttotalforceszr.get(i).get("sectionName").toString().substring(0, 3);
-                    selecttotalforceszr.get(i).put("sectionName",sectionName1);
+                    selecttotalforceszr.get(i).put("sectionName", sectionName1);
                 }
             }
 
-            return ResultUtil.setOK("success",selecttotalforceszr);
+            return ResultUtil.setOK("success", selecttotalforceszr);
         }
-        return ResultUtil.setError(SystemCon.RERROR1,"success",null);
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
     }
+
 
 }

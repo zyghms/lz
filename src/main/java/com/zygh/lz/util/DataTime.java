@@ -173,33 +173,37 @@ public class DataTime {
         return year;
     }
 
-    public static String hour() {
-        String time="";
-        Date date = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("HH");
-        String str = df.format(date);
-        int a = Integer.parseInt(str);
-        System.out.println(a);
-
-        if (a > 7 && a <= 13) {
-            if( a> 7.5 && a<9){
-                return "早高峰";
-            }
-            time="上午";
+    /**
+     *
+     * @param nowTime   当前时间
+     * @param startTime	开始时间
+     * @param endTime   结束时间
+     * @return
+     * @author sunran   判断当前时间在时间区间内
+     */
+    public static boolean hour(Date nowTime, Date startTime, Date endTime) {
+        if (nowTime.getTime() == startTime.getTime()
+                || nowTime.getTime() == endTime.getTime()) {
+            System.out.println();
+            return true;
         }
 
-        if (a > 13 && a <= 20) {
-            if(a>17.5 && a<18.5){
-                return "晚高峰";
-            }
-            time="下午";
-        }
-        if (a > 20 && a <= 24) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowTime);
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(startTime);
 
-            time="晚上";
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+
+        if (date.after(begin) && date.before(end)) {
+            return true;
+        } else {
+            return false;
         }
-        return time;
     }
+
+
 
     public static String duration(String starttime,String endtime) {
         //计算时间

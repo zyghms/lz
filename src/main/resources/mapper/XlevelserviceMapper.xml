@@ -223,7 +223,5 @@
                 WHERE section_name=#{sectionName})
             </if>
         </where>
-
-
     </select>
 </mapper>

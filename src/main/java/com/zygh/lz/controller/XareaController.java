@@ -1,6 +1,7 @@
 package com.zygh.lz.controller;
 
 import com.zygh.lz.admin.Xarea;
+import com.zygh.lz.service.staffService;
 import com.zygh.lz.service.xareaService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,4 +63,8 @@ public class XareaController {
         return xareaService.selectpolice();
     }
 
+    @GetMapping("selectqt")
+    public ResultBean selectqt(String conment){
+        return xareaService.selectqt(conment);
+    }
 }

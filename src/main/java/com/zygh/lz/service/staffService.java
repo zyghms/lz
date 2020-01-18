@@ -51,15 +51,17 @@ public interface staffService {
     ResultBean selectStaffYdByAll(String changeShifts,Integer SectionId);
 
     //查询所有在线民警，并把该民警岗位带出
-    ResultBean selectpoliceZx();
+    ResultBean selectpoliceZx(String station)throws Exception;
 
     ResultBean selectStaffByid(Integer id);
 
     //根据id查询民警应巡查路段
-    ResultBean selectStaffXareaByid(Integer id);
+    ResultBean selectStaffXareaByid(Integer id)throws Exception;
 
     //查询昨日总警力
     ResultBean selecttotalforces();
     //按大队查询昨日总警力
     ResultBean selecttotalforceszr();
+
+
 }

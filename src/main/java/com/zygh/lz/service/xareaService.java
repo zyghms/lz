@@ -26,5 +26,6 @@ public interface xareaService {
 
     //夜间快速岗
     ResultBean selectks();
-
+    //查询其他
+    ResultBean selectqt(String conment);
 }

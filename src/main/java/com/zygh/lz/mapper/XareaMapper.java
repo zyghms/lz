@@ -1,5 +1,6 @@
 package com.zygh.lz.mapper;
 
+import com.zygh.lz.admin.Staff;
 import com.zygh.lz.admin.Xarea;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -36,7 +37,7 @@ public interface XareaMapper {
     //查询所有区域
     List<Xarea> selectXareaAll();
 
-    List<Xarea> selectXareaZgByStaffId(Integer id);
+    List<Xarea> selectXareaZgByStaffId(@Param("id") Integer id,@Param("station") String station);
 
     List<HashMap> countYDSum(@Param("station") String station, @Param("battalion") String battalion);
 
@@ -82,6 +83,7 @@ public interface XareaMapper {
     //夜巡应到
     List<Integer> countYxYDsum(String battalion);
 
-
+    //查询其他
+    List<Xarea> selectqt(String conment);
 
 }
