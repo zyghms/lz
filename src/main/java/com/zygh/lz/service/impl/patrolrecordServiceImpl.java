@@ -548,7 +548,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
         for (HashMap yxPeople : yxPeoples) {
             for (Integer yx : yxList) {
-                if (yxPeople.get("sys_staff_id")==yx){
+                if (yxPeople.get("sys_staff_id").equals(yx)){
                     yxPeople.put("staff_online","1");
                 }
             }
@@ -559,7 +559,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion);
         for (HashMap gfPeople : gfPeoples) {
             for (Integer gf : gfList) {
-                if (gfPeople.get("sys_staff_id")==gf){
+                if (gfPeople.get("sys_staff_id").equals(gf)){
                     gfPeople.put("staff_online","1");
                 }
             }
@@ -572,7 +572,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         List<HashMap> rcPeoples = xareaMapper.countRcYDsumC2(battalion);
         for (HashMap rcPeople : rcPeoples) {
             for (Integer rc : rcList) {
-                if (rcPeople.get("sys_staff_id")==rc){
+                if (rcPeople.get("sys_staff_id").equals(rc)){
                     rcPeople.put("staff_online","1");
                 }
             }
@@ -582,7 +582,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         List<HashMap> rcPeoples1 = xareaMapper.countRcYDsum(battalion);
         for (HashMap hashMap : rcPeoples1) {
             for (Integer rc : rcList) {
-                if (hashMap.get("sys_staff_id")==rc){
+                if (hashMap.get("sys_staff_id").equals(rc)){
                     hashMap.put("staff_online","1");
                 }
             }
