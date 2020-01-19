@@ -587,6 +587,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 }
             }
         }
+
         rcPeoples.addAll(rcPeoples1);
         //+4是六大队的 没有具体人
         int rcYDsum = rcYDC2+rcPeoples1.size();

@@ -375,7 +375,7 @@
         <if test="battalion != null and battalion != ''" >
             and battalion = #{battalion}
         </if>
-        and type != '点'
+
     </select>
     <!--统计高峰岗 、固定岗组数-->
     <select id="countggZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
