@@ -83,6 +83,10 @@ public class StaffController {
         return staffService.selecttotalforceszr();
     }
 
-
+    //根据不同岗位查询在线人数
+    @GetMapping("selectzaBystation")
+    public ResultBean selectzaBystation(String station){
+        return staffService.selectzaBystation(station);
+    }
 
 }
