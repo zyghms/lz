@@ -385,8 +385,8 @@
         </if>
         GROUP BY f.sys_staff_id;
     </select>
-    <!--根据不通岗查询在线人GPS点-->
-    <select id="selectzaBystation" resultType="map">
+    <!--根据不同岗查询在线人GPS点-->
+    <select id="selectzaBystation" resultMap="BaseResultMap">
         select *
         from patrolrecord p,staff s,xarea x,xrelation xl
         where to_days(p.patrol_record_begintime) = to_days(now())
