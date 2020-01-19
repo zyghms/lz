@@ -49,6 +49,12 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         int i = patrolrecordMapper.insertSelective(patrolrecord);
         if (i > 0) {
+            //上线
+            Staff staff=new Staff();
+            staff.setSysStaffId(patrolrecord.getSysStaffId());
+            staff.setStaffOnline("1");
+            staffMapper.updateByPrimaryKeySelective(staff);
+
             Patrolrecord patrolrecord1 = patrolrecordMapper.selectBylast();
             //返回巡查记录id
             return ResultUtil.setOK("success", patrolrecord1.getSysPatrolRecordId());
@@ -69,7 +75,15 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         Integer sysPatrolRecordId = patrolrecord.getSysPatrolRecordId();
         Patrolrecord patrolrecord1 = patrolrecordMapper.selectByPrimaryKey(sysPatrolRecordId);
         String patrolRecordGps = patrolrecord1.getPatrolRecordGps();
-        System.out.println("patro:" + patrolRecordGps);
+
+        if(patrolrecord.getPatrolRecordEndtime()!=null){
+            //下线
+            Staff staff=new Staff();
+            staff.setSysStaffId(patrolrecord.getSysStaffId());
+            staff.setStaffOnline(null);
+            staffMapper.updateByPrimaryKeySelective(staff);
+        }
+
         if(patrolrecord.getPatrolRecordGps()!=null){
             if (patrolRecordGps != null && !patrolRecordGps.equals("")) {
                 patrolrecord.setPatrolRecordGps(patrolRecordGps + "," + patrolrecord.getPatrolRecordGps());

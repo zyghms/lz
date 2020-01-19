@@ -1,3 +1,4 @@
+/*
 package com.zygh.lz.controller;
 
 import com.zygh.lz.admin.Patrolrecord;
@@ -109,4 +110,4 @@ public class ScheduledTask {
     }
 
 
-}
+}*/
