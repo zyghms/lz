@@ -521,20 +521,58 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         //特殊
         HashMap<String, Object> tsMap = new HashMap<>();
 
-        //夜巡 3   铁骑2
+        List<Integer> yxList = patrolrecordMapper.countYxSDsum(battalion);
+        int yxSDsum = yxList.size();
+
+        List<Integer> gfList = patrolrecordMapper.countGdorGfSDsum("高峰岗", battalion);
+        int gfSDsum = gfList.size();
+
+        List<Integer> rcList = patrolrecordMapper.countRcSDsum(battalion);
+        int rcSDsum = rcList.size();
+
+        //夜巡
         List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
+        for (HashMap yxPeople : yxPeoples) {
+            for (Integer yx : yxList) {
+                if (yxPeople.get("sys_staff_id")==yx){
+                    yxPeople.put("staff_online","1");
+                }
+            }
+        }
         int yxYDsum = yxPeoples.size();
 
         //高峰应到数
         List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion);
+        for (HashMap gfPeople : gfPeoples) {
+            for (Integer gf : gfList) {
+                if (gfPeople.get("sys_staff_id")==gf){
+                    gfPeople.put("staff_online","1");
+                }
+            }
+
+        }
         int gfYDsum = gfPeoples.size();
 
         //日常勤务
         //网格+高速+铁骑+其他
         List<HashMap> rcPeoples = xareaMapper.countRcYDsumC2(battalion);
+        for (HashMap rcPeople : rcPeoples) {
+            for (Integer rc : rcList) {
+                if (rcPeople.get("sys_staff_id")==rc){
+                    rcPeople.put("staff_online","1");
+                }
+            }
+        }
         int rcYDC2 = rcPeoples.size()/2;
         //固定+重点
         List<HashMap> rcPeoples1 = xareaMapper.countRcYDsum(battalion);
+        for (HashMap hashMap : rcPeoples1) {
+            for (Integer rc : rcList) {
+                if (hashMap.get("sys_staff_id")==rc){
+                    hashMap.put("staff_online","1");
+                }
+            }
+        }
         rcPeoples.addAll(rcPeoples1);
         //+4是六大队的 没有具体人
         int rcYDsum = rcYDC2+rcPeoples1.size();
@@ -545,9 +583,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             TQYDsum = 0;
         }
 
-        int yxSDsum = patrolrecordMapper.countYxSDsum(battalion).size();
-        int gfSDsum = patrolrecordMapper.countGdorGfSDsum("高峰岗",battalion).size();
-        int rcSDsum = patrolrecordMapper.countRcSDsum(battalion).size();
+
 
         SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
