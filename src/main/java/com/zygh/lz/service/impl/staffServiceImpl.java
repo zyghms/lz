@@ -596,12 +596,22 @@ public class staffServiceImpl implements staffService {
 
     @Override
     public ResultBean selectzaBystation(String station,String conment,String grid) {
-        return ResultUtil.setOK("success",staffMapper.selectzaBystation(station,conment,grid));
+        List<Staff> staff = staffMapper.selectzaBystation(station, conment, grid);
+        for (int i=0;i<staff.size();i++){
+            Gps gps = gpsMapper.gpsEnd(staff.get(i).getSysStaffId());
+            staff.get(i).setGps(gps);
+        }
+        return ResultUtil.setOK("success",staff);
     }
 
     @Override
     public ResultBean selectStaffByqita() {
-        return ResultUtil.setOK("success",staffMapper.selectStaffByqita());
+        List<Staff> staff = staffMapper.selectStaffByqita();
+        for (int i=0;i<staff.size();i++){
+            Gps gps = gpsMapper.gpsEnd(staff.get(i).getSysStaffId());
+            staff.get(i).setGps(gps);
+        }
+        return ResultUtil.setOK("success",staff);
     }
 
 

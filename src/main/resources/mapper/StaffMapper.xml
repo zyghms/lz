@@ -461,7 +461,7 @@
 	    GROUP BY p.sys_staff_id) sb
     </select>
     <!--按大队-->
-    <select id="selecttotalforceszr" resultType="map">
+    <select id="selecttotalforceszr" resultMap="BaseResultMap">
       SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from (	SELECT s.section_name,f.sys_staff_id,s.sys_section_id,s.section_pid FROM patrolrecord p,staff f,section s
       WHERE f.sys_section_id=s.sys_section_id and f.sys_staff_id=p.sys_staff_id
       and date(patrol_record_begintime) = date_sub(curdate(),interval 1 day)
@@ -469,7 +469,7 @@
 	  ORDER BY FIELD(SUBSTRING(sb.section_name,1,1),'一','二','三','四','五','六','七','八','九','十')
     </select>
     <!--查询其他在线民警-->
-    <select id="selectStaffByqita" resultType="map">
+    <select id="selectStaffByqita" resultMap="BaseResultMap">
         select *
         from patrolrecord p,staff s,xarea x,xrelation xl
         where to_days(p.patrol_record_begintime) = to_days(now())
