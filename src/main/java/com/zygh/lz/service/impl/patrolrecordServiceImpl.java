@@ -1053,7 +1053,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         boolean effectiveDate = isEffectiveDate(nowTime, startTime, endTime);
         //晚高峰
         boolean effectiveDate2 = isEffectiveDate(nowTime, startTime2, endTime2);
-        //固定岗
+        //平峰期
         boolean effectiveDate3 = isEffectiveDate(nowTime, startTime3, endTime3);
 
         // 创建一个数值格式化对象
@@ -1219,22 +1219,25 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                             HashMap<String, Object> zdMap = new HashMap<>();
 
                             //日常
-                            int rcYDC2 = xareaMapper.countZDRcC2(battalion, zdName).size();
+                            int rcYDC2 = xareaMapper.countZDRcC2(ddName, zdName).size();
+
                             if (rcYDC2%2 != 0){
                                 rcYDC2 = (rcYDC2/2)+1;
                             }else {
                                 rcYDC2 = rcYDC2/2;
                             }
-                            int rcYD = xareaMapper.countZDRc(battalion, zdName,null).size();
+                            int rcYD = xareaMapper.countZDRc(ddName, zdName,null).size();
                             int rcYDSum = rcYDC2+rcYD;
 
                             int rcSDSum = patrolrecordMapper.countZDRcSDsum(ddName, zdName, null).size();
+
 
                             /*if (ddName.equals("六大队")&&zdName.equals("二中队")){
                                 rcYDSum += 2;
                             }else if (ddName.equals("六大队")&&zdName.equals("五中队")){
                                 rcYDSum += 2;
                             }*/
+
 
                             zdMap.put("name",zdName);
                             zdMap.put("YDnum",rcYDSum);

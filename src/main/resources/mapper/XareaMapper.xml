@@ -299,7 +299,7 @@
         <if test="battalion != null and battalion != ''" >
             and x.battalion = #{battalion}
         </if>
-        and (x.gridding = '固定岗' or conment = '4')
+        and (x.station = '固定岗' or conment = '4')
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
         and s.sys_section_id = st.sys_section_id
@@ -338,7 +338,7 @@
         where x.conment != '3'
         and x.battalion = #{battalion}
         and x.detachment = #{detachment}
-        and (x.gridding = '固定岗' or x.conment = '4'
+        and (x.station = '固定岗' or x.conment = '4'
         <if test="station != null and station != ''" >
             or x.station = #{station}
         </if>)
