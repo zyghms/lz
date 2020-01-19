@@ -88,5 +88,7 @@ public interface StaffMapper {
     //按大队查询昨日总警力
     List<HashMap> selecttotalforceszr();
 
+    //根据岗位查询在岗人
+    List<Staff> selectzaBystation(String station);
 
 }

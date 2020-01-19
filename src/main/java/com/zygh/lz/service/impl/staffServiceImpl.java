@@ -594,5 +594,10 @@ public class staffServiceImpl implements staffService {
         return ResultUtil.setError(SystemCon.RERROR1, "success", null);
     }
 
+    @Override
+    public ResultBean selectzaBystation(String station) {
+        return ResultUtil.setOK("success",staffMapper.selectzaBystation(station));
+    }
+
 
 }

@@ -386,6 +386,18 @@
         GROUP BY f.sys_staff_id;
     </select>
 
+    <select id="selectzaBystation" resultType="map">
+        select *
+        from patrolrecord p,staff s,xarea x,xrelation xl
+        where to_days(p.patrol_record_begintime) = to_days(now())
+        <if test="sectionId!=null and sectionId!='' ">
+            and x.station = #{station}
+        </if>
+        and p.sys_staff_id = s.sys_staff_id
+        and s.sys_staff_id = xl.staff_id
+        and xl.xarea_id = x.id
+        and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
+    </select>
     <!--大队或者区域应到人数-->
     <select id="selectStaffByxarea" resultMap="BaseResultMap">
       SELECT * FROM staff f,xrelation x,xarea a,section s WHERE s.sys_section_id=f.sys_section_id and

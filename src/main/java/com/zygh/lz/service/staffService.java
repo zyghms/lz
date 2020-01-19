@@ -63,5 +63,6 @@ public interface staffService {
     //按大队查询昨日总警力
     ResultBean selecttotalforceszr();
 
+    ResultBean selectzaBystation(String station);
 
 }
