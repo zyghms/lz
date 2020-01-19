@@ -313,7 +313,7 @@
             and x.battalion = #{battalion}
         </if>
         and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2')
-        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station is not null))
+        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station != '区域'))
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
         and s.sys_section_id = st.sys_section_id
@@ -327,7 +327,7 @@
         and x.battalion = #{battalion}
         and x.detachment = #{detachment}
         and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2')
-        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station is not null))
+        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station != '区域'))
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
         GROUP BY  s.sys_staff_id
@@ -399,7 +399,7 @@
     <select id="countQtZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
         select count(*) from xarea where station != '固定岗' and station != '高峰岗'
         and station != '高速岗' and conment != '2' and conment != '4'
-        and station != '快速岗' and station is not null
+        and station != '快速岗' and station != '区域'
         <if test="conment == null and conment == ''" >
             and conment != '3'
         </if>
@@ -434,7 +434,7 @@
         select s.sys_staff_id from xarea x,staff s,xrelation xl
         where x.station != '固定岗' and x.station != '高峰岗'
         and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
-        and x.station != '快速岗' and x.station is not null
+        and x.station != '快速岗' and x.station != '区域'
         and xl.xarea_id = x.id
         and xl.staff_id = s.sys_staff_id
         <if test="battalion != null and battalion != ''" >

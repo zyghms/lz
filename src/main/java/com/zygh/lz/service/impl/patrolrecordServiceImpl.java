@@ -537,7 +537,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         List<HashMap> rcPeoples1 = xareaMapper.countRcYDsum(battalion);
         rcPeoples.addAll(rcPeoples1);
         //+4是六大队的 没有具体人
-        int rcYDsum = rcYDC2+rcPeoples1.size()+4;
+        int rcYDsum = rcYDC2+rcPeoples1.size();
 
         //特殊勤务
         Integer TQYDsum = xlevelserviceMapper.selectorderlyAll(battalion);
@@ -863,7 +863,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //应到
         //固定岗 +4为六大队应到
-        int gdYDsum = xareaMapper.countYDSum("固定岗",battalion).size()+4;
+        int gdYDsum = xareaMapper.countYDSum("固定岗",battalion).size();
         //高峰岗
         int gfYDsum = xareaMapper.countYDSum("高峰岗",battalion).size();
         //重点
@@ -1101,11 +1101,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                             int zdYDSum = rcYDSum;
                             int zdSDSum = gfSDSum;
 
-                            if (ddName.equals("六大队")&&zdName.equals("二中队")){
+                            /*if (ddName.equals("六大队")&&zdName.equals("二中队")){
                                 zdYDSum += 2;
                             }else if (ddName.equals("六大队")&&zdName.equals("五中队")){
                                 zdYDSum += 2;
-                            }
+                            }*/
 
 
                             zdMap.put("name",zdName);
@@ -1165,11 +1165,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         int zdYDSum = rcYDSum;
                         int zdSDSum = gfSDSum;
 
-                        if (battalion.equals("六大队")&&zdName.equals("二中队")){
+                       /* if (battalion.equals("六大队")&&zdName.equals("二中队")){
                             zdYDSum += 2;
                         }else if (battalion.equals("六大队")&&zdName.equals("五中队")){
                             zdYDSum += 2;
-                        }
+                        }*/
 
                         zdMap.put("name",zdName);
                         zdMap.put("YDnum",zdYDSum);
@@ -1230,11 +1230,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                             int rcSDSum = patrolrecordMapper.countZDRcSDsum(ddName, zdName, null).size();
 
-                            if (ddName.equals("六大队")&&zdName.equals("二中队")){
+                            /*if (ddName.equals("六大队")&&zdName.equals("二中队")){
                                 rcYDSum += 2;
                             }else if (ddName.equals("六大队")&&zdName.equals("五中队")){
                                 rcYDSum += 2;
-                            }
+                            }*/
 
                             zdMap.put("name",zdName);
                             zdMap.put("YDnum",rcYDSum);
@@ -1286,11 +1286,11 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         }
                         int rcSDSum = patrolrecordMapper.countZDRcSDsum(battalion, zdName, null).size();
 
-                        if (battalion.equals("六大队")&&zdName.equals("二中队")){
+                        /*if (battalion.equals("六大队")&&zdName.equals("二中队")){
                             rcYDSum += 2;
                         }else if (battalion.equals("六大队")&&zdName.equals("五中队")){
                             rcYDSum += 2;
-                        }
+                        }*/
 
                         zdMap.put("name",zdName);
                         zdMap.put("YDnum",rcYDSum);
