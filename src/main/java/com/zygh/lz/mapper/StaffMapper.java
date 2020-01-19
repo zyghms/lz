@@ -89,6 +89,10 @@ public interface StaffMapper {
     List<HashMap> selecttotalforceszr();
 
     //根据岗位查询在岗人
-    List<Staff> selectzaBystation(String station);
+    List<Staff> selectzaBystation(@Param("station") String station,
+                                  @Param("conment") String conment,
+                                  @Param("grid") String grid);
+    //查询其他在线民警
+    List<Staff> selectStaffByqita();
 
 }

@@ -595,8 +595,13 @@ public class staffServiceImpl implements staffService {
     }
 
     @Override
-    public ResultBean selectzaBystation(String station) {
-        return ResultUtil.setOK("success",staffMapper.selectzaBystation(station));
+    public ResultBean selectzaBystation(String station,String conment,String grid) {
+        return ResultUtil.setOK("success",staffMapper.selectzaBystation(station,conment,grid));
+    }
+
+    @Override
+    public ResultBean selectStaffByqita() {
+        return ResultUtil.setOK("success",staffMapper.selectStaffByqita());
     }
 
 

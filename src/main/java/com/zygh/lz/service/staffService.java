@@ -63,6 +63,8 @@ public interface staffService {
     //按大队查询昨日总警力
     ResultBean selecttotalforceszr();
 
-    ResultBean selectzaBystation(String station);
+    ResultBean selectzaBystation(String station,String conment,String grid);
 
+    //查询其他在线民警
+    ResultBean selectStaffByqita();
 }

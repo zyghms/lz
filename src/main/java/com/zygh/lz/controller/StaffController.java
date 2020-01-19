@@ -85,8 +85,14 @@ public class StaffController {
 
     //根据不同岗位查询在线人数
     @GetMapping("selectzaBystation")
-    public ResultBean selectzaBystation(String station){
-        return staffService.selectzaBystation(station);
+    public ResultBean selectzaBystation(String station,String conment,String grid){
+        return staffService.selectzaBystation(station,conment,grid);
+    }
+
+    //查询其他在岗人
+    @GetMapping("selectStaffByqita")
+    public ResultBean selectStaffByqita(){
+        return staffService.selectStaffByqita();
     }
 
 }

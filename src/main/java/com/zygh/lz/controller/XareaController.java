@@ -63,6 +63,7 @@ public class XareaController {
         return xareaService.selectpolice();
     }
 
+    //查询其他在线警力
     @GetMapping("selectqt")
     public ResultBean selectqt(String conment){
         return xareaService.selectqt(conment);
