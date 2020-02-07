@@ -641,13 +641,12 @@ public class staffServiceImpl implements staffService {
         //实到在线人数
         List<Staff> gdorGfSDsum = staffMapper.countGdorGfSDsum("固定岗", battalion);
         List<Staff> staff = staffMapper.countGdorGfSDsumtj();
-       /* List<Staff> gfsd = staffMapper.countGdorGfSDsum("高峰岗", battalion);
         List<Staff> tqSD = staffMapper.countTqSDsum(battalion);
         List<Staff> wgSD = staffMapper.countWgSDsum(battalion);
         List<Staff> zdSD = staffMapper.countZdSDsum(battalion);//重点
         List<Staff> qtSD = staffMapper.countQtSDsum(battalion);
         List<Staff> gsSD = staffMapper.countGsorKsSDsum("高速岗", battalion, null);
-*/
+
         gdMap.put("固定岗",staff);
         gdMap.put("pepole",gdorGfSDsum);
 
@@ -659,11 +658,10 @@ public class staffServiceImpl implements staffService {
     @Override
     //根据岗位查询各大队在线民警
     public ResultBean selectcountBysection(String station){
-        System.out.println(staffMapper.selectcountBysection(station).size());
+
         List<HashMap> selectcountBysection = staffMapper.selectcountBysection(station);
-        System.out.println();
-        if (selectcountBysection.size() >= 0) {
-            for (int i = 0; i < selectcountBysection.size(); i++) {
+         if (selectcountBysection.size() >= 0) {
+           for (int i = 0; i < selectcountBysection.size(); i++) {
                 String sectionName = selectcountBysection.get(i).get("sectionName").toString();
                 if (sectionName.indexOf("大队") != -1) {
                     String sectionName1 = selectcountBysection.get(i).get("sectionName").toString().substring(0, 3);
@@ -673,7 +671,7 @@ public class staffServiceImpl implements staffService {
 
             return ResultUtil.setOK("success", selectcountBysection);
         }
-        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+        return ResultUtil.setError(SystemCon.RERROR1, "success", selectcountBysection);
     }
 
     @Override
