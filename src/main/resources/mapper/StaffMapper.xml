@@ -479,4 +479,83 @@
         and station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station != '区域'
         and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>
+
+    <!--统计固定岗/高峰岗实到在线人数-->
+    <select id="countGdorGfSDsum" resultType="map" parameterType="java.lang.String">
+        select s.*,st.section_name
+        from patrolrecord p,staff s,xarea x,xrelation xl,section st
+        where to_days(p.patrol_record_begintime) = to_days(now())
+        and x.station = #{station}
+        <if test="battalion != null and battalion != ''">
+            and x.battalion = #{battalion}
+        </if>
+        and s.sys_section_id=st.sys_section_id
+        and p.sys_staff_id = s.sys_staff_id
+        and s.sys_staff_id = xl.staff_id
+        and xl.xarea_id = x.id
+        and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
+    </select>
+    <!--统计-->
+    <select id="countGdorGfSDsumtj" resultType="map">
+        SELECT sb.battalion,sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	 (
+        select s.*,st.section_name,x.detachment
+        from patrolrecord p,staff s,xarea x,xrelation xl,section st
+        where to_days(p.patrol_record_begintime) = to_days(now())
+        and x.station = '固定岗'
+        and s.sys_section_id=st.sys_section_id
+        and  p.sys_staff_id = s.sys_staff_id
+        and s.sys_staff_id = xl.staff_id
+        and xl.xarea_id = x.id
+        and p.patrol_record_endtime is null GROUP BY p.sys_staff_id) sb GROUP BY SUBSTRING(sb.section_name,1,3)
+	ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+
+    <!--统计铁骑实到在线人数-->
+    <select id="countTqSDsum" resultType="map" parameterType="java.lang.String">
+        select s.*,st.section_name
+        from patrolrecord p,staff s,xarea x,xrelation xl,section st
+        where to_days(p.patrol_record_begintime) = to_days(now())
+        <if test="battalion != null and battalion != ''">
+            and x.battalion = #{battalion}
+        </if>
+        and s.sys_section_id=st.sys_section_id
+        and p.sys_staff_id = s.sys_staff_id
+        and s.sys_staff_id = xl.staff_id
+        and xl.xarea_id = x.id and x.conment = '2'
+        and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
+    </select>
+
+    <!--根据岗位查询各大队在线民警-->
+    <select id="selectcountBysection" resultType="map"  parameterType="java.lang.String">>
+         SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	 (
+        select s.*,st.section_name,x.detachment
+        from patrolrecord p,staff s,xarea x,xrelation xl,section st
+        where to_days(p.patrol_record_begintime) = to_days(now())
+        and x.station = '固定岗'
+        and s.sys_section_id=st.sys_section_id
+        and  p.sys_staff_id = s.sys_staff_id
+        and s.sys_staff_id = xl.staff_id
+        and xl.xarea_id = x.id
+        and p.patrol_record_endtime is null GROUP BY p.sys_staff_id) sb GROUP BY SUBSTRING(sb.section_name,1,3)
+	ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+
+    <!--根据岗位查询各大队在线民警详情-->
+    <select id="selectAllBysection" resultMap="BaseResultMap"  parameterType="java.lang.String">>
+        SELECT s.*
+        FROM patrolrecord p,staff s,xarea X,xrelation xl,section st
+        WHERE TO_DAYS(p.patrol_record_begintime) = TO_DAYS(NOW())
+        AND x.station = #{station}
+        AND st.sys_section_id IN
+        (
+        SELECT sys_section_id FROM section
+        WHERE section_name LIKE '%'+#{sectionName}+'%'
+        )
+        AND s.sys_section_id=st.sys_section_id
+        AND  p.sys_staff_id = s.sys_staff_id
+        AND s.sys_staff_id = xl.staff_id
+        AND xl.xarea_id = x.id
+        AND p.patrol_record_endtime IS NULL
+        GROUP BY p.sys_staff_id
+    </select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Staff;
 import com.zygh.lz.service.staffService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,4 +94,21 @@ public class StaffController {
         return staffService.selectStaffByqita();
     }
 
+    //以单位为结构显示信息列表
+    @GetMapping("selectAllbytype")
+    public ResultBean selectAllbytype(String battalion){
+        return staffService.selectAllbytype(battalion);
+    }
+
+    //根据岗位查询各大队在线民警
+    @GetMapping("selectcountBysection")
+    public ResultBean selectcountBysection(String station){
+        return staffService.selectcountBysection(station);
+    }
+
+    //根据岗位查询各大队在线民警详情
+    @GetMapping("selectAllBysection")
+    public ResultBean selectAllBysection(String station,String sectionName){
+        return staffService.selectAllBysection(station,sectionName);
+    }
 }

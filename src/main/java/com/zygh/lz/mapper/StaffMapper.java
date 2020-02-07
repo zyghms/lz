@@ -22,29 +22,32 @@ public interface StaffMapper {
     int updateByPrimaryKey(Staff record);
 
     //登录
-    Staff selectByLogin(@Param("staff_tel") String staff_tel, @Param("staff_password") String staff_password) ;
+    Staff selectByLogin(@Param("staff_tel") String staff_tel, @Param("staff_password") String staff_password);
+
     //校验
     Staff selectByName(String name);
+
     //根据id查询该人的部门、路长等级和姓名
     Staff selectInfoByid(Integer staffId);
 
     Staff selectByPrimaryKeyBig(String sysStaffId);
 
     //关联查询所有人员
-    List<Staff> selectAllStaff() ;
+    List<Staff> selectAllStaff();
+
     //查询所有人员
-    List<Staff> selectAllStaffPeople() ;
+    List<Staff> selectAllStaffPeople();
 
     int selectBySectionId(int id);
 
-    List<Object> selectStaffByDim(String staffSex,String staffPost,String staffName,String staffPid);
+    List<Object> selectStaffByDim(String staffSex, String staffPost, String staffName, String staffPid);
 
     List<Staff> selectdefault(String probleDetail);
 
     //查出每个大队下的人员
     List<Staff> selectAllBySF(Integer sysSectionId);
 
-    List<Staff> selectStaffByName(@Param("Name") String Name,@Param("staffHierarchy") String staffHierarchy);
+    List<Staff> selectStaffByName(@Param("Name") String Name, @Param("staffHierarchy") String staffHierarchy);
 
     //返回各大队指挥室
     Staff selectStaffBySectionName(Integer staffid);
@@ -71,10 +74,12 @@ public interface StaffMapper {
 
 
     List<Staff> selectStaffByxarea(Integer id);
+
     //所有应上岗人
     List<Staff> selectStaffYdByAll(@Param("changeShifts") String changeShifts,
-                                   @Param("SectionId")Integer SectionId,
+                                   @Param("SectionId") Integer SectionId,
                                    @Param("SectionZid") Integer SectionZid);
+
     List<Staff> selectStaffSdByAll(String changeShifts);
 
     //查询所有在线民警，并把该民警岗位带出
@@ -85,6 +90,7 @@ public interface StaffMapper {
 
     //查询昨日总警力
     int selecttotalforces();
+
     //按大队查询昨日总警力
     List<HashMap> selecttotalforceszr();
 
@@ -92,7 +98,51 @@ public interface StaffMapper {
     List<Staff> selectzaBystation(@Param("station") String station,
                                   @Param("conment") String conment,
                                   @Param("grid") String grid);
+
     //查询其他在线民警
     List<Staff> selectStaffByqita();
 
+
+    /**
+     * 从下查询人数，首页右侧信息展示
+     *
+     * @param station
+     * @param battalion
+     * @return
+     */
+    //统计固定岗/高峰岗实到
+    List<Staff> countGdorGfSDsum(@Param("station") String station, @Param("battalion") String battalion);
+    List<Staff> countGdorGfSDsumtj();
+
+    //统计夜巡实到
+    List<Staff> countYxSDsum(String battalion);
+
+    //统计铁骑实到
+    List<Staff> countTqSDsum(String battalion);
+
+    //统计网格实到
+    List<Staff> countWgSDsum(String battalion);
+
+    //日常实到
+    List<Staff> countRcSDsum(String battalion);
+
+    //重点岗实到
+    List<Staff> countZdSDsum(String battalion);
+
+    //其他岗实到
+    List<Staff> countQtSDsum(String battalion);
+
+    List<Staff> countZDRcSDsum(@Param("battalion") String battalion, @Param("detachment") String detachment, @Param("station") String station);
+
+    List<Staff> countZDYxSDsum(@Param("battalion") String battalion, @Param("detachment") String detachment);
+
+    //统计固定岗/高峰岗实到
+    public List<Staff> countGsorKsSDsum(@Param("station") String station, @Param("battalion") String battalion, @Param("conment") String conmen);
+
+    //根据岗位查询各大队在线民警
+    List<HashMap> selectcountBysection(@Param("station") String station);
+
+    //根据岗位查询各大队在线民警详情
+    List<HashMap> selectAllBysection(@Param("station") String station,
+                                     @Param("sectionName") String sectionName);
 }

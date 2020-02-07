@@ -67,4 +67,13 @@ public interface staffService {
 
     //查询其他在线民警
     ResultBean selectStaffByqita();
+
+    //以单位为结构显示信息列表
+    ResultBean selectAllbytype(String battalion);
+
+    //根据岗位查询各大队在线民警
+    ResultBean selectcountBysection(String station);
+
+    //根据岗位查询各大队在线民警详情
+    ResultBean selectAllBysection(String station,String sectionName);
 }

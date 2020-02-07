@@ -614,5 +614,76 @@ public class staffServiceImpl implements staffService {
         return ResultUtil.setOK("success",staff);
     }
 
+    /**
+     * 以单位为结构显示信息列表
+     *
+     * @return
+     */
+    @Override
+    public ResultBean selectAllbytype(String battalion) {
+
+        List<HashMap> typeSumList = new ArrayList<>();
+        //固定组数、应到数
+        HashMap<String, Object> gdMap = new HashMap<>();
+        //高峰岗组数、应到数
+        HashMap<String, Object> gfMap = new HashMap<>();
+        //铁骑实组数、应到数
+        HashMap<String, Object> tqMap = new HashMap<>();
+        //网格实组数、应到数
+        HashMap<String, Object> wgMap = new HashMap<>();
+        //重点组、应到实到
+        HashMap<String, Object> zdMap = new HashMap<>();
+        //其他组、应到实到
+        HashMap<String, Object> qtMap = new HashMap<>();
+        //高速
+        HashMap<String, Object> gsMap = new HashMap<>();
+
+        //实到在线人数
+        List<Staff> gdorGfSDsum = staffMapper.countGdorGfSDsum("固定岗", battalion);
+        List<Staff> staff = staffMapper.countGdorGfSDsumtj();
+       /* List<Staff> gfsd = staffMapper.countGdorGfSDsum("高峰岗", battalion);
+        List<Staff> tqSD = staffMapper.countTqSDsum(battalion);
+        List<Staff> wgSD = staffMapper.countWgSDsum(battalion);
+        List<Staff> zdSD = staffMapper.countZdSDsum(battalion);//重点
+        List<Staff> qtSD = staffMapper.countQtSDsum(battalion);
+        List<Staff> gsSD = staffMapper.countGsorKsSDsum("高速岗", battalion, null);
+*/
+        gdMap.put("固定岗",staff);
+        gdMap.put("pepole",gdorGfSDsum);
+
+
+        typeSumList.add(gdMap);
+        return ResultUtil.setOK("success",typeSumList);
+    }
+
+    @Override
+    //根据岗位查询各大队在线民警
+    public ResultBean selectcountBysection(String station){
+        System.out.println(staffMapper.selectcountBysection(station).size());
+        List<HashMap> selectcountBysection = staffMapper.selectcountBysection(station);
+        System.out.println();
+        if (selectcountBysection.size() >= 0) {
+            for (int i = 0; i < selectcountBysection.size(); i++) {
+                String sectionName = selectcountBysection.get(i).get("sectionName").toString();
+                if (sectionName.indexOf("大队") != -1) {
+                    String sectionName1 = selectcountBysection.get(i).get("sectionName").toString().substring(0, 3);
+                    selectcountBysection.get(i).put("sectionName", sectionName1);
+                }
+            }
+
+            return ResultUtil.setOK("success", selectcountBysection);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+    }
+
+    @Override
+    //根据岗位查询各大队在线民警详情
+    public ResultBean selectAllBysection(String station, String sectionName){
+        List<HashMap> selectAllBysection = staffMapper.selectAllBysection(station,sectionName);
+        if (selectAllBysection.size() >= 0) {
+            return ResultUtil.setOK("success", selectAllBysection);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+    }
 
 }
