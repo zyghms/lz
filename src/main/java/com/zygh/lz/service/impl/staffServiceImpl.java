@@ -641,19 +641,21 @@ public class staffServiceImpl implements staffService {
         //实到在线人数
         List<Staff> gdorGfSDsum = staffMapper.countGdorGfSDsum("固定岗", battalion);
         List<Staff> staff = staffMapper.countGdorGfSDsumtj();
-        List<Staff> tqSD = staffMapper.countTqSDsum(battalion);
+      /*  List<Staff> tqSD = staffMapper.countTqSDsum(battalion);
         List<Staff> wgSD = staffMapper.countWgSDsum(battalion);
         List<Staff> zdSD = staffMapper.countZdSDsum(battalion);//重点
         List<Staff> qtSD = staffMapper.countQtSDsum(battalion);
-        List<Staff> gsSD = staffMapper.countGsorKsSDsum("高速岗", battalion, null);
+        List<Staff> gsSD = staffMapper.countGsorKsSDsum("高速岗", battalion, null);*/
 
         gdMap.put("固定岗",staff);
-        gdMap.put("pepole",gdorGfSDsum);
+        gdMap.put("people",gdorGfSDsum);
 
 
         typeSumList.add(gdMap);
         return ResultUtil.setOK("success",typeSumList);
     }
+
+
 
     @Override
     //根据岗位查询各大队在线民警

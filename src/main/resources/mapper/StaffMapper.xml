@@ -498,7 +498,7 @@
     <!--统计-->
     <select id="countGdorGfSDsumtj" resultType="map">
         SELECT sb.battalion,sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	 (
-        select s.*,st.section_name,x.detachment
+        select s.*,st.section_name,x.battalion
         from patrolrecord p,staff s,xarea x,xrelation xl,section st
         where to_days(p.patrol_record_begintime) = to_days(now())
         and x.station = '固定岗'
@@ -526,12 +526,12 @@
     </select>
 
     <!--根据岗位查询各大队在线民警-->
-    <select id="selectcountBysection" resultType="map"  parameterType="java.lang.String">>
+    <select id="selectcountBysection" resultType="map"  parameterType="java.lang.String">
          SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	 (
         select s.*,st.section_name,x.detachment
         from patrolrecord p,staff s,xarea x,xrelation xl,section st
         where to_days(p.patrol_record_begintime) = to_days(now())
-        and x.station = '固定岗'
+        and x.station = #{station}
         and s.sys_section_id=st.sys_section_id
         and  p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id
@@ -541,7 +541,7 @@
     </select>
 
     <!--根据岗位查询各大队在线民警详情-->
-    <select id="selectAllBysection" resultMap="BaseResultMap"  parameterType="java.lang.String">>
+    <select id="selectAllBysection" resultMap="BaseResultMap"  parameterType="java.lang.String">
         SELECT s.*
         FROM patrolrecord p,staff s,xarea X,xrelation xl,section st
         WHERE TO_DAYS(p.patrol_record_begintime) = TO_DAYS(NOW())
@@ -549,7 +549,7 @@
         AND st.sys_section_id IN
         (
         SELECT sys_section_id FROM section
-        WHERE section_name LIKE '%'+#{sectionName}+'%'
+        WHERE section_name LIKE '%${sectionName}%'
         )
         AND s.sys_section_id=st.sys_section_id
         AND  p.sys_staff_id = s.sys_staff_id
