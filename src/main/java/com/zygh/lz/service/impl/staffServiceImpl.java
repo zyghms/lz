@@ -577,15 +577,21 @@ public class staffServiceImpl implements staffService {
         return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
 
+    /**
+     * 查询昨日总警力
+     * @return
+     */
     @Override
     public ResultBean selecttotalforceszr() {
         List<HashMap> selecttotalforceszr = staffMapper.selecttotalforceszr();
-        if (selecttotalforceszr.size() >= 0) {
+        if (selecttotalforceszr.size() > 0) {
             for (int i = 0; i < selecttotalforceszr.size(); i++) {
                 String sectionName = selecttotalforceszr.get(i).get("sectionName").toString();
                 if (sectionName.indexOf("大队") != -1) {
-                    String sectionName1 = selecttotalforceszr.get(i).get("sectionName").toString().substring(0, 3);
-                    selecttotalforceszr.get(i).put("sectionName", sectionName1);
+                    String sectionName1 = selecttotalforceszr.get(i).get("sectionName").toString();
+                    String dadui = sectionName1.substring(0, sectionName1.indexOf("大队")+2);
+                    //String[] sectionName1 = selecttotalforceszr.get(i).get("sectionName").toString();
+                    selecttotalforceszr.get(i).put("sectionName", dadui);
                 }
             }
 
@@ -659,11 +665,11 @@ public class staffServiceImpl implements staffService {
 
     @Override
     //根据岗位查询各大队在线民警
-    public ResultBean selectcountBysection(String station){
+    public ResultBean selectcountBysection(Xarea xarea){
 
-        List<HashMap> selectcountBysection = staffMapper.selectcountBysection(station);
-         if (selectcountBysection.size() >= 0) {
-           for (int i = 0; i < selectcountBysection.size(); i++) {
+        List<HashMap> selectcountBysection = staffMapper.selectcountBysection(xarea);
+        if (selectcountBysection.size() >= 0) {
+            for (int i = 0; i < selectcountBysection.size(); i++) {
                 String sectionName = selectcountBysection.get(i).get("sectionName").toString();
                 if (sectionName.indexOf("大队") != -1) {
                     String sectionName1 = selectcountBysection.get(i).get("sectionName").toString().substring(0, 3);
@@ -678,8 +684,8 @@ public class staffServiceImpl implements staffService {
 
     @Override
     //根据岗位查询各大队在线民警详情
-    public ResultBean selectAllBysection(String station, String sectionName){
-        List<HashMap> selectAllBysection = staffMapper.selectAllBysection(station,sectionName);
+    public ResultBean selectAllBysection(Xarea xarea){
+        List<HashMap> selectAllBysection = staffMapper.selectAllBysection(xarea);
         if (selectAllBysection.size() >= 0) {
             return ResultUtil.setOK("success", selectAllBysection);
         }

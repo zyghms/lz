@@ -2,6 +2,7 @@ package com.zygh.lz.service;
 
 import com.zygh.lz.admin.Register;
 import com.zygh.lz.admin.Staff;
+import com.zygh.lz.admin.Xarea;
 import com.zygh.lz.vo.ResultBean;
 import org.omg.PortableInterceptor.INACTIVE;
 
@@ -71,9 +72,10 @@ public interface staffService {
     //以单位为结构显示信息列表
     ResultBean selectAllbytype(String battalion);
 
+
     //根据岗位查询各大队在线民警
-    ResultBean selectcountBysection(String station);
+    ResultBean selectcountBysection(Xarea xarea);
 
     //根据岗位查询各大队在线民警详情
-    ResultBean selectAllBysection(String station,String sectionName);
+    ResultBean selectAllBysection(Xarea xarea);
 }

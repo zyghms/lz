@@ -1,5 +1,6 @@
 package com.zygh.lz.controller;
 
+import com.zygh.lz.admin.Xarea;
 import com.zygh.lz.service.staffService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,15 +101,16 @@ public class StaffController {
         return staffService.selectAllbytype(battalion);
     }
 
+
     //根据岗位查询各大队在线民警
     @GetMapping("selectcountBysection")
-    public ResultBean selectcountBysection(String station){
-        return staffService.selectcountBysection(station);
+    public ResultBean selectcountBysection(Xarea xarea){
+        return staffService.selectcountBysection(xarea);
     }
 
     //根据岗位查询各大队在线民警详情
     @GetMapping("selectAllBysection")
-    public ResultBean selectAllBysection(String station,String sectionName){
-        return staffService.selectAllBysection(station,sectionName);
+    public ResultBean selectAllBysection(Xarea xarea){
+        return staffService.selectAllBysection(xarea);
     }
 }

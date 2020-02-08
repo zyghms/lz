@@ -139,10 +139,10 @@ public interface StaffMapper {
     //统计固定岗/高峰岗实到
     public List<Staff> countGsorKsSDsum(@Param("station") String station, @Param("battalion") String battalion, @Param("conment") String conmen);
 
+
     //根据岗位查询各大队在线民警
-    List<HashMap> selectcountBysection(@Param("station") String station);
+    List<HashMap> selectcountBysection(Xarea xarea);
 
     //根据岗位查询各大队在线民警详情
-    List<HashMap> selectAllBysection(@Param("station") String station,
-                                     @Param("sectionName") String sectionName);
+    List<HashMap> selectAllBysection(Xarea xarea);
 }
