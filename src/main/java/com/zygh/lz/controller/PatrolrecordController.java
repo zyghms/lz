@@ -140,5 +140,12 @@ public class PatrolrecordController {
         return patrolrecordService.typeSumByTime(battalion);
     }
 
+    //查询区域内在线人的点位
+    @GetMapping("findNowByGps")
+    public List<HashMap> findNowByGps(double[] lon, double[] lat) {
 
- }
+        return patrolrecordService.findNowByGps(lon,lat);
+    }
+
+
+    }
