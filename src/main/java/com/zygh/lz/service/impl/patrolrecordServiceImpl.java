@@ -11,6 +11,7 @@ import com.zygh.lz.util.DataTime;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.util.StringUtil;
 import com.zygh.lz.vo.ResultBean;
+import com.zygh.lz.vo.pgs;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,10 @@ public class patrolrecordServiceImpl implements patrolrecordService {
      */
     @Override
     public ResultBean addPatrolrecord(Patrolrecord patrolrecord) {
+        if(patrolrecord.getPatrolRecordGps()!=null){
+            String  patrolRecordGps= patrolrecord.getPatrolRecordGps();
+            patrolrecord.setPatrolRecordGps(pgs.replace(patrolRecordGps));
+        }
 
         int i = patrolrecordMapper.insertSelective(patrolrecord);
         if (i > 0) {
@@ -74,7 +79,8 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         Integer sysPatrolRecordId = patrolrecord.getSysPatrolRecordId();
         Patrolrecord patrolrecord1 = patrolrecordMapper.selectByPrimaryKey(sysPatrolRecordId);
-        String patrolRecordGps = patrolrecord1.getPatrolRecordGps();
+
+        String patrolRecordGps = pgs.replace(patrolrecord1.getPatrolRecordGps());
 
         if (patrolrecord.getPatrolRecordEndtime() != null) {
             //下线
