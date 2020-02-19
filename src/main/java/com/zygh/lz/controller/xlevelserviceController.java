@@ -16,7 +16,7 @@ public class xlevelserviceController {
     public ResultBean selectorderlyAll(String sectionName){
         return xlevelserviceService.selectorderlyAll(sectionName);
     }
-    //
+    //按部门
     @GetMapping("selectorderlydjyd")
     public ResultBean selectorderlydjyd(String sectionName){
         return xlevelserviceService.selectorderlydjyd(sectionName);
