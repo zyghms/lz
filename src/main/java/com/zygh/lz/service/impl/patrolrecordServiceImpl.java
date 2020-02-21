@@ -1640,6 +1640,92 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         return inNowByGps;
     }
 
+    //根据大队名称查询在人GPS
+    @Override
+    public List<HashMap> findNowStaffBySection(String time,String battalion,Integer type){
+        List<HashMap> staffBySectionList = new ArrayList<>();
+
+        if (type == 1){
+            //高峰在线人ID
+            List<Integer> gfList = patrolrecordMapper.findGFGPS(time,"高峰岗",battalion);
+            for (Integer gfId : gfList) {
+                HashMap<String, Object> gfStaffGps = patrolrecordMapper.findStaffGps(time, gfId);
+                staffBySectionList.add(gfStaffGps);
+            }
+
+            //日常在线人ID
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            for (Integer rcId : rcList) {
+                HashMap<String, Object> rcStaffGps = patrolrecordMapper.findStaffGps(time, rcId);
+                staffBySectionList.add(rcStaffGps);
+            }
+        }else if (type == 2){
+            //日常在线人ID
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            for (Integer rcId : rcList) {
+                HashMap<String, Object> rcStaffGps = patrolrecordMapper.findStaffGps(time, rcId);
+                staffBySectionList.add(rcStaffGps);
+            }
+        }else if (type == 3){
+            //夜巡在线人ID
+            List<Integer> yxList = patrolrecordMapper.findYXGPS(time,battalion);
+            for (Integer yxId : yxList) {
+                HashMap<String, Object> yxStaffGps = patrolrecordMapper.findStaffGps(time, yxId);
+                staffBySectionList.add(yxStaffGps);
+            }
+        }
+
+        return staffBySectionList;
+    }
+
+    //统计各大队在线、应到人数
+    @Override
+    public HashMap findStaffSum(String time,String battalion,Integer type){
+        HashMap staffSumMap = new HashMap();
+
+        //高峰应到数
+        List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion);
+        //网格+高速+铁骑+其他
+        List<HashMap> rcPeoples = xareaMapper.countRcYDsumC2(battalion);
+        //固定+重点
+        List<HashMap> rcPeoples1 = xareaMapper.countRcYDsum(battalion);
+        //夜巡
+        List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
+
+        int gfYDSum = (gfPeoples.size())+(rcPeoples.size())+(rcPeoples1.size());
+        int rcYDSum = (rcPeoples.size())+(rcPeoples1.size());
+        int yxYDSum = yxPeoples.size();
+
+        if (type == 1){
+            //高峰在线人ID
+            List<Integer> gfList = patrolrecordMapper.findGFGPS(time,"高峰岗",battalion);
+            //日常在线人ID
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            int gfSDSum = (gfList.size())+(rcList.size());
+
+            staffSumMap.put("SDsum",gfSDSum);
+            staffSumMap.put("YDsum",gfYDSum);
+
+        }else if (type == 2){
+            //日常在线人ID
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            int rcSDSum = rcList.size();
+
+            staffSumMap.put("SDsum",rcSDSum);
+            staffSumMap.put("YDsum",rcYDSum);
+
+        }else if (type == 3){
+            //夜巡在线人ID
+            List<Integer> yxList = patrolrecordMapper.findYXGPS(time,battalion);
+            int yxSDSum = yxList.size();
+
+            staffSumMap.put("SDsum",yxSDSum);
+            staffSumMap.put("YDsum",yxYDSum);
+
+        }
+
+        return staffSumMap;
+    }
 
     /**
      * 判断是否在多边形区域内

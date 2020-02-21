@@ -76,5 +76,10 @@ public interface patrolrecordService {
     //查询在线人最新的点位
     public List<HashMap> findNowByGps(double[] lon, double[] lat);
 
+    //根据大队名称查询在人GPS
+    public List<HashMap> findNowStaffBySection(String time,String battalion,Integer type);
+
+    public HashMap findStaffSum(String time,String battalion,Integer type);
+
 
 }

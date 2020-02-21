@@ -120,5 +120,16 @@ public interface PatrolrecordMapper {
     //根据ID查询Gps点位
     public HashMap<String,Object> findNowGps(Integer id);
 
+    //高峰实到在线人ID
+    public List<Integer> findGFGPS(@Param("time")String time,@Param("station") String station,@Param("battalion")String battalion);
+    //日常勤务实到在线人ID
+    public List<Integer> findRcGPS(@Param("time")String time,@Param("battalion")String battalion);
+    //夜巡实到在线人ID
+    public List<Integer> findYXGPS(@Param("time")String time,@Param("battalion")String battalion);
+    //根据ID查询Gps点位
+    public HashMap<String,Object> findStaffGps(@Param("time")String time,@Param("id")Integer id);
+    //根据ID查询Gps点位
+    public List<HashMap> findSectionId(String sectionName);
+
 
 }

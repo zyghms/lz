@@ -147,5 +147,16 @@ public class PatrolrecordController {
         return patrolrecordService.findNowByGps(lon,lat);
     }
 
+    //根据大队名称查询在人GPS /热力图
+    @GetMapping("findNowStaffBySection")
+    public List<HashMap> findNowStaffBySection(String time,String battalion,Integer type){
+        return patrolrecordService.findNowStaffBySection(time,battalion,type);
+    }
+
+    //根据大队名称统计在线、应到人数
+    @GetMapping("findNowStaffBySection")
+    public HashMap findStaffSum(String time,String battalion,Integer type){
+        return patrolrecordService.findStaffSum(time,battalion,type);
+    }
 
     }
