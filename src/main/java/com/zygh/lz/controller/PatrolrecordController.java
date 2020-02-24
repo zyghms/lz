@@ -1,20 +1,13 @@
 package com.zygh.lz.controller;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import com.zygh.lz.admin.Patrolrecord;
-import com.zygh.lz.admin.Xarea;
-import com.zygh.lz.admin.Xlevelservice;
 import com.zygh.lz.mapper.PatrolrecordMapper;
-import com.zygh.lz.mapper.XareaMapper;
-import com.zygh.lz.mapper.XlevelserviceMapper;
 import com.zygh.lz.service.patrolrecordService;
-import com.zygh.lz.util.GPSTransformMars;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,9 +21,6 @@ public class PatrolrecordController {
     private patrolrecordService patrolrecordService;
     @Autowired
     private PatrolrecordMapper patrolrecordMapper;
-
-    @Autowired
-    private XlevelserviceMapper xlevelserviceMapper;
 
     //查询所有巡查记录
     @GetMapping("selectAllPatrolrecord")
@@ -58,8 +48,8 @@ public class PatrolrecordController {
 
     //根据道路类型、部门查询所有巡查信息(分层级查询)
     @GetMapping("selectByRoadtype")
-    public ResultBean selectByRoadtype(Integer staffid, String beginTime, String endTime) {
-        return patrolrecordService.selectByRoadtype(staffid, beginTime, endTime);
+    public ResultBean selectByRoadtype( Integer staffid, String beginTime, String endTime) {
+        return patrolrecordService.selectByRoadtype( staffid, beginTime, endTime);
     }
 
     //根据时间查询个人巡查记录
@@ -67,7 +57,6 @@ public class PatrolrecordController {
     public ResultBean selectByStaffs(Integer SysStaffId, String beginTime, String endTime) {
         return patrolrecordService.selectByStaff(SysStaffId, beginTime, endTime);
     }
-
     //根据时间查询个人巡查记录app
     @GetMapping("selectByStaff")
     public ResultBean selectByStaff(Integer SysStaffId, String beginTime, String endTime) {
@@ -89,93 +78,67 @@ public class PatrolrecordController {
     //根据登录用户负责道路列表
     @GetMapping("selectByStaffId")
     public ResultBean selectByStaffId(Integer staffId) {
-        return patrolrecordService.selectByStaffId(staffId);
+        return  patrolrecordService.selectByStaffId(staffId);
     }
 
     //查询最后一条巡查记录
     @GetMapping("selectBylast")
-    public Patrolrecord selectBylast() {
+    public Patrolrecord selectBylast(){
         return patrolrecordMapper.selectBylast();
     }
 
     //修改巡查记录
     @GetMapping("updatePatrolrecord")
-    public ResultBean updatePatrolrecord(Patrolrecord patrolrecord) {
+    public ResultBean updatePatrolrecord(Patrolrecord patrolrecord){
         return patrolrecordService.updatePatrolrecord(patrolrecord);
     }
 
     //删除巡查记录
     @GetMapping("delPatrolrecord")
-    public ResultBean delPatrolrecord(Integer id) {
+    public ResultBean delPatrolrecord(Integer id){
         return patrolrecordService.delPatrolrecord(id);
     }
 
     //批量删除
     @GetMapping("delectPatrolrecordById")
-    public ResultBean delectPatrolrecordById(int[] array) {
+    public ResultBean delectPatrolrecordById(int[] array){
         return patrolrecordService.delectPatrolrecordById(array);
     }
 
     //根据id查询该人的巡查记录
     @GetMapping("selectAllPatrolrecordById")
-    public ResultBean selectAllPatrolrecordById(Integer id) {
+    public ResultBean selectAllPatrolrecordById(Integer id){
         return patrolrecordService.selectAllPatrolrecordById(id);
     }
 
     //查询当天日常勤务各时间段 实到、应到人数
     @GetMapping("theDaySum")
-    public List<HashMap> theDaySum(String battalion) throws Exception {
+    public List<HashMap> theDaySum(String battalion)throws Exception{
         return patrolrecordService.theDaySum(battalion);
     }
-
     //统计各个岗位应到实到人
     @GetMapping("typeSum")
-    public List<HashMap> typeSum(String battalion) throws Exception {
+    public List<HashMap> typeSum(String battalion)throws Exception{
         return patrolrecordService.typeSum(battalion);
     }
 
     //查询当天各大队各中队日常勤务各时间段 实到、应到人数
     @GetMapping("countZD")
-    public List<HashMap> countZD(String battalion) throws Exception {
+    public List<HashMap> countZD(String battalion)throws Exception{
         return patrolrecordService.countZD(battalion);
     }
 
     //统计夜间各个岗位应到实到人
     @GetMapping("yXtypeSum")
-    public List<HashMap> yXtypeSum(String battalion) throws Exception {
+    public List<HashMap> yXtypeSum(String battalion)throws Exception{
         return patrolrecordService.yXtypeSum(battalion);
     }
 
     //按时间段统计日间各个岗位应到实到人
     @GetMapping("typeSumByTime")
-    public List<HashMap> typeSumByTime(String battalion) throws Exception {
+    public List<HashMap> typeSumByTime(String battalion)throws Exception{
         return patrolrecordService.typeSumByTime(battalion);
     }
 
-    //查询区域内在线人的点位
-    @GetMapping("findNowByGps")
-    public List<HashMap> findNowByGps(double[] lon, double[] lat) {
 
-        return patrolrecordService.findNowByGps(lon, lat);
-    }
-
-   /* @GetMapping("gps")
-    public void gps() {
-        List<Patrolrecord> xareas = patrolrecordMapper.selectAllPatrolrecordes();
-        int si=0;
-        for (int i = 0; i < xareas.size(); i++) {
-            String gps = xareas.get(i).getPatrolRecordGps();
-            if (gps != null && gps != "") {
-                String s = GPSTransformMars.GCj2TOWGS(gps);
-                Patrolrecord xarea = new Patrolrecord();
-                xarea.setPatrolRecordGps(s);
-                xarea.setSysPatrolRecordId(xareas.get(i).getSysPatrolRecordId());
-                patrolrecordMapper.updateByPrimaryKeySelective(xarea);
-            }else {
-                si++;
-                System.out.println("++++++++++"+si);
-            }
-        }
-    }*/
-
-}
+ }

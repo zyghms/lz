@@ -1,6 +1,7 @@
 package com.zygh.lz.service;
 
 import com.zygh.lz.admin.Patrolrecord;
+import com.zygh.lz.admin.Problem;
 import com.zygh.lz.vo.ResultBean;
 
 import java.util.HashMap;
@@ -72,9 +73,6 @@ public interface patrolrecordService {
 
     //按时间段
     List<HashMap> typeSumByTime(String battalion) throws Exception;
-
-    //查询在线人最新的点位
-    public List<HashMap> findNowByGps(double[] lon, double[] lat);
 
 
 }

@@ -188,10 +188,6 @@
     and f.sys_section_id=s.sys_section_id
     ORDER BY patrol_record_begintime DESC
   </select>
-    <select id="selectAllPatrolrecordes" resultMap="BaseResultMap">
-    SELECT * FROM patrolrecord
-  </select>
-
     <!--查询所有巡查记录的视频-->
     <select id="selectVideo" resultMap="BaseResultMap">
         SELECT * FROM patrolrecord
@@ -521,18 +517,4 @@
         </set>
         where sys_patrol_record_id = #{sysPatrolRecordId,jdbcType=INTEGER}
     </update>
-
-
-    <!--查询在线人ID-->
-    <select id="findNowId" resultType="java.lang.Integer">
-        SELECT sys_staff_id FROM patrolrecord where patrol_record_endtime is null GROUP BY sys_staff_id
-    </select>
-
-    <select id="findNowGps" resultType="java.util.HashMap" parameterType="java.lang.Integer">
-        SELECT * FROM gps g,staff f,section s
-        where g.sys_staff_id=f.sys_staff_id
-        and f.sys_section_id=s.sys_section_id
-        and g.sys_staff_id = #{id}
-        ORDER BY gps_time DESC LIMIT 1
-    </select>
 </mapper>
