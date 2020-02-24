@@ -7,6 +7,7 @@ import com.zygh.lz.admin.Staff;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.mapper.*;
 import com.zygh.lz.service.patrolrecordService;
+import com.zygh.lz.util.GPSTransformMars;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;
 import com.zygh.lz.vo.pgs;
@@ -46,7 +47,12 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     public ResultBean addPatrolrecord(Patrolrecord patrolrecord) {
         if(patrolrecord.getPatrolRecordGps()!=null){
             String  patrolRecordGps= patrolrecord.getPatrolRecordGps();
-            patrolrecord.setPatrolRecordGps(pgs.replace(patrolRecordGps));
+            //空格换成逗号
+            String replace = pgs.replace(patrolRecordGps);
+            //火星坐标系转换84坐标系
+            String s = GPSTransformMars.GCj2TOWGS(replace);
+            patrolrecord.setPatrolRecordGps(s);
+
         }
 
         int i = patrolrecordMapper.insertSelective(patrolrecord);

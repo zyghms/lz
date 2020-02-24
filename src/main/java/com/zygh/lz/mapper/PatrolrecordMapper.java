@@ -23,6 +23,7 @@ public interface PatrolrecordMapper {
 
     int updateByPrimaryKey(Patrolrecord record);
 
+    List<Patrolrecord> selectAll();
     //根据道路名称、部门查询所有巡查信息
     List<Patrolrecord> selectByRoadtype(@Param("sysSectionId") Integer sysSectionId,
                                         @Param("beginTime") String beginTime, @Param("endTime") String endTime);
@@ -44,6 +45,7 @@ public interface PatrolrecordMapper {
 
     //查询所有巡查记录
     List<Patrolrecord> selectAllPatrolrecord();
+    List<Patrolrecord> selectAllPatrolrecordes();
 
     //查询巡查记录的所有视频
     List<Patrolrecord> selectVideo();

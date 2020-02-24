@@ -38,4 +38,6 @@ public interface XlevelserviceMapper {
     List<Xlevelservice> selectxleveBydj(@Param("hierarchy") Integer hierarchy,
                                         @Param("sectionName") String sectionName);
 
+    List<Xlevelservice> selectXleveAll();
+
 }

@@ -1,5 +1,11 @@
 package com.zygh.lz.util;
 
+import com.zygh.lz.admin.Xarea;
+import com.zygh.lz.mapper.XareaMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
 public class GPSTransformMars {
     /*
      * GPS坐标转换为高德地图坐标
@@ -11,6 +17,10 @@ public class GPSTransformMars {
     double PI = 3.1415926535897932384626;
     double a = 6378245.0;
     double ee = 0.00669342162296594323;
+
+
+    @Autowired
+    private XareaMapper xareaMapper;
 
     /**
      * WGS84转GCj02
@@ -49,5 +59,48 @@ public class GPSTransformMars {
         ret += (150.0 * Math.sin(lng / 12.0 * PI) + 300.0 * Math.sin(lng / 30.0 * PI)) * 2.0 / 3.0;
         return ret;
     }
+
+    //坐标转换，
+    public static String GCj2TOWGS(String gps){
+        String[] split = gps.split(",");
+        for (int i = 0; i < split.length; i++) {
+            System.out.println(split[i]);
+        }
+        String loastr = "";
+        String loc = "";
+        for (int k = 0; k < split.length; k++) {
+            if (k % 2 == 0) {
+                double lat = Double.valueOf(split[k + 1]); //标记纬度
+                double lng = Double.valueOf(split[k]);     //标记经度
+                double[] doubles = GCJ2WGSUtils.gcj02towgs84(lng, lat);
+                loastr = String.valueOf(doubles[0]) + "," + String.valueOf(doubles[1])+",";
+                loc += loastr;
+            }
+        }
+
+        return loc.substring(0,loc.length()-1);
+    }
+
+    /*public static void main(String[] args) {
+        String gps="113.700199,34.762999";
+        String[] split = gps.split(",");
+        for (int i = 0; i < split.length; i++) {
+            System.out.println(split[i]);
+        }
+        String loastr = "";
+        String loc = "";
+        for (int k = 0; k < split.length; k++) {
+            if (k % 2 == 0) {
+                double lat = Double.valueOf(split[k + 1]); //标记纬度
+                double lng = Double.valueOf(split[k]);     //标记经度
+                double[] doubles = GCJ2WGSUtils.gcj02towgs84(lng, lat);
+                loastr = String.valueOf(doubles[0]) + "," + String.valueOf(doubles[1])+",";
+                loc += loastr;
+            }
+        }
+
+        System.out.println(loc.substring(0,loc.length()-1));
+    }*/
+
 
 }

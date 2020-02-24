@@ -188,6 +188,10 @@
     and f.sys_section_id=s.sys_section_id
     ORDER BY patrol_record_begintime DESC
   </select>
+    <select id="selectAllPatrolrecordes" resultMap="BaseResultMap">
+    SELECT * FROM patrolrecord
+  </select>
+
     <!--查询所有巡查记录的视频-->
     <select id="selectVideo" resultMap="BaseResultMap">
         SELECT * FROM patrolrecord
