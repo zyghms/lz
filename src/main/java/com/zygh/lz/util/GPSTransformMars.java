@@ -1,10 +1,7 @@
 package com.zygh.lz.util;
 
-import com.zygh.lz.admin.Xarea;
 import com.zygh.lz.mapper.XareaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 public class GPSTransformMars {
     /*
@@ -61,7 +58,7 @@ public class GPSTransformMars {
     }
 
     //坐标转换，
-    public static String GCj2TOWGS(String gps){
+    public static String GCj2TOWGS(String gps) {
         String[] split = gps.split(",");
         for (int i = 0; i < split.length; i++) {
             System.out.println(split[i]);
@@ -73,12 +70,12 @@ public class GPSTransformMars {
                 double lat = Double.valueOf(split[k + 1]); //标记纬度
                 double lng = Double.valueOf(split[k]);     //标记经度
                 double[] doubles = GCJ2WGSUtils.gcj02towgs84(lng, lat);
-                loastr = String.valueOf(doubles[0]) + "," + String.valueOf(doubles[1])+",";
+                loastr = String.valueOf(doubles[0]) + "," + String.valueOf(doubles[1]) + ",";
                 loc += loastr;
             }
         }
 
-        return loc.substring(0,loc.length()-1);
+        return loc.substring(0, loc.length() - 1);
     }
 
     /*public static void main(String[] args) {

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.awt.geom.Point2D;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1612,6 +1613,177 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public List<HashMap> findNowByGps(double[] lon, double[] lat) {
+
+        List<HashMap> inNowByGps = new ArrayList<>();
+        if (lon!=null && lat!= null){
+            List<Integer> nowIds = patrolrecordMapper.findNowId();
+            if (nowIds.size()>0){
+                for (Integer nowId : nowIds) {
+                    HashMap<String, Object> nowGps = patrolrecordMapper.findNowGps(nowId);
+                    if (nowGps!=null){
+                        String gps_x = (String) nowGps.get("gps_x");
+                        String gps_y = (String) nowGps.get("gps_y");
+
+                        Double x = Double.parseDouble(gps_x);
+                        Double y = Double.parseDouble(gps_y);
+
+                        boolean result = isInPolygon(x, y, lon, lat);
+                        if (result){
+                            inNowByGps.add(nowGps);
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return inNowByGps;
+    }
+
+    //根据大队名称查询在人GPS
+    @Override
+    public List<HashMap> findNowStaffBySection(String time,String battalion,Integer type){
+        List<HashMap> staffBySectionList = new ArrayList<>();
+
+        if (type == 1){
+            //高峰在线人ID
+            List<Integer> gfList = patrolrecordMapper.findGFGPS(time,"高峰岗",battalion);
+            for (Integer gfId : gfList) {
+                HashMap<String, Object> gfStaffGps = patrolrecordMapper.findStaffGps(time, gfId);
+                staffBySectionList.add(gfStaffGps);
+            }
+
+            //日常在线人ID
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            for (Integer rcId : rcList) {
+                HashMap<String, Object> rcStaffGps = patrolrecordMapper.findStaffGps(time, rcId);
+                staffBySectionList.add(rcStaffGps);
+            }
+        }else if (type == 2){
+            //日常在线人ID
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            for (Integer rcId : rcList) {
+                HashMap<String, Object> rcStaffGps = patrolrecordMapper.findStaffGps(time, rcId);
+                staffBySectionList.add(rcStaffGps);
+            }
+        }else if (type == 3){
+            //夜巡在线人ID
+            List<Integer> yxList = patrolrecordMapper.findYXGPS(time,battalion);
+            for (Integer yxId : yxList) {
+                HashMap<String, Object> yxStaffGps = patrolrecordMapper.findStaffGps(time, yxId);
+                staffBySectionList.add(yxStaffGps);
+            }
+        }
+
+        return staffBySectionList;
+    }
+
+    //统计各大队在线、应到人数
+    @Override
+    public HashMap findStaffSum(String time,String battalion,Integer type){
+        HashMap staffSumMap = new HashMap();
+
+        //高峰应到数
+        List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion);
+        //网格+高速+铁骑+其他
+        List<HashMap> rcPeoples = xareaMapper.countRcYDsumC2(battalion);
+        //固定+重点
+        List<HashMap> rcPeoples1 = xareaMapper.countRcYDsum(battalion);
+        //夜巡
+        List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
+
+        int gfYDSum = (gfPeoples.size())+(rcPeoples.size())+(rcPeoples1.size());
+        int rcYDSum = (rcPeoples.size())+(rcPeoples1.size());
+        int yxYDSum = yxPeoples.size();
+
+        if (type == 1){
+            //高峰在线人ID
+            List<Integer> gfList = patrolrecordMapper.findGFGPS(time,"高峰岗",battalion);
+            //日常在线人ID
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            int gfSDSum = (gfList.size())+(rcList.size());
+
+            staffSumMap.put("SDsum",gfSDSum);
+            staffSumMap.put("YDsum",gfYDSum);
+
+        }else if (type == 2){
+            //日常在线人ID
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            int rcSDSum = rcList.size();
+
+            staffSumMap.put("SDsum",rcSDSum);
+            staffSumMap.put("YDsum",rcYDSum);
+
+        }else if (type == 3){
+            //夜巡在线人ID
+            List<Integer> yxList = patrolrecordMapper.findYXGPS(time,battalion);
+            int yxSDSum = yxList.size();
+
+            staffSumMap.put("SDsum",yxSDSum);
+            staffSumMap.put("YDsum",yxYDSum);
+
+        }
+
+        return staffSumMap;
+    }
+
+    /**
+     * 判断是否在多边形区域内
+     *
+     * @param pointLon
+     *            要判断的点的纵坐标
+     * @param pointLat
+     *            要判断的点的横坐标
+     * @param lon
+     *            区域各顶点的纵坐标数组
+     * @param lat
+     *            区域各顶点的横坐标数组
+     * @return
+     */
+    public static boolean isInPolygon(double pointLon, double pointLat, double[] lon,
+                                      double[] lat) {
+        // 将要判断的横纵坐标组成一个点
+        Point2D.Double point = new Point2D.Double(pointLon, pointLat);
+        // 将区域各顶点的横纵坐标放到一个点集合里面
+        List<Point2D.Double> pointList = new ArrayList<Point2D.Double>();
+        double polygonPoint_x = 0.0, polygonPoint_y = 0.0;
+        for (int i = 0; i < lon.length; i++) {
+            polygonPoint_x = lon[i];
+            polygonPoint_y = lat[i];
+            Point2D.Double polygonPoint = new Point2D.Double(polygonPoint_x, polygonPoint_y);
+            pointList.add(polygonPoint);
+        }
+        return check(point, pointList);
+    }
+    /**
+     * 一个点是否在多边形内
+     *
+     * @param point
+     *            要判断的点的横纵坐标
+     * @param polygon
+     *            组成的顶点坐标集合
+     * @return
+     */
+    private static boolean check(Point2D.Double point, List<Point2D.Double> polygon) {
+        java.awt.geom.GeneralPath peneralPath = new java.awt.geom.GeneralPath();
+
+        Point2D.Double first = polygon.get(0);
+        // 通过移动到指定坐标（以双精度指定），将一个点添加到路径中
+        peneralPath.moveTo(first.x, first.y);
+        polygon.remove(0);
+        for (Point2D.Double d : polygon) {
+            // 通过绘制一条从当前坐标到新指定坐标（以双精度指定）的直线，将一个点添加到路径中。
+            peneralPath.lineTo(d.x, d.y);
+        }
+        // 将几何多边形封闭
+        peneralPath.lineTo(first.x, first.y);
+        peneralPath.closePath();
+        // 测试指定的 Point2D 是否在 Shape 的边界内。
+        return peneralPath.contains(point);
     }
 
 

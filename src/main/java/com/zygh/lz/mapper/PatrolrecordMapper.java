@@ -4,6 +4,7 @@ import com.zygh.lz.admin.Patrolrecord;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -113,5 +114,20 @@ public interface PatrolrecordMapper {
     //统计固定岗/高峰岗实到
     public List<Integer> countGsorKsSDsum(@Param("station") String station, @Param("battalion") String battalion, @Param("conment") String conmen);
 
+
+    //查询在线人ID
+    public List<Integer> findNowId();
+    //根据ID查询Gps点位
+    public HashMap<String,Object> findNowGps(Integer id);
+    //高峰实到在线人ID
+    public List<Integer> findGFGPS(@Param("time")String time,@Param("station") String station,@Param("battalion")String battalion);
+    //日常勤务实到在线人ID
+    public List<Integer> findRcGPS(@Param("time")String time,@Param("battalion")String battalion);
+    //夜巡实到在线人ID
+    public List<Integer> findYXGPS(@Param("time")String time,@Param("battalion")String battalion);
+    //根据ID查询Gps点位
+    public HashMap<String,Object> findStaffGps(@Param("time")String time,@Param("id")Integer id);
+    //根据ID查询Gps点位
+    public List<HashMap> findSectionId(String sectionName);
 
 }
