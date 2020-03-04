@@ -165,4 +165,10 @@ public class PatrolrecordController {
         return patrolrecordService.findCircleByGps(circleX,circleY,r);
     }
 
+    //根据个人id查询改人当天是否签到
+    @GetMapping("selectinfoByid")
+    public ResultBean selectinfoByid(Integer id){
+        return patrolrecordService.selectinfoByid(id);
+    }
+
  }

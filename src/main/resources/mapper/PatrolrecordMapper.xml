@@ -36,6 +36,19 @@
         <result column="section_tel" property="sectionTel" jdbcType="VARCHAR"/>
         <result column="section_person" property="sectionPerson" jdbcType="VARCHAR"/>
     </resultMap>
+
+    <resultMap id="BaseResultMap1" type="com.zygh.lz.admin.Patrolrecord">
+        <id column="sys_patrol_record_id" property="sysPatrolRecordId" jdbcType="INTEGER"/>
+        <result column="sys_staff_id" property="sysStaffId" jdbcType="INTEGER"/>
+        <result column="patrol_record_begintime" property="patrolRecordBegintime" jdbcType="TIMESTAMP"/>
+        <result column="patrol_record_endtime" property="patrolRecordEndtime" jdbcType="TIMESTAMP"/>
+        <result column="patrol_record_picture" property="patrolRecordPicture" jdbcType="VARCHAR"/>
+        <result column="patrol_record_video" property="patrolRecordVideo" jdbcType="VARCHAR"/>
+        <result column="patrol_record_gps" property="patrolRecordGps" jdbcType="VARCHAR"/>
+        <result column="patrol_record_detail" property="patrolRecordDetail" jdbcType="VARCHAR"/>
+        <result column="roadName" property="roadName" jdbcType="VARCHAR"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
     sys_patrol_record_id, sys_staff_id, patrol_record_begintime, patrol_record_endtime, 
     patrol_record_picture, patrol_record_video, patrol_record_gps, patrol_record_detail, 
@@ -592,5 +605,8 @@
             and st.section_name = #{sectionName}
         </if>
         GROUP BY st.section_name
+    </select>
+    <select id="selectinfoByid" resultType="java.util.HashMap">
+        SELECT * from patrolrecord  WHERE sys_staff_id=#{id} AND TO_DAYS(patrol_record_begintime) = TO_DAYS(NOW())
     </select>
 </mapper>

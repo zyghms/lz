@@ -62,6 +62,7 @@ public interface patrolrecordService {
     //根据id查询该人的巡查记录
     ResultBean selectAllPatrolrecordById(Integer id);
 
+    //
 
     List<HashMap> theDaySum(String battalion) throws Exception;
 
@@ -85,4 +86,6 @@ public interface patrolrecordService {
     //判断是否在圆内
     public List<HashMap> findCircleByGps(double circleX, double circleY,double r);
 
+    //根据个人id查询改人当天是否签到
+    ResultBean selectinfoByid(Integer id);
 }

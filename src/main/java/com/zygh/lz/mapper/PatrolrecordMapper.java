@@ -130,4 +130,7 @@ public interface PatrolrecordMapper {
     //根据ID查询Gps点位
     public List<HashMap> findSectionId(String sectionName);
 
+    //根据个人id查询改人当天是否签到
+    HashMap selectinfoByid(Integer id);
+
 }

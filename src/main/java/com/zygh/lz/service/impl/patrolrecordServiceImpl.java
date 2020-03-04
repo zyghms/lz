@@ -1,5 +1,6 @@
 package com.zygh.lz.service.impl;
 
+import com.google.gson.JsonObject;
 import com.zygh.lz.admin.Gps;
 import com.zygh.lz.admin.Patrolrecord;
 import com.zygh.lz.admin.Problem;
@@ -1813,6 +1814,15 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         }
 
         return inNowByGps;
+    }
+
+    @Override
+    public ResultBean selectinfoByid(Integer id) {
+        HashMap patrolrecord = patrolrecordMapper.selectinfoByid(id);
+        if(patrolrecord!=null){
+            return ResultUtil.setOK("success",patrolrecord);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
     }
 
 
