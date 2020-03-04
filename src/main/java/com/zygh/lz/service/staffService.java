@@ -56,8 +56,11 @@ public interface staffService {
 
     ResultBean selectStaffByid(Integer id);
 
-    //根据id查询民警应巡查路段
+    //根据id查询民警应巡查路段里程上班时长
     ResultBean selectStaffXareaByid(Integer id)throws Exception;
+
+    //根据id查询民警应巡查路段
+    ResultBean selectXareaByid(Integer id)throws Exception;
 
     //查询昨日总警力
     ResultBean selecttotalforces();

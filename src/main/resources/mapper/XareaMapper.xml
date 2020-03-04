@@ -259,10 +259,13 @@
     </select>
     <!--根据人员id查他的岗位-->
     <select id="selectXareaZgByStaffId" resultMap="BaseResultMap">
-        SELECT * FROM xarea a,xrelation x WHERE a.id=x.xarea_id AND x.staff_id=#{id}
-        <if test="station != null and station != ''" >
-            and a.station=#{station}
-        </if>
+        SELECT * FROM xarea a,xrelation x,staff s WHERE a.id=x.xarea_id
+        AND s.sys_staff_id=x.staff_id and  a.gps is not null and x.staff_id=#{id}
+    </select>
+    <!--根据人员id查他的岗位-->
+    <select id="selectXareaByid" resultType="map">
+        SELECT * FROM xarea a,xrelation x,staff s WHERE a.id=x.xarea_id
+        AND s.sys_staff_id=x.staff_id and  a.gps is not null and x.staff_id=#{id}
     </select>
 
 

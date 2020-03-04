@@ -8,6 +8,7 @@ import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.mapper.*;
 import com.zygh.lz.service.patrolrecordService;
 import com.zygh.lz.util.DataTime;
+import com.zygh.lz.util.GPSTransformMars;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.util.StringUtil;
 import com.zygh.lz.vo.ResultBean;
@@ -50,7 +51,9 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     public ResultBean addPatrolrecord(Patrolrecord patrolrecord) {
         if(patrolrecord.getPatrolRecordGps()!=null){
             String  patrolRecordGps= patrolrecord.getPatrolRecordGps();
-            patrolrecord.setPatrolRecordGps(pgs.replace(patrolRecordGps));
+            patrolRecordGps= pgs.replace(patrolRecordGps);
+            String s = GPSTransformMars.GCj2TOWGS(patrolRecordGps);
+            patrolrecord.setPatrolRecordGps(s);
         }
 
         int i = patrolrecordMapper.insertSelective(patrolrecord);
@@ -1785,7 +1788,59 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         // 测试指定的 Point2D 是否在 Shape 的边界内。
         return peneralPath.contains(point);
     }
+    @Override
+    public List<HashMap> findCircleByGps(double circleX, double circleY,double r) {
 
+        List<HashMap> inNowByGps = new ArrayList<>();
+
+        List<Integer> nowIds = patrolrecordMapper.findNowId();
+        if (nowIds.size()>0){
+            for (Integer nowId : nowIds) {
+                HashMap<String, Object> nowGps = patrolrecordMapper.findNowGps(nowId);
+                if (nowGps!=null){
+                    String gps_x = (String) nowGps.get("gps_x");
+                    String gps_y = (String) nowGps.get("gps_y");
+
+                    Double x = Double.parseDouble(gps_x);
+                    Double y = Double.parseDouble(gps_y);
+
+                    boolean result = distencePC(x, y, circleX, circleY,r);
+                    if (result){
+                        inNowByGps.add(nowGps);
+                    }
+                }
+            }
+        }
+
+        return inNowByGps;
+    }
+
+
+    /**
+     * 将两个经纬度坐标转化成距离（米）
+     * @param X 维度
+     * @param Y 经度
+     * @param circleX  中心点维度
+     * @param circleY  中心点经度
+     * @param r  半径
+     *
+     */
+    public boolean distencePC(double X, double Y, double circleX, double circleY,double r)
+    {
+        double a = X * Math.PI / 180.0 - circleX * Math.PI / 180.0;
+        double b = Y * Math.PI / 180.0 - circleY * Math.PI / 180.0;
+        double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+                + Math.cos(X * Math.PI / 180.0)
+                * Math.cos(circleX * Math.PI / 180.0)
+                * Math.pow(Math.sin(b / 2), 2)));
+        s = s * 6378.137 * 1000;
+        s = Math.round(s);
+        System.out.println("s:  " +s);
+        if (s > r) {
+            return false;
+        }
+        return true;
+    }
 
 }
 

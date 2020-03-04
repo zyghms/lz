@@ -224,7 +224,7 @@
             </if>
         </where>
     </select>
-    <select id="selectXleveAll" resultType="map">
+    <select id="selectXleveAll" resultMap="BaseResultMap">
         SELECT * from	 xlevelservice
     </select>
 </mapper>

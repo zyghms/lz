@@ -410,7 +410,7 @@
       SELECT * FROM patrolrecord p,staff f,section s
         WHERE f.sys_section_id=s.sys_section_id and f.sys_staff_id=p.sys_staff_id
         and to_days(p.patrol_record_begintime) = to_days(now())
-        AND p.patrol_record_endtime is null AND p.patrol_record_gps is NOT NULL
+       AND p.patrol_record_gps is NOT NULL
         AND p.sys_staff_id=#{id}
         ORDER BY p.patrol_record_begintime DESC LIMIT 1
     </select>

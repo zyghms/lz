@@ -557,10 +557,12 @@
         ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
     </select>
 
+
+
     <!--根据岗位查询各大队在线民警详情-->
     <select id="selectAllBysection" resultMap="BaseResultMap"  parameterType="com.zygh.lz.admin.Xarea">
-        SELECT s.*
-        FROM patrolrecord p,staff s,xarea X,xrelation xl,section st
+        SELECT *
+        FROM patrolrecord p,staff s,xarea X,xrelation xl,section st,gps g
         WHERE TO_DAYS(p.patrol_record_begintime) = TO_DAYS(NOW())
         <if test="station!=null and station != '' ">
             <if test="station!='其它岗'">
@@ -589,7 +591,9 @@
         AND  p.sys_staff_id = s.sys_staff_id
         AND s.sys_staff_id = xl.staff_id
         AND xl.xarea_id = x.id
+        and g.sys_staff_id = s.sys_staff_id
         AND p.patrol_record_endtime IS NULL
         GROUP BY p.sys_staff_id
+        ORDER BY g.gps_time DESC LIMIT 1
     </select>
 </mapper>

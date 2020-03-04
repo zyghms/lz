@@ -504,42 +504,24 @@ public class staffServiceImpl implements staffService {
         if (patrolrecords != null) {
             String patrolRecordGps = patrolrecords.getPatrolRecordGps();
             Date date = new Date();
-           /* String start=df.format(date);
-            String end=df.format(patrolrecords.getPatrolRecordBegintime());*/
             //上班时长
-            String duration = DataTime.getDatePoor(date, patrolrecords.getPatrolRecordBegintime());
+            String duration=null;
+            if(patrolrecords.getPatrolRecordEndtime()==null){
+                 duration = DataTime.getDatePoor(date, patrolrecords.getPatrolRecordBegintime());
+            }else {
+                duration = DataTime.getDatePoor(patrolrecords.getPatrolRecordEndtime(), patrolrecords.getPatrolRecordBegintime());
+
+            }
+
 
             DecimalFormat dub = new DecimalFormat("######0.00");
             //切割GPS点
             String[] split = patrolRecordGps.split(",");
-           /* Double num=0.0;
-            for (int g=0;g<split.length;g++){
-                if(g+1!=split.length){
-                    double v = Double.parseDouble(split[g].split(" ")[0]);
-                    double v1 = Double.parseDouble(split[g].split(" ")[1]);
-                    double s =  Double.parseDouble(split[g+1].split(" ")[0]);
-                    double s1 =  Double.parseDouble(split[g+1].split(" ")[1]);
-                    System.out.println(v);
-                    System.out.println(v1);
-                    System.out.println(s);
-                    System.out.println(s1);
-                    double distance = DataTime.getDistance(v,v1,s,s1);
-                    System.out.println("asd====:"+distance);
-                    num+=distance;
-                }
-            }
-            //第一个GPS点
-            String[] s = split[0].split(" ");
-            Double startgp1=Double.parseDouble(s[0]);
-            Double startgp2=Double.parseDouble(s[1]);
-            //第二个GPS点
-            String[] s1 = split[split.length-1].split(" ");
-            Double endgp1=Double.parseDouble(s1[0]);
-            Double endgp2=Double.parseDouble(s1[1]);*/
-            int num = split.length * 10;
-            //巡查距离
+            //距离，坐标个数乘以10
+            int num = (split.length)/2 * 10;
+            //巡查时长  现在时间减去签到时长
             staff.setDuration(duration);
-            //num = (double) Math.round(num * 100) / 100;
+            //巡查距离  每十米上传一次，
             staff.setJuli(num);
             staff.setPatrolrecord(patrolrecords);
         }
@@ -561,6 +543,15 @@ public class staffServiceImpl implements staffService {
         Gps gps = gpsMapper.gpsEnd(staff.getSysStaffId());
         staff.setGps(gps);
         return ResultUtil.setOK("success", staff);
+    }
+
+    @Override
+    public ResultBean selectXareaByid(Integer id) throws Exception {
+        List<Xarea> xareas = xareaMapper.selectXareaByid(id);
+        if(xareas.size()>0){
+            return ResultUtil.setOK("success", xareas);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
     }
 
     /**

@@ -60,10 +60,16 @@ public class StaffController {
         return staffService.selectStaffByid(id);
     }
 
-    //根据民警id查询该民警所负责的路段
+    //根据民警id查询该民警所负责的路段里程，上班时长
     @GetMapping("selectStaffXareaByid")
     public ResultBean selectStaffXareaByid(Integer id)throws Exception{
        return staffService.selectStaffXareaByid(id);
+    }
+
+    //根据民警id查询该民警所负责的路段
+    @GetMapping("selectXareaByid")
+    public ResultBean selectXareaByid(Integer id)throws Exception{
+        return staffService.selectXareaByid(id);
     }
 
     //返回在线民警GPS

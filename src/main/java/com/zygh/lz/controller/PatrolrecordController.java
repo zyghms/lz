@@ -159,4 +159,10 @@ public class PatrolrecordController {
         return patrolrecordService.findStaffSum(time,battalion,type);
     }
 
+    //判断是否在圆内
+    @GetMapping("findCircleByGps")
+    public List<HashMap> findCircleByGps(double circleX, double circleY,double r){
+        return patrolrecordService.findCircleByGps(circleX,circleY,r);
+    }
+
  }

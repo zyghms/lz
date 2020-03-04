@@ -82,4 +82,7 @@ public interface patrolrecordService {
 
     public HashMap findStaffSum(String time,String battalion,Integer type);
 
+    //判断是否在圆内
+    public List<HashMap> findCircleByGps(double circleX, double circleY,double r);
+
 }

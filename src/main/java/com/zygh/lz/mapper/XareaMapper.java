@@ -38,6 +38,7 @@ public interface XareaMapper {
     List<Xarea> selectXareaAll();
 
     List<Xarea> selectXareaZgByStaffId(@Param("id") Integer id,@Param("station") String station);
+    List<Xarea> selectXareaByid(Integer id);
 
     List<HashMap> countYDSum(@Param("station") String station, @Param("battalion") String battalion);
 
