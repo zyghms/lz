@@ -609,4 +609,7 @@
     <select id="selectinfoByid" resultType="java.util.HashMap">
         SELECT * from patrolrecord  WHERE sys_staff_id=#{id} AND TO_DAYS(patrol_record_begintime) = TO_DAYS(NOW())
     </select>
+    <select id="findByType" resultType="java.util.HashMap">
+        select gps,centre from xarea where type = '面' and centre is not null and centre != ''
+    </select>
 </mapper>

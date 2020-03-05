@@ -171,4 +171,10 @@ public class PatrolrecordController {
         return patrolrecordService.selectinfoByid(id);
     }
 
+    //热力图
+    @GetMapping("heatMap")
+    public List<HashMap> heatMap(){
+        return patrolrecordService.heatMap();
+    }
+
  }

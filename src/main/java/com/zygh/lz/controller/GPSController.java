@@ -1,9 +1,7 @@
 package com.zygh.lz.controller;
 
 import com.zygh.lz.admin.Gps;
-import com.zygh.lz.admin.Xarea;
 import com.zygh.lz.admin.Xlevelservice;
-import com.zygh.lz.mapper.XareaMapper;
 import com.zygh.lz.mapper.XlevelserviceMapper;
 import com.zygh.lz.service.GpsService;
 import com.zygh.lz.util.GPSTransformMars;
@@ -24,17 +22,17 @@ public class GPSController {
 
     //实时上传gps
     @PostMapping("addGps")
-    public ResultBean addGps(Gps gps){
+    public ResultBean addGps(Gps gps) {
         return gpsService.addGps(gps);
     }
 
     @GetMapping("gps")
-    public void gps(){
+    public void gps() {
         List<Xlevelservice> xareas = xlevelserviceMapper.selectXleveAll();
-        for (int i=0;i<xareas.size();i++){
-            System.out.println("====="+xareas.get(i).getLocation());
-            if(xareas.get(i).getLocation()!=null){
-                Xlevelservice xarea=new Xlevelservice();
+        for (int i = 0; i < xareas.size(); i++) {
+            System.out.println("=====" + xareas.get(i).getLocation());
+            if (xareas.get(i).getLocation() != null) {
+                Xlevelservice xarea = new Xlevelservice();
                 String s = GPSTransformMars.GCj2TOWGS(xareas.get(i).getLocation());
 
                 xarea.setId(xareas.get(i).getId());

@@ -133,4 +133,6 @@ public interface PatrolrecordMapper {
     //根据个人id查询改人当天是否签到
     HashMap selectinfoByid(Integer id);
 
+    //查询网格
+    List<HashMap> findByType();
 }

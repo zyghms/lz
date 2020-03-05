@@ -88,4 +88,7 @@ public interface patrolrecordService {
 
     //根据个人id查询改人当天是否签到
     ResultBean selectinfoByid(Integer id);
+
+    //热力图统计
+    List<HashMap> heatMap();
 }

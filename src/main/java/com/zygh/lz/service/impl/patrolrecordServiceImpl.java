@@ -1852,5 +1852,71 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         return true;
     }
 
+    //热力图统计
+    @Override
+    public List<HashMap> heatMap(){
+        List<HashMap> typeGPSList = patrolrecordMapper.findByType();
+
+        List<HashMap>  resultList = new ArrayList<>();
+
+        for (HashMap map : typeGPSList) {
+            String gps = map.get("gps").toString();
+            String[] split = gps.split(",");
+            int num = 0;
+
+            List<String> lonList = new ArrayList<>();//经度集合
+            List<String> latList = new ArrayList<>();//维度集合
+
+            for (int i = 1;i <= split.length;i++) {
+                String s = split[i - 1];
+                if (i%2==0){
+                    //偶数
+                    latList.add(s);
+                }else {
+                    lonList.add(s);
+                }
+            }
+
+            double[] lonArr = new double[lonList.size()];
+            double[] latArr = new double[latList.size()];
+            for (int j=0;j<lonList.size();j++) {
+                Double aa = Double.parseDouble(lonList.get(j));
+                lonArr[j] = aa;
+            }
+
+            for (int k=0;k<latList.size();k++) {
+                Double aa = Double.parseDouble(latList.get(k));
+                latArr[k] = aa;
+            }
+
+            List<Integer> nowIds = patrolrecordMapper.findNowId();
+            if (nowIds.size()>0){
+                for (Integer nowId : nowIds) {
+                    HashMap<String, Object> nowGps = patrolrecordMapper.findNowGps(nowId);
+                    if (nowGps!=null){
+                        String gps_x = (String) nowGps.get("gps_x");
+                        String gps_y = (String) nowGps.get("gps_y");
+
+                        Double x = Double.parseDouble(gps_x);
+                        Double y = Double.parseDouble(gps_y);
+
+                        boolean result = isInPolygon(x, y, lonArr, latArr);
+                        if (result){
+                            num ++;
+                        }
+                    }
+
+                }
+            }
+            String centre = map.get("centre").toString();
+            HashMap<String, Object> resultMap = new HashMap<>();
+            resultMap.put("centre",centre);
+            resultMap.put("num",num);
+
+            resultList.add(resultMap);
+        }
+
+        return resultList;
+    }
 }
 
