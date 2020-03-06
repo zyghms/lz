@@ -533,7 +533,7 @@
 
     <!--查询在线人ID-->
     <select id="findNowId" resultType="java.lang.Integer">
-        SELECT sys_staff_id FROM patrolrecord where patrol_record_endtime is null GROUP BY sys_staff_id
+        SELECT sys_staff_id FROM patrolrecord where (patrol_record_endtime is null or patrol_record_endtime = '') and (sys_staff_id != '' or sys_staff_id is not null) GROUP BY sys_staff_id
     </select>
 
     <select id="findNowGps" resultType="java.util.HashMap" parameterType="java.lang.Integer">

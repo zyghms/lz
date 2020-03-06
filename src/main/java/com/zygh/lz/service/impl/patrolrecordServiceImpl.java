@@ -1,6 +1,5 @@
 package com.zygh.lz.service.impl;
 
-import com.google.gson.JsonObject;
 import com.zygh.lz.admin.Gps;
 import com.zygh.lz.admin.Patrolrecord;
 import com.zygh.lz.admin.Problem;
@@ -8,10 +7,8 @@ import com.zygh.lz.admin.Staff;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.mapper.*;
 import com.zygh.lz.service.patrolrecordService;
-import com.zygh.lz.util.DataTime;
 import com.zygh.lz.util.GPSTransformMars;
 import com.zygh.lz.util.ResultUtil;
-import com.zygh.lz.util.StringUtil;
 import com.zygh.lz.vo.ResultBean;
 import com.zygh.lz.vo.pgs;
 import org.springframework.beans.BeanUtils;
@@ -23,8 +20,6 @@ import java.awt.geom.Point2D;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import static com.zygh.lz.util.DataTime.isEffectiveDate;
 
 @Service
 public class patrolrecordServiceImpl implements patrolrecordService {
@@ -50,9 +45,9 @@ public class patrolrecordServiceImpl implements patrolrecordService {
      */
     @Override
     public ResultBean addPatrolrecord(Patrolrecord patrolrecord) {
-        if(patrolrecord.getPatrolRecordGps()!=null){
-            String  patrolRecordGps= patrolrecord.getPatrolRecordGps();
-            patrolRecordGps= pgs.replace(patrolRecordGps);
+        if (patrolrecord.getPatrolRecordGps() != null) {
+            String patrolRecordGps = patrolrecord.getPatrolRecordGps();
+            patrolRecordGps = pgs.replace(patrolRecordGps);
             String s = GPSTransformMars.GCj2TOWGS(patrolRecordGps);
             patrolrecord.setPatrolRecordGps(s);
         }
@@ -80,30 +75,29 @@ public class patrolrecordServiceImpl implements patrolrecordService {
      */
     @Override
     public ResultBean updatePatrolrecord(Patrolrecord patrolrecord) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+        //获取修改id
         Integer sysPatrolRecordId = patrolrecord.getSysPatrolRecordId();
         Patrolrecord patrolrecord1 = patrolrecordMapper.selectByPrimaryKey(sysPatrolRecordId);
 
-        String patrolRecordGps = pgs.replace(patrolrecord1.getPatrolRecordGps());
-
-        if (patrolrecord.getPatrolRecordEndtime() != null) {
-            //下线
+        //下线修改人员表在线不在线状态
+        if (patrolrecord.getPatrolRecordDetail().equals("flase")) {
             Staff staff = new Staff();
-            staff.setSysStaffId(patrolrecord.getSysStaffId());
-            staff.setStaffOnline(null);
-            staffMapper.updateByPrimaryKeySelective(staff);
+            staff.setSysStaffId(patrolrecord1.getSysStaffId());
+            staff.setStaffOnline("0");
+            int i = staffMapper.updateByPrimaryKeySelective(staff);
+            System.out.println("=="+i);
         }
 
         if (patrolrecord.getPatrolRecordGps() != null) {
-            if (patrolRecordGps != null && !patrolRecordGps.equals("")) {
-                patrolrecord.setPatrolRecordGps(patrolRecordGps + "," + patrolrecord.getPatrolRecordGps());
+            //修改app穿过来的gps坐标格式
+            String patrolRecordGps = pgs.replace(patrolrecord.getPatrolRecordGps());
+            if (patrolrecord1.getPatrolRecordGps() != null && !patrolrecord1.getPatrolRecordGps().equals("")) {
+                patrolrecord.setPatrolRecordGps(patrolrecord1.getPatrolRecordGps() + "," + patrolRecordGps);
             } else {
-                patrolrecord.setPatrolRecordGps(patrolRecordGps + patrolrecord.getPatrolRecordGps());
+                patrolrecord.setPatrolRecordGps(patrolRecordGps);
             }
         }
 
-        System.out.println("=========" + patrolRecordGps + patrolrecord.getPatrolRecordGps());
         return ResultUtil.execOp(patrolrecordMapper.updateByPrimaryKeySelective(patrolrecord), "修改");
     }
 
@@ -505,8 +499,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         }
         return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
-
-
 
 
     private List<Staff> getChild(Integer id, List<Staff> rootMenu) throws NullPointerException {//int id  id 是指当前菜单id，rootMenu是指要查找的列表
@@ -1623,12 +1615,12 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     public List<HashMap> findNowByGps(double[] lon, double[] lat) {
 
         List<HashMap> inNowByGps = new ArrayList<>();
-        if (lon!=null && lat!= null){
+        if (lon != null && lat != null) {
             List<Integer> nowIds = patrolrecordMapper.findNowId();
-            if (nowIds.size()>0){
+            if (nowIds.size() > 0) {
                 for (Integer nowId : nowIds) {
                     HashMap<String, Object> nowGps = patrolrecordMapper.findNowGps(nowId);
-                    if (nowGps!=null){
+                    if (nowGps != null) {
                         String gps_x = (String) nowGps.get("gps_x");
                         String gps_y = (String) nowGps.get("gps_y");
 
@@ -1636,7 +1628,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         Double y = Double.parseDouble(gps_y);
 
                         boolean result = isInPolygon(x, y, lon, lat);
-                        if (result){
+                        if (result) {
                             inNowByGps.add(nowGps);
                         }
                     }
@@ -1650,33 +1642,33 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
     //根据大队名称查询在人GPS
     @Override
-    public List<HashMap> findNowStaffBySection(String time,String battalion,Integer type){
+    public List<HashMap> findNowStaffBySection(String time, String battalion, Integer type) {
         List<HashMap> staffBySectionList = new ArrayList<>();
 
-        if (type == 1){
+        if (type == 1) {
             //高峰在线人ID
-            List<Integer> gfList = patrolrecordMapper.findGFGPS(time,"高峰岗",battalion);
+            List<Integer> gfList = patrolrecordMapper.findGFGPS(time, "高峰岗", battalion);
             for (Integer gfId : gfList) {
                 HashMap<String, Object> gfStaffGps = patrolrecordMapper.findStaffGps(time, gfId);
                 staffBySectionList.add(gfStaffGps);
             }
 
             //日常在线人ID
-            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time, battalion);
             for (Integer rcId : rcList) {
                 HashMap<String, Object> rcStaffGps = patrolrecordMapper.findStaffGps(time, rcId);
                 staffBySectionList.add(rcStaffGps);
             }
-        }else if (type == 2){
+        } else if (type == 2) {
             //日常在线人ID
-            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time, battalion);
             for (Integer rcId : rcList) {
                 HashMap<String, Object> rcStaffGps = patrolrecordMapper.findStaffGps(time, rcId);
                 staffBySectionList.add(rcStaffGps);
             }
-        }else if (type == 3){
+        } else if (type == 3) {
             //夜巡在线人ID
-            List<Integer> yxList = patrolrecordMapper.findYXGPS(time,battalion);
+            List<Integer> yxList = patrolrecordMapper.findYXGPS(time, battalion);
             for (Integer yxId : yxList) {
                 HashMap<String, Object> yxStaffGps = patrolrecordMapper.findStaffGps(time, yxId);
                 staffBySectionList.add(yxStaffGps);
@@ -1688,7 +1680,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
     //统计各大队在线、应到人数
     @Override
-    public HashMap findStaffSum(String time,String battalion,Integer type){
+    public HashMap findStaffSum(String time, String battalion, Integer type) {
         HashMap staffSumMap = new HashMap();
 
         //高峰应到数
@@ -1700,35 +1692,35 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         //夜巡
         List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
 
-        int gfYDSum = (gfPeoples.size())+(rcPeoples.size())+(rcPeoples1.size());
-        int rcYDSum = (rcPeoples.size())+(rcPeoples1.size());
+        int gfYDSum = (gfPeoples.size()) + (rcPeoples.size()) + (rcPeoples1.size());
+        int rcYDSum = (rcPeoples.size()) + (rcPeoples1.size());
         int yxYDSum = yxPeoples.size();
 
-        if (type == 1){
+        if (type == 1) {
             //高峰在线人ID
-            List<Integer> gfList = patrolrecordMapper.findGFGPS(time,"高峰岗",battalion);
+            List<Integer> gfList = patrolrecordMapper.findGFGPS(time, "高峰岗", battalion);
             //日常在线人ID
-            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
-            int gfSDSum = (gfList.size())+(rcList.size());
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time, battalion);
+            int gfSDSum = (gfList.size()) + (rcList.size());
 
-            staffSumMap.put("SDsum",gfSDSum);
-            staffSumMap.put("YDsum",gfYDSum);
+            staffSumMap.put("SDsum", gfSDSum);
+            staffSumMap.put("YDsum", gfYDSum);
 
-        }else if (type == 2){
+        } else if (type == 2) {
             //日常在线人ID
-            List<Integer> rcList = patrolrecordMapper.findRcGPS(time,battalion);
+            List<Integer> rcList = patrolrecordMapper.findRcGPS(time, battalion);
             int rcSDSum = rcList.size();
 
-            staffSumMap.put("SDsum",rcSDSum);
-            staffSumMap.put("YDsum",rcYDSum);
+            staffSumMap.put("SDsum", rcSDSum);
+            staffSumMap.put("YDsum", rcYDSum);
 
-        }else if (type == 3){
+        } else if (type == 3) {
             //夜巡在线人ID
-            List<Integer> yxList = patrolrecordMapper.findYXGPS(time,battalion);
+            List<Integer> yxList = patrolrecordMapper.findYXGPS(time, battalion);
             int yxSDSum = yxList.size();
 
-            staffSumMap.put("SDsum",yxSDSum);
-            staffSumMap.put("YDsum",yxYDSum);
+            staffSumMap.put("SDsum", yxSDSum);
+            staffSumMap.put("YDsum", yxYDSum);
 
         }
 
@@ -1738,14 +1730,10 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     /**
      * 判断是否在多边形区域内
      *
-     * @param pointLon
-     *            要判断的点的纵坐标
-     * @param pointLat
-     *            要判断的点的横坐标
-     * @param lon
-     *            区域各顶点的纵坐标数组
-     * @param lat
-     *            区域各顶点的横坐标数组
+     * @param pointLon 要判断的点的纵坐标
+     * @param pointLat 要判断的点的横坐标
+     * @param lon      区域各顶点的纵坐标数组
+     * @param lat      区域各顶点的横坐标数组
      * @return
      */
     public static boolean isInPolygon(double pointLon, double pointLat, double[] lon,
@@ -1763,13 +1751,12 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         }
         return check(point, pointList);
     }
+
     /**
      * 一个点是否在多边形内
      *
-     * @param point
-     *            要判断的点的横纵坐标
-     * @param polygon
-     *            组成的顶点坐标集合
+     * @param point   要判断的点的横纵坐标
+     * @param polygon 组成的顶点坐标集合
      * @return
      */
     private static boolean check(Point2D.Double point, List<Point2D.Double> polygon) {
@@ -1789,24 +1776,25 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         // 测试指定的 Point2D 是否在 Shape 的边界内。
         return peneralPath.contains(point);
     }
+
     @Override
-    public List<HashMap> findCircleByGps(double circleX, double circleY,double r) {
+    public List<HashMap> findCircleByGps(double circleX, double circleY, double r) {
 
         List<HashMap> inNowByGps = new ArrayList<>();
 
         List<Integer> nowIds = patrolrecordMapper.findNowId();
-        if (nowIds.size()>0){
+        if (nowIds.size() > 0) {
             for (Integer nowId : nowIds) {
                 HashMap<String, Object> nowGps = patrolrecordMapper.findNowGps(nowId);
-                if (nowGps!=null){
+                if (nowGps != null) {
                     String gps_x = (String) nowGps.get("gps_x");
                     String gps_y = (String) nowGps.get("gps_y");
 
                     Double x = Double.parseDouble(gps_x);
                     Double y = Double.parseDouble(gps_y);
 
-                    boolean result = distencePC(x, y, circleX, circleY,r);
-                    if (result){
+                    boolean result = distencePC(x, y, circleX, circleY, r);
+                    if (result) {
                         inNowByGps.add(nowGps);
                     }
                 }
@@ -1819,24 +1807,23 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     @Override
     public ResultBean selectinfoByid(Integer id) {
         HashMap patrolrecord = patrolrecordMapper.selectinfoByid(id);
-        if(patrolrecord!=null){
-            return ResultUtil.setOK("success",patrolrecord);
+        if (patrolrecord != null) {
+            return ResultUtil.setOK("success", patrolrecord);
         }
-        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+        return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
 
 
     /**
      * 将两个经纬度坐标转化成距离（米）
-     * @param X 维度
-     * @param Y 经度
-     * @param circleX  中心点维度
-     * @param circleY  中心点经度
-     * @param r  半径
      *
+     * @param X       维度
+     * @param Y       经度
+     * @param circleX 中心点维度
+     * @param circleY 中心点经度
+     * @param r       半径
      */
-    public boolean distencePC(double X, double Y, double circleX, double circleY,double r)
-    {
+    public boolean distencePC(double X, double Y, double circleX, double circleY, double r) {
         double a = X * Math.PI / 180.0 - circleX * Math.PI / 180.0;
         double b = Y * Math.PI / 180.0 - circleY * Math.PI / 180.0;
         double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
@@ -1845,7 +1832,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 * Math.pow(Math.sin(b / 2), 2)));
         s = s * 6378.137 * 1000;
         s = Math.round(s);
-        System.out.println("s:  " +s);
+        System.out.println("s:  " + s);
         if (s > r) {
             return false;
         }
@@ -1854,10 +1841,10 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
     //热力图统计
     @Override
-    public List<HashMap> heatMap(){
+    public List<HashMap> heatMap() {
         List<HashMap> typeGPSList = patrolrecordMapper.findByType();
 
-        List<HashMap>  resultList = new ArrayList<>();
+        List<HashMap> resultList = new ArrayList<>();
 
         for (HashMap map : typeGPSList) {
             String gps = map.get("gps").toString();
@@ -1867,33 +1854,33 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             List<String> lonList = new ArrayList<>();//经度集合
             List<String> latList = new ArrayList<>();//维度集合
 
-            for (int i = 1;i <= split.length;i++) {
+            for (int i = 1; i <= split.length; i++) {
                 String s = split[i - 1];
-                if (i%2==0){
+                if (i % 2 == 0) {
                     //偶数
                     latList.add(s);
-                }else {
+                } else {
                     lonList.add(s);
                 }
             }
 
             double[] lonArr = new double[lonList.size()];
             double[] latArr = new double[latList.size()];
-            for (int j=0;j<lonList.size();j++) {
+            for (int j = 0; j < lonList.size(); j++) {
                 Double aa = Double.parseDouble(lonList.get(j));
                 lonArr[j] = aa;
             }
 
-            for (int k=0;k<latList.size();k++) {
+            for (int k = 0; k < latList.size(); k++) {
                 Double aa = Double.parseDouble(latList.get(k));
                 latArr[k] = aa;
             }
 
             List<Integer> nowIds = patrolrecordMapper.findNowId();
-            if (nowIds.size()>0){
+            if (nowIds.size() > 0) {
                 for (Integer nowId : nowIds) {
                     HashMap<String, Object> nowGps = patrolrecordMapper.findNowGps(nowId);
-                    if (nowGps!=null){
+                    if (nowGps != null) {
                         String gps_x = (String) nowGps.get("gps_x");
                         String gps_y = (String) nowGps.get("gps_y");
 
@@ -1901,8 +1888,8 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         Double y = Double.parseDouble(gps_y);
 
                         boolean result = isInPolygon(x, y, lonArr, latArr);
-                        if (result){
-                            num ++;
+                        if (result) {
+                            num++;
                         }
                     }
 
@@ -1910,8 +1897,8 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             }
             String centre = map.get("centre").toString();
             HashMap<String, Object> resultMap = new HashMap<>();
-            resultMap.put("centre",centre);
-            resultMap.put("num",num);
+            resultMap.put("centre", centre);
+            resultMap.put("num", num);
 
             resultList.add(resultMap);
         }

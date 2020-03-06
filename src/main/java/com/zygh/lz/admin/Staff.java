@@ -55,7 +55,15 @@ public class Staff {
     //时长
     private String duration;
     //距离
-    private int juli;
+    private Double juli;
+
+    public Double getJuli() {
+        return juli;
+    }
+
+    public void setJuli(Double juli) {
+        this.juli = juli;
+    }
 
     public String getDuration() {
         return duration;
@@ -65,13 +73,6 @@ public class Staff {
         this.duration = duration;
     }
 
-    public int getJuli() {
-        return juli;
-    }
-
-    public void setJuli(int juli) {
-        this.juli = juli;
-    }
 
     public List<Xarea> getXareaList() {
         return xareaList;

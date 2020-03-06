@@ -519,10 +519,11 @@ public class staffServiceImpl implements staffService {
             String[] split = patrolRecordGps.split(",");
             //距离，坐标个数乘以10
             int num = (split.length)/2 * 10;
+            double lic=num/500.00;
             //巡查时长  现在时间减去签到时长
             staff.setDuration(duration);
             //巡查距离  每十米上传一次，
-            staff.setJuli(num);
+            staff.setJuli(lic);
             staff.setPatrolrecord(patrolrecords);
         }
 
