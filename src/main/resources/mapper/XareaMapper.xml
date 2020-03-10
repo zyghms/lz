@@ -271,7 +271,7 @@
 
     <!--统计应道人数-->
     <select id="countYDSum" resultType="java.util.Map" parameterType="java.lang.String">
-        select s.*,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
+        select s.*,x.gps,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
         where x.station = #{station}
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
@@ -284,7 +284,7 @@
 
     <!--统计夜巡 / 铁骑应到人数-->
     <select id="countYxSum" resultType="java.util.Map" parameterType="java.lang.String">
-        select s.*,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
+        select s.*,x.gps,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
         where x.conment = #{conment}
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
@@ -297,7 +297,7 @@
 
     <!--统计日常勤务应到在线人数-->
     <select id="countRcYDsum" resultType="java.util.Map" parameterType="java.lang.String">
-        select s.*,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
+        select s.*,x.gps,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
         where x.conment != '3'
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
@@ -370,6 +370,7 @@
         </if>
         and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id GROUP BY xl.staff_id
     </select>
+
 
 
     <!--统计铁骑组数-->
@@ -565,16 +566,114 @@
 
 
     <!--日间警力部署-->
+    <!--固定岗/高峰岗-->
     <select id="selectfixationRJ" resultType="map">
         SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (
         select s.staff_name,st.section_name,s.sys_staff_id from xarea x,staff s ,xrelation xl,section st
-        where x.station = '固定岗'
+        where x.station = #{station}
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
         and s.sys_section_id = st.sys_section_id
         GROUP BY s.sys_staff_id) sb GROUP BY SUBSTRING(sb.section_name,1,3)
         ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
     </select>
+    <!--日间重点机关岗-->
+    <select id="selectemphasisRJ" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	(select s.staff_name,st.section_name,s.sys_staff_id from xarea x,staff s ,xrelation xl,section st
+        where x.conment = '4'
+        and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id AND s.sys_section_id=st.sys_section_id GROUP BY xl.staff_id) sb GROUP BY SUBSTRING(sb.section_name,1,3)
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
 
-
+    <!--日间重点机关岗-->
+    <select id="selectemphasisPope" resultType="map">
+        select s.*,x.gps,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
+        where x.conment = '4' and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id
+        AND s.sys_section_id=st.sys_section_id GROUP BY xl.staff_id
+    </select>
+    <!--日间铁骑部署警力-->
+    <select id="selectcavalryRJ" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (select s.*,x.battalion,st.section_name from xarea x,staff s ,xrelation xl,section st
+        where x.conment = 2
+        and s.sys_section_id = st.sys_section_id
+        and x.id = xl.xarea_id
+        and s.sys_staff_id = xl.staff_id
+        GROUP BY s.sys_staff_id) sb GROUP BY SUBSTRING(sb.section_name,1,3)
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+    <!--日间网格警力部署-->
+    <select id="selectgriddingRJ" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	 (select s.*,x.*,st.section_name  from xarea x,staff s ,xrelation xl,section st
+        where x.gridding like '%网格%'
+        and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id AND s.sys_section_id=st.sys_section_id GROUP BY xl.staff_id) sb
+        GROUP BY SUBSTRING(sb.section_name,1,3)
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+    <!--日间网格警力人员详情-->
+    <select id="selectgriddingPope" resultType="map">
+        select s.*,x.gps,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
+        where x.gridding like '%网格%'
+        <if test="battalion != null and battalion != ''">
+            and x.battalion = #{battalion}
+        </if>
+        AND s.sys_section_id=st.sys_section_id
+        and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id GROUP BY xl.staff_id
+    </select>
+    <!--日间高速岗/快速岗-->
+    <select id="selectexpresswayRJ" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (select s.*,x.*,st.section_name from xarea x,staff s,xrelation xl,section st
+        where station = #{station}
+        and x.conment != 3 AND s.sys_section_id=st.sys_section_id
+        and xl.xarea_id = x.id
+        and xl.staff_id = s.sys_staff_id
+        GROUP BY s.sys_staff_id
+        )sb
+        GROUP BY SUBSTRING(sb.section_name,1,3)
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+    <!--快速岗详情-->
+    <select id="selectexpresswayPope" resultType="map">
+        select s.*,x.gps,x.*,st.section_name from xarea x,staff s,xrelation xl,section st
+        where  xl.xarea_id = x.id and  s.sys_section_id=st.sys_section_id
+        <if test="battalion != null and battalion != ''">
+            and station = #{station}
+        </if>
+        <if test="battalion != null and battalion != ''">
+            and battalion = #{battalion}
+        </if>
+        <if test="conment == null and conment == ''">
+            and x.conment != 3
+        </if>
+        <if test="conment != null and conment != ''">
+            and x.conment = #{conment}
+        </if>
+        and xl.staff_id = s.sys_staff_id
+        GROUP BY s.sys_staff_id
+    </select>
+    <!--日间其他警力部署-->
+    <select id="selectqtRJ" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (select s.*,x.*,st.section_name from xarea x,staff s,xrelation xl ,section st
+        where x.station != '固定岗' and x.station != '高峰岗'
+        AND s.sys_section_id=st.sys_section_id
+        and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
+        and x.station != '快速岗' and x.station != '区域'
+        and xl.xarea_id = x.id
+        and xl.staff_id = s.sys_staff_id
+        and x.conment != 3
+        GROUP BY s.sys_staff_id) sb
+        GROUP BY SUBSTRING(sb.section_name,1,3) 
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+    <!--日间其他警力部署人员详情-->
+    <select id="selectqtPope" resultType="map">
+        select s.*,x.gps,x.*,st.section_name from xarea x,staff s,xrelation xl ,section st
+        where x.station != '固定岗' and x.station != '高峰岗'
+        AND s.sys_section_id=st.sys_section_id
+        and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
+        and x.station != '快速岗' and x.station != '区域'
+        and xl.xarea_id = x.id
+        and xl.staff_id = s.sys_staff_id
+        and x.conment != 3
+        GROUP BY s.sys_staff_id
+    </select>
 </mapper>

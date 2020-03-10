@@ -69,9 +69,34 @@ public class XareaController {
         return xareaService.selectqt(conment);
     }
 
-    //日间固定岗
+    //日间固定岗/高峰岗
     @GetMapping("selectfixationRJ")
-    public ResultBean selectfixationRJ(){
-        return xareaService.selectfixationRJ();
+    public ResultBean selectfixationRJ(String station){
+        return xareaService.selectfixationRJ(station);
+    }
+    //日间重点机关岗
+    @GetMapping("selectemphasisRJ")
+    public ResultBean selectemphasisRJ(){
+        return xareaService.selectemphasisRJ();
+    }
+    //日间铁骑
+    @GetMapping("selectcavalryRJ")
+    public ResultBean selectcavalryRJ(){
+        return xareaService.selectcavalryRJ();
+    }
+    //日间网格警力部署
+    @GetMapping("selectgriddingRJ")
+    public ResultBean selectgriddingRJ(){
+        return xareaService.selectgriddingRJ();
+    }
+    //日间快速岗部署
+    @GetMapping("selectexpresswayRJ")
+    public ResultBean selectexpresswayRJ(String station){
+        return xareaService.selectexpresswayRJ(station);
+    }
+    //日间其他部署
+    @GetMapping("selectqtRJ")
+    public ResultBean selectqtRJ(){
+        return xareaService.selectqtRJ();
     }
 }

@@ -256,20 +256,21 @@ public class XareaServiceImpl implements xareaService {
 
     /**
      * 日间警力部署
+     * 固定岗每个大队几个人查询
      * @return
      */
     @Override
-    public ResultBean selectfixationRJ() {
+    public ResultBean selectfixationRJ(String station) {
         //固定岗每个大队几个人查询
-        List<HashMap> list = xareaMapper.selectfixationRJ();
+        List<HashMap> list = xareaMapper.selectfixationRJ(station);
         if (list.size() >= 0) {
             for (int i = 0; i < list.size(); i++) {
                 String sectionName = list.get(i).get("sectionName").toString();
                 if (sectionName.indexOf("大队") != -1) {
-                    String sectionName1 = list.get(i).get("sectionName").toString().substring(0, 3);
+                    String sectionName1 = list.get(i).get("sectionName").toString().substring(0,sectionName.indexOf("队")+1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> hashMaps = xareaMapper.countYDSum("固定岗", list.get(i).get("sectionName").toString());
+                List<HashMap> hashMaps = xareaMapper.countYDSum(station, list.get(i).get("sectionName").toString());
                 list.get(i).put("personnel",hashMaps);
 
             }
@@ -279,5 +280,134 @@ public class XareaServiceImpl implements xareaService {
 
         return ResultUtil.setError(SystemCon.RERROR1, "success", null);
     }
+
+    /**
+     * 重点单位岗
+     * @return
+     */
+    @Override
+    public ResultBean selectemphasisRJ() {
+        //重点机关岗
+        List<HashMap> list = xareaMapper.selectemphasisRJ();
+        if (list.size() >= 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String sectionName = list.get(i).get("sectionName").toString();
+                if (sectionName.indexOf("大队") != -1) {
+                    String sectionName1 = list.get(i).get("sectionName").toString().substring(0,sectionName.indexOf("队")+1);
+                    list.get(i).put("sectionName", sectionName1);
+                }
+                List<HashMap> hashMaps = xareaMapper.selectemphasisPope();
+                list.get(i).put("personnel",hashMaps);
+
+            }
+
+            return ResultUtil.setOK("success", list);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+    }
+
+    /**
+     * 日间铁骑
+     * @return
+     */
+    @Override
+    public ResultBean selectcavalryRJ() {
+        //铁骑
+        List<HashMap> list = xareaMapper.selectcavalryRJ();
+        if (list.size() >= 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String sectionName = list.get(i).get("sectionName").toString();
+                if (sectionName.indexOf("大队") != -1) {
+                    String sectionName1 = list.get(i).get("sectionName").toString().substring(0,sectionName.indexOf("队")+1);
+                    list.get(i).put("sectionName", sectionName1);
+                }
+                List<HashMap> hashMaps =xareaMapper.countYxSum("2",list.get(i).get("sectionName").toString());
+                list.get(i).put("personnel",hashMaps);
+
+            }
+
+            return ResultUtil.setOK("success", list);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+    }
+
+    /**
+     * 日间网格
+     * @return
+     */
+    @Override
+    public ResultBean selectgriddingRJ() {
+        //网格
+        List<HashMap> list = xareaMapper.selectgriddingRJ();
+        if (list.size() >= 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String sectionName = list.get(i).get("sectionName").toString();
+                if (sectionName.indexOf("大队") != -1) {
+                    String sectionName1 = list.get(i).get("sectionName").toString().substring(0,sectionName.indexOf("队")+1);
+                    list.get(i).put("sectionName", sectionName1);
+                }
+                List<HashMap> hashMaps =xareaMapper.selectgriddingPope(list.get(i).get("sectionName").toString());
+                list.get(i).put("personnel",hashMaps);
+
+            }
+
+            return ResultUtil.setOK("success", list);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+    }
+
+    /**
+     * 日间高速/快速岗
+     * @param station
+     * @return
+     */
+    @Override
+    public ResultBean selectexpresswayRJ(String station) {
+        //高速
+        List<HashMap> list = xareaMapper.selectexpresswayRJ("高速岗");
+        if (list.size() >= 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String sectionName = list.get(i).get("sectionName").toString();
+                if (sectionName.indexOf("大队") != -1) {
+                    String sectionName1 = list.get(i).get("sectionName").toString().substring(0,sectionName.indexOf("队")+1);
+                    list.get(i).put("sectionName", sectionName1);
+                }
+                List<HashMap> hashMaps =xareaMapper.selectexpresswayPope("高速岗",list.get(i).get("sectionName").toString(),null);
+                System.out.println(hashMaps.size());
+                list.get(i).put("personnel",hashMaps);
+
+            }
+
+            return ResultUtil.setOK("success", list);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+    }
+
+    /**
+     * 日间其他警力部署
+     * @return
+     */
+    @Override
+    public ResultBean selectqtRJ() {
+        //其他
+        List<HashMap> list = xareaMapper.selectqtRJ();
+        if (list.size() >= 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String sectionName = list.get(i).get("sectionName").toString();
+                if (sectionName.indexOf("大队") != -1) {
+                    String sectionName1 = list.get(i).get("sectionName").toString().substring(0,sectionName.indexOf("队")+1);
+                    list.get(i).put("sectionName", sectionName1);
+                }
+                List<HashMap> hashMaps =xareaMapper.selectqtPope(list.get(i).get("sectionName").toString());
+                System.out.println(hashMaps.size());
+                list.get(i).put("personnel",hashMaps);
+
+            }
+
+            return ResultUtil.setOK("success", list);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+    }
+
 
 }

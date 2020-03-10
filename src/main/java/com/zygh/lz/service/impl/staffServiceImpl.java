@@ -664,7 +664,7 @@ public class staffServiceImpl implements staffService {
             for (int i = 0; i < selectcountBysection.size(); i++) {
                 String sectionName = selectcountBysection.get(i).get("sectionName").toString();
                 if (sectionName.indexOf("大队") != -1) {
-                    String sectionName1 = selectcountBysection.get(i).get("sectionName").toString().substring(0, 3);
+                    String sectionName1 = selectcountBysection.get(i).get("sectionName").toString().substring(0,sectionName.indexOf("队")+1);
                     selectcountBysection.get(i).put("sectionName", sectionName1);
                 }
             }

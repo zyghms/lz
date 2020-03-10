@@ -3,6 +3,7 @@ package com.zygh.lz.mapper;
 import com.zygh.lz.admin.Staff;
 import com.zygh.lz.admin.Xarea;
 import org.apache.ibatis.annotations.Param;
+import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
 import java.util.HashMap;
@@ -37,7 +38,8 @@ public interface XareaMapper {
     //查询所有区域
     List<Xarea> selectXareaAll();
 
-    List<Xarea> selectXareaZgByStaffId(@Param("id") Integer id,@Param("station") String station);
+    List<Xarea> selectXareaZgByStaffId(@Param("id") Integer id, @Param("station") String station);
+
     List<Xarea> selectXareaByid(Integer id);
 
     List<HashMap> countYDSum(@Param("station") String station, @Param("battalion") String battalion);
@@ -45,13 +47,14 @@ public interface XareaMapper {
     List<HashMap> countYxSum(@Param("conment") String conment, @Param("battalion") String battalion);
 
     List<HashMap> countRcYDsumC2(String battalion);
+
     List<HashMap> countRcYDsum(String battalion);
 
     List<Integer> countWgSum(String battalion);
 
     List<Integer> countZdYDSum(String battalion);
 
-    List<Integer> countQtYDSum(@Param("battalion") String battalion,@Param("conment") String conment);
+    List<Integer> countQtYDSum(@Param("battalion") String battalion, @Param("conment") String conment);
 
     List<Integer> countTqZSum(String battalion);
 
@@ -61,9 +64,10 @@ public interface XareaMapper {
 
     int countZdZSum(String battalion);
 
-    int countQtZSum(@Param("battalion")String battalion,@Param("conment")String conment);
+    int countQtZSum(@Param("battalion") String battalion, @Param("conment") String conment);
 
     List<Integer> countZDRc(@Param("battalion") String battalion, @Param("detachment") String detachment, @Param("station") String station);
+
     List<Integer> countZDRcC2(@Param("battalion") String battalion, @Param("detachment") String detachment);
 
     List<HashMap> countZDYxorTq(@Param("conment") String conment, @Param("battalion") String battalion, @Param("detachment") String detachment);
@@ -83,6 +87,7 @@ public interface XareaMapper {
 
     //夜巡组数
     List<Integer> countYxZ(String battalion);
+
     //夜巡应到
     List<Integer> countYxYDsum(String battalion);
 
@@ -94,7 +99,30 @@ public interface XareaMapper {
      * 日间警力部署
      */
     //日间固定岗部署人员按大队细分
-    List<HashMap> selectfixationRJ();
+    List<HashMap> selectfixationRJ(String station);
 
+    //日间重点单位岗
+    List<HashMap> selectemphasisRJ();
+    //日间重点单位岗人员详情
+    List<HashMap> selectemphasisPope();
 
+    //日间铁骑
+    List<HashMap> selectcavalryRJ();
+
+    //日间网格警组
+    List<HashMap> selectgriddingRJ();
+    //日间网格警力详情
+    List<HashMap> selectgriddingPope(String battalion);
+
+    //日间高速/快速
+    List<HashMap> selectexpresswayRJ(String station);
+    List<HashMap> selectexpresswayPope(@Param("station") String station,
+                                       @Param("battalion") String battalion,
+                                       @Param("conment")String conment);
+
+    //日间其他警力部署
+    List<HashMap> selectqtRJ();
+
+    //日间其他警员详情
+    List<HashMap> selectqtPope(String battalion);
 }
