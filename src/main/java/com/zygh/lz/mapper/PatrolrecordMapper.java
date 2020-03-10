@@ -142,6 +142,9 @@ public interface PatrolrecordMapper {
     //查询网格
     List<HashMap> findByType();
 
+    //应部署GPS
+    List<HashMap> findTypeGps(String type);
+
 
 
 
