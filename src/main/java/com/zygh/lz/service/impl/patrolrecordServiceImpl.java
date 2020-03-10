@@ -9,6 +9,7 @@ import com.zygh.lz.mapper.*;
 import com.zygh.lz.service.patrolrecordService;
 import com.zygh.lz.util.GPSTransformMars;
 import com.zygh.lz.util.ResultUtil;
+import com.zygh.lz.util.StringUtil;
 import com.zygh.lz.vo.ResultBean;
 import com.zygh.lz.vo.pgs;
 import org.springframework.beans.BeanUtils;
@@ -2060,6 +2061,14 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         List<HashMap> typeGPSList = patrolrecordMapper.findByType();
 
         List<HashMap> resultList = new ArrayList<>();
+        List<HashMap> nowGpsList = new ArrayList<>();
+        List<Integer> nowIds = patrolrecordMapper.findNowId();
+        for (Integer nowId : nowIds) {
+            HashMap<String, Object> nowGps = patrolrecordMapper.findNowGps(nowId);
+            nowGpsList.add(nowGps);
+        }
+
+
 
         for (HashMap map : typeGPSList) {
             String gps = map.get("gps").toString();
@@ -2091,13 +2100,12 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 latArr[k] = aa;
             }
 
-            List<Integer> nowIds = patrolrecordMapper.findNowId();
+
             if (nowIds.size() > 0) {
-                for (Integer nowId : nowIds) {
-                    HashMap<String, Object> nowGps = patrolrecordMapper.findNowGps(nowId);
-                    if (nowGps != null) {
-                        String gps_x = (String) nowGps.get("gps_x");
-                        String gps_y = (String) nowGps.get("gps_y");
+                for (int l = 0;l<nowGpsList.size();l++) {
+                    if (nowGpsList.get(l) != null) {
+                        String gps_x = (String) nowGpsList.get(l).get("gps_x");
+                        String gps_y = (String) nowGpsList.get(l).get("gps_y");
 
                         Double x = Double.parseDouble(gps_x);
                         Double y = Double.parseDouble(gps_y);
@@ -2105,6 +2113,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         boolean result = isInPolygon(x, y, lonArr, latArr);
                         if (result) {
                             num++;
+                            nowGpsList.remove(l);
                         }
                     }
 
@@ -2118,6 +2127,140 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             resultList.add(resultMap);
         }
 
+        return resultList;
+    }
+
+    //热力图统计
+    @Override
+    public List<HashMap> heatMapYD(){
+        //查询网格
+        List<HashMap> typeGPSList = patrolrecordMapper.findByType();
+
+        List<HashMap> dianList = patrolrecordMapper.findTypeGps("点");
+        List<HashMap> xianList = patrolrecordMapper.findTypeGps("线");
+        List<HashMap> mianList = patrolrecordMapper.findTypeGps("面");
+
+        List<HashMap> resultList = new ArrayList<>();
+
+        int sum =0;
+
+        for (HashMap map : typeGPSList) {
+            String gps = map.get("gps").toString();
+            String[] split = gps.split(",");
+            int num = 0;
+
+            List<String> lonList = new ArrayList<>();//经度集合
+            List<String> latList = new ArrayList<>();//维度集合
+
+            for (int i = 1; i <= split.length; i++) {
+                String s = split[i - 1];
+                if (i % 2 == 0) {
+                    //偶数
+                    latList.add(s);
+                } else {
+                    lonList.add(s);
+                }
+            }
+
+            double[] lonArr = new double[lonList.size()];
+            double[] latArr = new double[latList.size()];
+            for (int j = 0; j < lonList.size(); j++) {
+                Double aa = Double.parseDouble(lonList.get(j));
+                lonArr[j] = aa;
+            }
+
+            for (int k = 0; k < latList.size(); k++) {
+                Double aa = Double.parseDouble(latList.get(k));
+                latArr[k] = aa;
+            }
+
+            //点
+            for (int a=0;a<dianList.size();a++) {
+                String gps_x = dianList.get(a).get("gps").toString().split(",")[0];
+                String gps_y = dianList.get(a).get("gps").toString().split(",")[1];
+
+                Double x = Double.parseDouble(gps_x);
+                Double y = Double.parseDouble(gps_y);
+
+                boolean result = isInPolygon(x, y, lonArr, latArr);
+                if (result) {
+                    num++;
+                    dianList.remove(a);
+                }
+            }
+
+            //线
+            for (int b=0;b<xianList.size();b++) {
+                if (!StringUtils.isEmpty(xianList.get(b).get("centre"))){
+                    String gps_x = xianList.get(b).get("centre").toString().split(",")[0];
+                    String gps_y = xianList.get(b).get("centre").toString().split(",")[1];
+
+                    Double x = Double.parseDouble(gps_x);
+                    Double y = Double.parseDouble(gps_y);
+
+                    boolean result = isInPolygon(x, y, lonArr, latArr);
+                    if (result) {
+                        num++;
+                        xianList.remove(b);
+                    }
+                }else{
+                    String gps_x = xianList.get(b).get("gps").toString().split(",")[0];
+                    String gps_y = xianList.get(b).get("gps").toString().split(",")[1];
+
+                    Double x = Double.parseDouble(gps_x);
+                    Double y = Double.parseDouble(gps_y);
+
+                    boolean result = isInPolygon(x, y, lonArr, latArr);
+                    if (result) {
+                        num++;
+                        xianList.remove(b);
+                    }
+                }
+
+            }
+
+            //面
+            for (int c=0;c<mianList.size();c++) {
+                if (!StringUtils.isEmpty(mianList.get(c).get("centre"))){
+                    String gps_x = mianList.get(c).get("centre").toString().split(",")[0];
+                    String gps_y = mianList.get(c).get("centre").toString().split(",")[1];
+
+                    Double x = Double.parseDouble(gps_x);
+                    Double y = Double.parseDouble(gps_y);
+
+                    boolean result = isInPolygon(x, y, lonArr, latArr);
+                    if (result) {
+                        num++;
+                        mianList.remove(c);
+                    }
+                }else{
+                    String gps_x = mianList.get(c).get("gps").toString().split(",")[0];
+                    String gps_y = mianList.get(c).get("gps").toString().split(",")[1];
+
+                    Double x = Double.parseDouble(gps_x);
+                    Double y = Double.parseDouble(gps_y);
+
+                    boolean result = isInPolygon(x, y, lonArr, latArr);
+                    if (result) {
+                        num++;
+                        mianList.remove(c);
+                    }
+                }
+
+            }
+
+
+            String centre = map.get("centre").toString();
+            HashMap<String, Object> resultMap = new HashMap<>();
+            resultMap.put("centre", centre);
+
+            resultMap.put("num", num);
+
+            resultList.add(resultMap);
+
+            sum += num;
+        }
+        System.out.println(sum);
         return resultList;
     }
 }

@@ -91,4 +91,7 @@ public interface patrolrecordService {
 
     //热力图统计
     List<HashMap> heatMap();
+
+    //应部署GPS
+    List<HashMap> heatMapYD();
 }

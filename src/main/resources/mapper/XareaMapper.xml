@@ -405,7 +405,7 @@
         select count(*) from xarea where station != '固定岗' and station != '高峰岗'
         and station != '高速岗' and conment != '2' and conment != '4'
         and station != '快速岗' and station != '区域'
-        <if test="conment == null and conment == ''">
+        <if test="conment == null or conment == ''">
             and conment != '3'
         </if>
         <if test="conment != null and conment != ''">
@@ -445,7 +445,7 @@
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
-        <if test="conment == null and conment == ''">
+        <if test="conment == null or conment == ''">
             and x.conment != 3
         </if>
         <if test="conment != null and conment != ''">
@@ -484,7 +484,7 @@
     <select id="findZd" resultType="java.lang.String" parameterType="java.lang.String">
         select x.detachment from xarea x,section st
         where x.battalion = #{battalion}
-        <if test="conment == null and conment == ''">
+        <if test="conment == null or conment == ''">
             and x.conment != '3'
         </if>
         <if test="conment != null and conment != ''">
@@ -523,7 +523,7 @@
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
-        <if test="conment == null and conment == ''">
+        <if test="conment == null or conment == ''">
             and x.conment != 3
         </if>
         <if test="conment != null and conment != ''">

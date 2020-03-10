@@ -614,4 +614,10 @@
     <select id="findByType" resultType="java.util.HashMap">
         select gps,centre from xarea where type = '面' and centre is not null and centre != '' and gps != '' and gps is not null
     </select>
+
+    <!--应部署GPS-->
+    <select id="findTypeGps" resultType="java.util.HashMap" parameterType="java.lang.String">
+        select x.gps,x.centre,xl.staff_id from xarea x,xrelation xl where x.type = #{type} and x.gps != '' and x.gps is not null and xl.xarea_id = x.id GROUP BY xl.staff_id
+    </select>
+
 </mapper>

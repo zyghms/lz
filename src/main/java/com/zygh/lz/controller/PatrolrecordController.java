@@ -171,10 +171,16 @@ public class PatrolrecordController {
         return patrolrecordService.selectinfoByid(id);
     }
 
-    //热力图
+    //热力图在线警力
     @GetMapping("heatMap")
     public List<HashMap> heatMap(){
         return patrolrecordService.heatMap();
+    }
+
+    //热力图应到部署警力
+    @GetMapping("heatMapYD")
+    public List<HashMap> heatMapYD(){
+        return patrolrecordService.heatMapYD();
     }
 
  }
