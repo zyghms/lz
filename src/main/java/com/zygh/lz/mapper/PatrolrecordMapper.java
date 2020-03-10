@@ -87,52 +87,64 @@ public interface PatrolrecordMapper {
     Patrolrecord selectrecordByid(Integer id);
 
     //统计固定岗/高峰岗实到
-    public List<Integer> countGdorGfSDsum(@Param("station") String station, @Param("battalion") String battalion);
+    List<Integer> countGdorGfSDsum(@Param("station") String station, @Param("battalion") String battalion);
 
     //统计夜巡实到
-    public List<Integer> countYxSDsum(String battalion);
+    List<Integer> countYxSDsum(String battalion);
 
     //统计铁骑实到
-    public List<Integer> countTqSDsum(String battalion);
+    List<Integer> countTqSDsum(String battalion);
 
     //统计网格实到
-    public List<Integer> countWgSDsum(String battalion);
+    List<Integer> countWgSDsum(String battalion);
 
     //日常实到
-    public List<Integer> countRcSDsum(String battalion);
+    List<Integer> countRcSDsum(String battalion);
 
     //重点岗实到
-    public List<Integer> countZdSDsum(String battalion);
+    List<Integer> countZdSDsum(String battalion);
 
     //其他岗实到
-    public List<Integer> countQtSDsum(String battalion);
+    List<Integer> countQtSDsum(String battalion);
 
-    public List<Integer> countZDRcSDsum(@Param("battalion") String battalion, @Param("detachment") String detachment, @Param("station") String station);
+    List<Integer> countZDRcSDsum(@Param("battalion") String battalion, @Param("detachment") String detachment, @Param("station") String station);
 
-    public List<Integer> countZDYxSDsum(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    List<Integer> countZDYxSDsum(@Param("battalion") String battalion, @Param("detachment") String detachment);
 
     //统计固定岗/高峰岗实到
-    public List<Integer> countGsorKsSDsum(@Param("station") String station, @Param("battalion") String battalion, @Param("conment") String conmen);
+    List<Integer> countGsorKsSDsum(@Param("station") String station, @Param("battalion") String battalion, @Param("conment") String conmen);
 
 
     //查询在线人ID
-    public List<Integer> findNowId();
+    List<Integer> findNowId();
+
     //根据ID查询Gps点位
-    public HashMap<String,Object> findNowGps(Integer id);
+    HashMap<String, Object> findNowGps(Integer id);
+
     //高峰实到在线人ID
-    public List<Integer> findGFGPS(@Param("time")String time,@Param("station") String station,@Param("battalion")String battalion);
+    List<Integer> findGFGPS(@Param("time") String time, @Param("station") String station, @Param("battalion") String battalion);
+
     //日常勤务实到在线人ID
-    public List<Integer> findRcGPS(@Param("time")String time,@Param("battalion")String battalion);
+    List<Integer> findRcGPS(@Param("time") String time, @Param("battalion") String battalion);
+
     //夜巡实到在线人ID
-    public List<Integer> findYXGPS(@Param("time")String time,@Param("battalion")String battalion);
+    List<Integer> findYXGPS(@Param("time") String time, @Param("battalion") String battalion);
+
     //根据ID查询Gps点位
-    public HashMap<String,Object> findStaffGps(@Param("time")String time,@Param("id")Integer id);
+    HashMap<String, Object> findStaffGps(@Param("time") String time, @Param("id") Integer id);
+
     //根据ID查询Gps点位
-    public List<HashMap> findSectionId(String sectionName);
+    List<HashMap> findSectionId(String sectionName);
 
     //根据个人id查询改人当天是否签到
     HashMap selectinfoByid(Integer id);
 
     //查询网格
     List<HashMap> findByType();
+
+
+
+
+
+
 }

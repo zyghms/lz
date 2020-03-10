@@ -59,7 +59,7 @@ public class XareaServiceImpl implements xareaService {
             for (int k = 0; k < staff.size(); k++) {
                 //实际在岗人数
                 Patrolrecord patrolrecords = patrolrecordMapper.selectPatrolrecordByStaffId(staff.get(k).getSysStaffId());
-
+                //不为空说明在岗
                 if (patrolrecords != null) {
                     if (staff.get(k).getSysStaffId() == patrolrecords.getSysStaffId()) {
                         staff.get(k).setStaffOnline("1");
@@ -70,6 +70,8 @@ public class XareaServiceImpl implements xareaService {
                     }
 
                 }
+
+
             }
             conment += staff.size();
             xareas.get(i).setStaff(staff);
@@ -250,6 +252,32 @@ public class XareaServiceImpl implements xareaService {
             xareas.get(i).setStaff(staff);
         }
         return ResultUtil.setOK("success", xareas);
+    }
+
+    /**
+     * 日间警力部署
+     * @return
+     */
+    @Override
+    public ResultBean selectfixationRJ() {
+        //固定岗每个大队几个人查询
+        List<HashMap> list = xareaMapper.selectfixationRJ();
+        if (list.size() >= 0) {
+            for (int i = 0; i < list.size(); i++) {
+                String sectionName = list.get(i).get("sectionName").toString();
+                if (sectionName.indexOf("大队") != -1) {
+                    String sectionName1 = list.get(i).get("sectionName").toString().substring(0, 3);
+                    list.get(i).put("sectionName", sectionName1);
+                }
+                List<HashMap> hashMaps = xareaMapper.countYDSum("固定岗", list.get(i).get("sectionName").toString());
+                list.get(i).put("personnel",hashMaps);
+
+            }
+
+            return ResultUtil.setOK("success", list);
+        }
+
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
     }
 
 }

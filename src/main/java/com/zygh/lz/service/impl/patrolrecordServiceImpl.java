@@ -1615,6 +1615,60 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     public List<HashMap> findNowByGps(double[] lon, double[] lat) {
 
         List<HashMap> inNowByGps = new ArrayList<>();
+
+        //固定岗
+        HashMap<String, Object> gdMap = new HashMap<>();
+        gdMap.put("gangwei","固定岗");
+        //高峰岗
+        HashMap<String, Object> gfMap = new HashMap<>();
+        gfMap.put("gangwei","高峰岗");
+        //重点
+        HashMap<String, Object> zdMap = new HashMap<>();
+        zdMap.put("gangwei","重点岗");
+        //铁骑
+        HashMap<String, Object> tqMap = new HashMap<>();
+        tqMap.put("gangwei","铁骑");
+        //网格
+        HashMap<String, Object> wgMap = new HashMap<>();
+        wgMap.put("gangwei","网格岗");
+        //夜巡
+        HashMap<String, Object> yxMap = new HashMap<>();
+        yxMap.put("gangwei","夜巡");
+        //高速
+        HashMap<String, Object> gsMap = new HashMap<>();
+        gsMap.put("gangwei","高速岗");
+        //快速
+        HashMap<String, Object> ksMap = new HashMap<>();
+        ksMap.put("gangwei","快速岗");
+        //特勤
+        HashMap<String, Object> TQMap = new HashMap<>();
+        TQMap.put("gangwei","特勤岗");
+        //其他
+        HashMap<String, Object> qtMap = new HashMap<>();
+        qtMap.put("gangwei","其他岗");
+
+        //固定
+        List<HashMap> gdLsit = new ArrayList<>();
+        //高峰
+        List<HashMap> gfLsit = new ArrayList<>();
+        //重点
+        List<HashMap> zdLsit = new ArrayList<>();
+        //铁骑
+        List<HashMap> tqLsit = new ArrayList<>();
+        //网格
+        List<HashMap> wgLsit = new ArrayList<>();
+        //夜巡
+        List<HashMap> yxLsit = new ArrayList<>();
+        //高速
+        List<HashMap> gsLsit = new ArrayList<>();
+        //快速
+        List<HashMap> ksLsit = new ArrayList<>();
+        //特勤
+        List<HashMap> TQLsit = new ArrayList<>();
+        //其他
+        List<HashMap> qtLsit = new ArrayList<>();
+
+
         if (lon != null && lat != null) {
             List<Integer> nowIds = patrolrecordMapper.findNowId();
             if (nowIds.size() > 0) {
@@ -1629,7 +1683,29 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                         boolean result = isInPolygon(x, y, lon, lat);
                         if (result) {
-                            inNowByGps.add(nowGps);
+                            if (nowGps.get("station").toString().equals("固定岗")){
+                                gdLsit.add(nowGps);
+                            }else if(nowGps.get("station").toString().equals("高峰岗")){
+                                gfLsit.add(nowGps);
+                            }else if(nowGps.get("conment").toString().equals("3")){
+                                yxLsit.add(nowGps);
+                            }else if(nowGps.get("conment").toString().equals("2")){
+                                tqLsit.add(nowGps);
+                            }else if (nowGps.get("gridding")!=null){
+                                if(nowGps.get("gridding").toString().contains("网格")){
+                                wgLsit.add(nowGps);}
+                            }else if(nowGps.get("conment").toString().equals("4")){
+                                zdLsit.add(nowGps);
+                            }else if(nowGps.get("station").toString().equals("高速岗")){
+                                gsLsit.add(nowGps);
+                            }else if(nowGps.get("station").toString().equals("快速岗")){
+                                ksLsit.add(nowGps);
+                            }else if(nowGps.get("station").toString().equals("特勤岗")){
+                                TQLsit.add(nowGps);
+                            }else {
+                                qtLsit.add(nowGps);
+                            }
+
                         }
                     }
 
@@ -1637,8 +1713,41 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             }
         }
 
+        gdMap.put("data",gdLsit);
+        gdMap.put("num",gdLsit.size());
+        gfMap.put("data",gfLsit);
+        gfMap.put("num",gfLsit.size());
+        yxMap.put("data",yxLsit);
+        yxMap.put("num",yxLsit.size());
+        tqMap.put("data",tqLsit);
+        tqMap.put("num",tqLsit.size());
+        wgMap.put("data",wgLsit);
+        wgMap.put("num",wgLsit.size());
+        zdMap.put("data",zdLsit);
+        zdMap.put("num",zdLsit.size());
+        gsMap.put("data",gsLsit);
+        gsMap.put("num",gsLsit.size());
+        ksMap.put("data",ksLsit);
+        ksMap.put("num",ksLsit.size());
+        TQMap.put("data",TQLsit);
+        TQMap.put("num",TQLsit.size());
+        qtMap.put("data",qtLsit);
+        qtMap.put("num",qtLsit.size());
+
+        inNowByGps.add(gdMap);
+        inNowByGps.add(gfMap);
+        inNowByGps.add(yxMap);
+        inNowByGps.add(tqMap);
+        inNowByGps.add(wgMap);
+        inNowByGps.add(zdMap);
+        inNowByGps.add(gsMap);
+        inNowByGps.add(ksMap);
+        inNowByGps.add(TQMap);
+        inNowByGps.add(qtMap);
+
         return inNowByGps;
     }
+
 
     //根据大队名称查询在人GPS
     @Override
@@ -1780,6 +1889,58 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     @Override
     public List<HashMap> findCircleByGps(double circleX, double circleY, double r) {
 
+        //固定岗
+        HashMap<String, Object> gdMap = new HashMap<>();
+        gdMap.put("gangwei","固定岗");
+        //高峰岗
+        HashMap<String, Object> gfMap = new HashMap<>();
+        gfMap.put("gangwei","高峰岗");
+        //重点
+        HashMap<String, Object> zdMap = new HashMap<>();
+        zdMap.put("gangwei","重点岗");
+        //铁骑
+        HashMap<String, Object> tqMap = new HashMap<>();
+        tqMap.put("gangwei","铁骑");
+        //网格
+        HashMap<String, Object> wgMap = new HashMap<>();
+        wgMap.put("gangwei","网格岗");
+        //夜巡
+        HashMap<String, Object> yxMap = new HashMap<>();
+        yxMap.put("gangwei","夜巡");
+        //高速
+        HashMap<String, Object> gsMap = new HashMap<>();
+        gsMap.put("gangwei","高速岗");
+        //快速
+        HashMap<String, Object> ksMap = new HashMap<>();
+        ksMap.put("gangwei","快速岗");
+        //特勤
+        HashMap<String, Object> TQMap = new HashMap<>();
+        TQMap.put("gangwei","特勤岗");
+        //其他
+        HashMap<String, Object> qtMap = new HashMap<>();
+        qtMap.put("gangwei","其他岗");
+
+        //固定
+        List<HashMap> gdLsit = new ArrayList<>();
+        //高峰
+        List<HashMap> gfLsit = new ArrayList<>();
+        //重点
+        List<HashMap> zdLsit = new ArrayList<>();
+        //铁骑
+        List<HashMap> tqLsit = new ArrayList<>();
+        //网格
+        List<HashMap> wgLsit = new ArrayList<>();
+        //夜巡
+        List<HashMap> yxLsit = new ArrayList<>();
+        //高速
+        List<HashMap> gsLsit = new ArrayList<>();
+        //快速
+        List<HashMap> ksLsit = new ArrayList<>();
+        //特勤
+        List<HashMap> TQLsit = new ArrayList<>();
+        //其他
+        List<HashMap> qtLsit = new ArrayList<>();
+
         List<HashMap> inNowByGps = new ArrayList<>();
 
         List<Integer> nowIds = patrolrecordMapper.findNowId();
@@ -1795,11 +1956,65 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                     boolean result = distencePC(x, y, circleX, circleY, r);
                     if (result) {
-                        inNowByGps.add(nowGps);
+                        if (nowGps.get("station").toString().equals("固定岗")){
+                            gdLsit.add(nowGps);
+                        }else if(nowGps.get("station").toString().equals("高峰岗")){
+                            gfLsit.add(nowGps);
+                        }else if(nowGps.get("conment").toString().equals("3")){
+                            yxLsit.add(nowGps);
+                        }else if(nowGps.get("conment").toString().equals("2")){
+                            tqLsit.add(nowGps);
+                        }else if(nowGps.get("gridding")!=null){
+                            if(nowGps.get("gridding").toString().contains("网格")){
+                            wgLsit.add(nowGps);}
+                        }else if(nowGps.get("conment").toString().equals("4")){
+                            zdLsit.add(nowGps);
+                        }else if(nowGps.get("station").toString().equals("高速岗")){
+                            gsLsit.add(nowGps);
+                        }else if(nowGps.get("station").toString().equals("快速岗")){
+                            ksLsit.add(nowGps);
+                        }else if(nowGps.get("station").toString().equals("特勤岗")){
+                            TQLsit.add(nowGps);
+                        }else {
+                            qtLsit.add(nowGps);
+                        }
+
                     }
                 }
             }
         }
+
+        gdMap.put("data",gdLsit);
+        gdMap.put("num",gdLsit.size());
+        gfMap.put("data",gfLsit);
+        gfMap.put("num",gfLsit.size());
+        yxMap.put("data",yxLsit);
+        yxMap.put("num",yxLsit.size());
+        tqMap.put("data",tqLsit);
+        tqMap.put("num",tqLsit.size());
+        wgMap.put("data",wgLsit);
+        wgMap.put("num",wgLsit.size());
+        zdMap.put("data",zdLsit);
+        zdMap.put("num",zdLsit.size());
+        gsMap.put("data",gsLsit);
+        gsMap.put("num",gsLsit.size());
+        ksMap.put("data",ksLsit);
+        ksMap.put("num",ksLsit.size());
+        TQMap.put("data",TQLsit);
+        TQMap.put("num",TQLsit.size());
+        qtMap.put("data",qtLsit);
+        qtMap.put("num",qtLsit.size());
+
+        inNowByGps.add(gdMap);
+        inNowByGps.add(gfMap);
+        inNowByGps.add(yxMap);
+        inNowByGps.add(tqMap);
+        inNowByGps.add(wgMap);
+        inNowByGps.add(zdMap);
+        inNowByGps.add(gsMap);
+        inNowByGps.add(ksMap);
+        inNowByGps.add(TQMap);
+        inNowByGps.add(qtMap);
 
         return inNowByGps;
     }

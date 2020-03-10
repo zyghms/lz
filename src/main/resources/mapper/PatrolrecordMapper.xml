@@ -537,9 +537,11 @@
     </select>
 
     <select id="findNowGps" resultType="java.util.HashMap" parameterType="java.lang.Integer">
-        SELECT * FROM gps g,staff f,section s
+        SELECT g.*,f.*,x.* FROM gps g,staff f,section s,xarea x,xrelation xl
         where g.sys_staff_id=f.sys_staff_id
         and f.sys_section_id=s.sys_section_id
+				and f.sys_staff_id = xl.staff_id
+				and xl.xarea_id = x.id
         and g.sys_staff_id = #{id}
         ORDER BY gps_time DESC LIMIT 1
     </select>
@@ -610,6 +612,6 @@
         SELECT * from patrolrecord  WHERE sys_staff_id=#{id} AND TO_DAYS(patrol_record_begintime) = TO_DAYS(NOW())
     </select>
     <select id="findByType" resultType="java.util.HashMap">
-        select gps,centre from xarea where type = '面' and centre is not null and centre != ''
+        select gps,centre from xarea where type = '面' and centre is not null and centre != '' and gps != '' and gps is not null
     </select>
 </mapper>

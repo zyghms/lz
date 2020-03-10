@@ -3,6 +3,7 @@ package com.zygh.lz.service;
 import com.zygh.lz.admin.Xarea;
 import com.zygh.lz.vo.ResultBean;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface xareaService {
@@ -28,4 +29,11 @@ public interface xareaService {
     ResultBean selectks();
     //查询其他
     ResultBean selectqt(String conment);
+
+
+    /**
+     * 日间警力部署
+     */
+    //日间固定岗部署人员按大队细分
+    ResultBean selectfixationRJ();
 }

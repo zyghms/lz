@@ -68,4 +68,10 @@ public class XareaController {
     public ResultBean selectqt(String conment){
         return xareaService.selectqt(conment);
     }
+
+    //日间固定岗
+    @GetMapping("selectfixationRJ")
+    public ResultBean selectfixationRJ(){
+        return xareaService.selectfixationRJ();
+    }
 }

@@ -89,4 +89,12 @@ public interface XareaMapper {
     //查询其他
     List<Xarea> selectqt(String conment);
 
+
+    /**
+     * 日间警力部署
+     */
+    //日间固定岗部署人员按大队细分
+    List<HashMap> selectfixationRJ();
+
+
 }

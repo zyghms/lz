@@ -13,8 +13,8 @@
         <result column="leader" property="leader" jdbcType="VARCHAR"/>
         <result column="conment" property="conment" jdbcType="VARCHAR"/>
         <result column="centre" property="centre" jdbcType="VARCHAR"/>
-        <result column="section_Zid" property="sectionZid" jdbcType="INTEGER" />
-        <result column="section_Did" property="sectionDid" jdbcType="INTEGER" />
+        <result column="section_Zid" property="sectionZid" jdbcType="INTEGER"/>
+        <result column="section_Did" property="sectionDid" jdbcType="INTEGER"/>
     </resultMap>
     <resultMap id="ResultMapWithBLOBs" type="com.zygh.lz.admin.Xarea" extends="BaseResultMap">
         <result column="gps" property="gps" jdbcType="LONGVARCHAR"/>
@@ -38,8 +38,8 @@
     delete from xarea
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Xarea" >
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+    <insert id="insert" parameterType="com.zygh.lz.admin.Xarea">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into xarea (name, station, type,
@@ -53,140 +53,140 @@
         #{centre,jdbcType=VARCHAR}, #{sectionZid,jdbcType=INTEGER}, #{sectionDid,jdbcType=INTEGER},
         #{gps,jdbcType=LONGVARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Xarea" >
-        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Xarea">
+        <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
         insert into xarea
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="name != null" >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
                 name,
             </if>
-            <if test="station != null" >
+            <if test="station != null">
                 station,
             </if>
-            <if test="type != null" >
+            <if test="type != null">
                 type,
             </if>
-            <if test="battalion != null" >
+            <if test="battalion != null">
                 battalion,
             </if>
-            <if test="detachment != null" >
+            <if test="detachment != null">
                 detachment,
             </if>
-            <if test="gridding != null" >
+            <if test="gridding != null">
                 gridding,
             </if>
-            <if test="rank != null" >
+            <if test="rank != null">
                 rank,
             </if>
-            <if test="leader != null" >
+            <if test="leader != null">
                 leader,
             </if>
-            <if test="conment != null" >
+            <if test="conment != null">
                 conment,
             </if>
-            <if test="centre != null" >
+            <if test="centre != null">
                 centre,
             </if>
-            <if test="sectionZid != null" >
+            <if test="sectionZid != null">
                 section_Zid,
             </if>
-            <if test="sectionDid != null" >
+            <if test="sectionDid != null">
                 section_Did,
             </if>
-            <if test="gps != null" >
+            <if test="gps != null">
                 gps,
             </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="name != null" >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
                 #{name,jdbcType=VARCHAR},
             </if>
-            <if test="station != null" >
+            <if test="station != null">
                 #{station,jdbcType=VARCHAR},
             </if>
-            <if test="type != null" >
+            <if test="type != null">
                 #{type,jdbcType=VARCHAR},
             </if>
-            <if test="battalion != null" >
+            <if test="battalion != null">
                 #{battalion,jdbcType=VARCHAR},
             </if>
-            <if test="detachment != null" >
+            <if test="detachment != null">
                 #{detachment,jdbcType=VARCHAR},
             </if>
-            <if test="gridding != null" >
+            <if test="gridding != null">
                 #{gridding,jdbcType=VARCHAR},
             </if>
-            <if test="rank != null" >
+            <if test="rank != null">
                 #{rank,jdbcType=VARCHAR},
             </if>
-            <if test="leader != null" >
+            <if test="leader != null">
                 #{leader,jdbcType=VARCHAR},
             </if>
-            <if test="conment != null" >
+            <if test="conment != null">
                 #{conment,jdbcType=VARCHAR},
             </if>
-            <if test="centre != null" >
+            <if test="centre != null">
                 #{centre,jdbcType=VARCHAR},
             </if>
-            <if test="sectionZid != null" >
+            <if test="sectionZid != null">
                 #{sectionZid,jdbcType=INTEGER},
             </if>
-            <if test="sectionDid != null" >
+            <if test="sectionDid != null">
                 #{sectionDid,jdbcType=INTEGER},
             </if>
-            <if test="gps != null" >
+            <if test="gps != null">
                 #{gps,jdbcType=LONGVARCHAR},
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Xarea" >
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Xarea">
         update xarea
-        <set >
-            <if test="name != null" >
+        <set>
+            <if test="name != null">
                 name = #{name,jdbcType=VARCHAR},
             </if>
-            <if test="station != null" >
+            <if test="station != null">
                 station = #{station,jdbcType=VARCHAR},
             </if>
-            <if test="type != null" >
+            <if test="type != null">
                 type = #{type,jdbcType=VARCHAR},
             </if>
-            <if test="battalion != null" >
+            <if test="battalion != null">
                 battalion = #{battalion,jdbcType=VARCHAR},
             </if>
-            <if test="detachment != null" >
+            <if test="detachment != null">
                 detachment = #{detachment,jdbcType=VARCHAR},
             </if>
-            <if test="gridding != null" >
+            <if test="gridding != null">
                 gridding = #{gridding,jdbcType=VARCHAR},
             </if>
-            <if test="rank != null" >
+            <if test="rank != null">
                 rank = #{rank,jdbcType=VARCHAR},
             </if>
-            <if test="leader != null" >
+            <if test="leader != null">
                 leader = #{leader,jdbcType=VARCHAR},
             </if>
-            <if test="conment != null" >
+            <if test="conment != null">
                 conment = #{conment,jdbcType=VARCHAR},
             </if>
-            <if test="centre != null" >
+            <if test="centre != null">
                 centre = #{centre,jdbcType=VARCHAR},
             </if>
-            <if test="sectionZid != null" >
+            <if test="sectionZid != null">
                 section_Zid = #{sectionZid,jdbcType=INTEGER},
             </if>
-            <if test="sectionDid != null" >
+            <if test="sectionDid != null">
                 section_Did = #{sectionDid,jdbcType=INTEGER},
             </if>
-            <if test="gps != null" >
+            <if test="gps != null">
                 gps = #{gps,jdbcType=LONGVARCHAR},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zygh.lz.admin.Xarea" >
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zygh.lz.admin.Xarea">
     update xarea
     set name = #{name,jdbcType=VARCHAR},
       station = #{station,jdbcType=VARCHAR},
@@ -203,7 +203,7 @@
       gps = #{gps,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Xarea" >
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Xarea">
     update xarea
     set name = #{name,jdbcType=VARCHAR},
       station = #{station,jdbcType=VARCHAR},
@@ -222,7 +222,7 @@
 
     <!--根据大队，中队，岗位，中队领导-->
     <select id="selectXareabycondition" resultMap="BaseResultMap">
-        SELECT * from	 xarea x
+        SELECT * from xarea x
         <where>
             <if test="battalion!=null and battalion!='' ">
                 and x.battalion=#{battalion}
@@ -246,7 +246,7 @@
 
     </select>
     <select id="selectXareaByName" resultMap="BaseResultMap">
-        SELECT * from	 xarea
+        SELECT * from xarea
         <where>
             <if test="Name!=null and Name!='' ">
                 `name` LIKE CONCAT('%',#{Name},'%')
@@ -273,7 +273,7 @@
     <select id="countYDSum" resultType="java.util.Map" parameterType="java.lang.String">
         select s.*,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
         where x.station = #{station}
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
         and x.id = xl.xarea_id
@@ -286,7 +286,7 @@
     <select id="countYxSum" resultType="java.util.Map" parameterType="java.lang.String">
         select s.*,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
         where x.conment = #{conment}
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
         and s.sys_section_id = st.sys_section_id
@@ -296,10 +296,10 @@
     </select>
 
     <!--统计日常勤务应到在线人数-->
-    <select id="countRcYDsum" resultType="java.util.Map"  parameterType="java.lang.String">
+    <select id="countRcYDsum" resultType="java.util.Map" parameterType="java.lang.String">
         select s.*,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
         where x.conment != '3'
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
         and (x.station = '固定岗' or conment = '4')
@@ -309,14 +309,15 @@
         GROUP BY s.sys_staff_id
     </select>
     <!--统计日常勤务应到在线人数 上下午班-->
-    <select id="countRcYDsumC2" resultType="java.util.Map"  parameterType="java.lang.String">
+    <select id="countRcYDsumC2" resultType="java.util.Map" parameterType="java.lang.String">
         select s.*,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
         where x.conment != '3'
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
         and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2')
-        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station != '区域'))
+        or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station
+        != '快速岗' and station != '区域'))
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
         and s.sys_section_id = st.sys_section_id
@@ -324,7 +325,7 @@
     </select>
 
     <!--中队日常组数 上下午班-->
-    <select id="countZDRcC2" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countZDRcC2" resultType="java.lang.Integer" parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s ,xrelation xl
         where x.conment != '3'
         and x.battalion = #{battalion}
@@ -336,35 +337,35 @@
         GROUP BY  s.sys_staff_id
     </select>
     <!--统计中队日常勤务应到在线人数-->
-    <select id="countZDRc" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countZDRc" resultType="java.lang.Integer" parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s ,xrelation xl
         where x.conment != '3'
         and x.battalion = #{battalion}
         and x.detachment = #{detachment}
         and (x.station = '固定岗' or x.conment = '4'
-        <if test="station != null and station != ''" >
+        <if test="station != null and station != ''">
             or x.station = #{station}
         </if>)
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
-        GROUP BY  s.sys_staff_id
+        GROUP BY s.sys_staff_id
     </select>
 
     <!--统计网格应到人数-->
-    <select id="countWgSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countWgSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select xl.staff_id from xarea x,staff s ,xrelation xl
         where x.gridding like '%网格%'
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
         and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id GROUP BY xl.staff_id
     </select>
 
     <!--统计重点应到人数-->
-    <select id="countZdYDSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countZdYDSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select xl.staff_id from xarea x,staff s ,xrelation xl
         where x.conment = '4'
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
         and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id GROUP BY xl.staff_id
@@ -372,10 +373,10 @@
 
 
     <!--统计铁骑组数-->
-    <select id="countTqZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countTqZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select id from xarea
         where conment = '2'
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
 
@@ -384,32 +385,32 @@
     <select id="countggZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select count(*) from xarea
         where station = #{station}
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
     </select>
 
     <!--统计网格组数-->
-    <select id="countWgZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countWgZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select count(*) from xarea
         where gridding like '%网格%'
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
     </select>
 
     <!--统计其他岗组数-->
-    <select id="countQtZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countQtZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select count(*) from xarea where station != '固定岗' and station != '高峰岗'
         and station != '高速岗' and conment != '2' and conment != '4'
         and station != '快速岗' and station != '区域'
-        <if test="conment == null and conment == ''" >
+        <if test="conment == null and conment == ''">
             and conment != '3'
         </if>
-        <if test="conment != null and conment != ''" >
+        <if test="conment != null and conment != ''">
             and conment = '3'
         </if>
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
     </select>
@@ -417,36 +418,36 @@
     <!--统计夜巡组-->
     <select id="countYxZ" resultType="java.lang.Integer" parameterType="java.lang.String">
         select * from xarea where conment = 3 and battalion != '高架大队'
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
     </select>
 
     <!--统计重点保障岗组数-->
-    <select id="countZdZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countZdZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select count(*) from xarea
         where conment = '4'
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
 
     </select>
 
     <!--统计其他岗应到数-->
-    <select id="countQtYDSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countQtYDSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s,xrelation xl
         where x.station != '固定岗' and x.station != '高峰岗'
         and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
         and x.station != '快速岗' and x.station != '区域'
         and xl.xarea_id = x.id
         and xl.staff_id = s.sys_staff_id
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
-        <if test="conment == null and conment == ''" >
+        <if test="conment == null and conment == ''">
             and x.conment != 3
         </if>
-        <if test="conment != null and conment != ''" >
+        <if test="conment != null and conment != ''">
             and x.conment = #{conment}
         </if>
         GROUP BY s.sys_staff_id
@@ -454,7 +455,7 @@
     </select>
 
     <!--统计高速、快速岗组数-->
-    <select id="countGsOrKsZSum" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countGsOrKsZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select id from xarea
         where station = #{station}
         and name is not null and name != ''
@@ -463,9 +464,8 @@
     </select>
 
 
-
     <!--中队夜巡或者铁骑-->
-    <select id="countZDYxorTq" resultType="java.lang.Integer"  parameterType="java.lang.String">
+    <select id="countZDYxorTq" resultType="java.lang.Integer" parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s ,xrelation xl
         where x.conment = #{conment}
         and x.battalion = #{battalion}
@@ -483,10 +483,10 @@
     <select id="findZd" resultType="java.lang.String" parameterType="java.lang.String">
         select x.detachment from xarea x,section st
         where x.battalion = #{battalion}
-        <if test="conment == null and conment == ''" >
+        <if test="conment == null and conment == ''">
             and x.conment != '3'
         </if>
-        <if test="conment != null and conment != ''" >
+        <if test="conment != null and conment != ''">
             and x.conment = #{conment}
         </if>
         and x.battalion = st.section_name
@@ -498,7 +498,7 @@
         select id
         from xarea
         where station = #{station}
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
         and name is not null and name != ''
@@ -509,7 +509,7 @@
     <!--特勤组数-->
     <select id="countTQZ" resultType="java.lang.Integer">
         select id from xlevelservice
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             where section_id = (select sys_section_id from section where section_name = #{battalion})
         </if>
         GROUP BY place ORDER BY place
@@ -519,13 +519,13 @@
     <select id="countGsOrKsYDSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s,xrelation xl
         where station = #{station}
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
-        <if test="conment == null and conment == ''" >
+        <if test="conment == null and conment == ''">
             and x.conment != 3
         </if>
-        <if test="conment != null and conment != ''" >
+        <if test="conment != null and conment != ''">
             and x.conment = #{conment}
         </if>
         and xl.xarea_id = x.id
@@ -541,7 +541,7 @@
     <select id="countYxYDsum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select s.sys_staff_id from xarea x,staff s,xrelation xl
         where x.conment = '3'
-        <if test="battalion != null and battalion != ''" >
+        <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
         and (x.detachment like '%夜巡%' or x.gridding like '%夜巡%')
@@ -564,8 +564,17 @@
     </select>
 
 
-
-
+    <!--日间警力部署-->
+    <select id="selectfixationRJ" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (
+        select s.staff_name,st.section_name,s.sys_staff_id from xarea x,staff s ,xrelation xl,section st
+        where x.station = '固定岗'
+        and x.id = xl.xarea_id
+        and s.sys_staff_id = xl.staff_id
+        and s.sys_section_id = st.sys_section_id
+        GROUP BY s.sys_staff_id) sb GROUP BY SUBSTRING(sb.section_name,1,3)
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
 
 
 </mapper>
