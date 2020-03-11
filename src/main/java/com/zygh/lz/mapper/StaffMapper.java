@@ -145,4 +145,6 @@ public interface StaffMapper {
 
     //根据岗位查询各大队在线民警详情
     List<HashMap> selectAllBysection(Xarea xarea);
+
+
 }

@@ -596,4 +596,6 @@
         AND p.patrol_record_endtime IS NULL
         GROUP BY p.sys_staff_id
     </select>
+
+
 </mapper>

@@ -59,4 +59,24 @@ public interface xareaService {
     //日间其他警力部署
     ResultBean selectqtRJ();
 
+    //在线人详情
+    ResultBean selectInformant();
+
+    //夜间夜巡警力部署
+    ResultBean selectNightTour();
+
+    //夜间快速/高速警力部署
+    ResultBean selectcelerity(String station);
+
+    //夜间其他
+    ResultBean selectqita();
+
+    //九主六块十六示范区
+    ResultBean selectDemonstrationPlot(String station);
+
+    //根据区域名字模糊匹配部署警力
+    ResultBean selctStrength(String name);
+
+    //九主六块多有人
+    ResultBean selectAllByDemonstration(String station);
 }

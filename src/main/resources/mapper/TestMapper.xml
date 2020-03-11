@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zygh.lz.mapper.TestMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Test" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.zygh.lz.admin.Test" extends="BaseResultMap" >
+    <result column="name" property="name" jdbcType="LONGVARCHAR" />
+    <result column="gps" property="gps" jdbcType="LONGVARCHAR" />
+    <result column="po" property="po" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id
+  </sql>
+  <sql id="Blob_Column_List" >
+    name, gps,po
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from test
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from test
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zygh.lz.admin.Test" >
+    insert into test (id, name, gps
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=LONGVARCHAR}, #{gps,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zygh.lz.admin.Test" >
+    insert into test
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="gps != null" >
+        gps,
+      </if>
+      <if test="po != null" >
+        po,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="gps != null" >
+        #{gps,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="po != null" >
+        #{po,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Test" >
+    update test
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="gps != null" >
+        gps = #{gps,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="po != null" >
+        gps = #{po,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zygh.lz.admin.Test" >
+    update test
+    set name = #{name,jdbcType=LONGVARCHAR},
+      gps = #{gps,jdbcType=LONGVARCHAR},po = #{po,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectTestAll" resultMap="BaseResultMap">
+    select  * from test
+  </select>
+</mapper>

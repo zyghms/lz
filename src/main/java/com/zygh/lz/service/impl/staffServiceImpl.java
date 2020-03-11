@@ -438,19 +438,6 @@ public class staffServiceImpl implements staffService {
             List<Xarea> xareas = xareaMapper.selectXareaZgByStaffId(staff.get(i).getSysStaffId(),station);
             for (int f = 0; f < xareas.size(); f++) {
                 staff.get(i).setXarea(xareas.get(f));
-                    /*if (effectiveDate==true && xareas.get(f).getStation().equals("高峰岗")) {
-                        System.out.println("111111111111");
-
-                    } else if (effectiveDate2==true && xareas.get(f).getStation().equals("高峰岗")) {
-                        System.out.println("222222222222222222");
-                        staff.get(i).setXarea(xareas.get(f));
-                    } else if (effectiveDate3==true && xareas.get(f).getStation().equals("固定岗")) {
-                        System.out.println("3333333333333333333");
-                        staff.get(i).setXareaList(xareas);
-                    } else {
-                        System.out.println("44444444444444444444");
-                        staff.get(i).setXareaList(null);
-                    }*/
 
             }
             Gps gps = gpsMapper.gpsEnd(staff.get(i).getSysStaffId());

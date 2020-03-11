@@ -271,7 +271,7 @@
 
     <!--统计应道人数-->
     <select id="countYDSum" resultType="java.util.Map" parameterType="java.lang.String">
-        select s.*,x.gps,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
+        select s.*,x.*,st.* from xarea x,staff s ,xrelation xl,section st
         where x.station = #{station}
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
@@ -561,7 +561,7 @@
         <if test="conment!=null and conment!=''">
             and x.conment = #{conment}
         </if>
-        GROUP BY s.sys_staff_id
+       GROUP BY battalion
     </select>
 
 
@@ -587,7 +587,7 @@
 
     <!--日间重点机关岗-->
     <select id="selectemphasisPope" resultType="map">
-        select s.*,x.gps,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
+        select s.*,x.*,st.* from xarea x,staff s ,xrelation xl,section st
         where x.conment = '4' and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id
         AND s.sys_section_id=st.sys_section_id GROUP BY xl.staff_id
     </select>
@@ -611,7 +611,7 @@
     </select>
     <!--日间网格警力人员详情-->
     <select id="selectgriddingPope" resultType="map">
-        select s.*,x.gps,x.battalion,st.* from xarea x,staff s ,xrelation xl,section st
+        select s.*,x.*,st.* from xarea x,staff s ,xrelation xl,section st
         where x.gridding like '%网格%'
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
@@ -641,7 +641,7 @@
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
-        <if test="conment == null and conment == ''">
+        <if test="conment == null or conment == ''">
             and x.conment != 3
         </if>
         <if test="conment != null and conment != ''">
@@ -675,5 +675,133 @@
         and xl.staff_id = s.sys_staff_id
         and x.conment != 3
         GROUP BY s.sys_staff_id
+    </select>
+    <!--在线人-->
+    <select id="selectInformant" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (SELECT x.id,f.sys_staff_id,f.staff_name,s.section_name,a.battalion
+        FROM patrolrecord p,staff f,section s,xarea a,xrelation x
+        WHERE
+        a.id=x.xarea_id
+        AND f.sys_staff_id=x.staff_id
+        AND f.sys_section_id=s.sys_section_id
+        and f.sys_staff_id=p.sys_staff_id and to_days(p.patrol_record_begintime) = to_days(now())
+        AND p.patrol_record_endtime is null
+        GROUP BY sys_staff_id
+        ) sb
+        GROUP BY SUBSTRING(sb.section_name,1,3)
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+    <!--全部在线人详情-->
+    <select id="selectInformantPope" resultType="map">
+        SELECT f.*,a.*,s.section_name
+        FROM patrolrecord p,staff f,section s,xarea a,xrelation x
+        WHERE
+        a.id=x.xarea_id
+        AND a.battalion=#{battalion}
+        AND f.sys_staff_id=x.staff_id
+        AND f.sys_section_id=s.sys_section_id
+        and f.sys_staff_id=p.sys_staff_id and to_days(p.patrol_record_begintime) = to_days(now())
+        AND p.patrol_record_endtime is null
+        GROUP BY sys_staff_id
+    </select>
+    <!--夜间夜巡警力部署-->
+    <select id="selectNightTour" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (select s.*,x.*,st.section_name from xarea x,staff s,xrelation xl,section st
+        where x.conment = '3'
+        AND st.sys_section_id=s.sys_section_id
+        and (x.detachment like '%夜巡%' or x.gridding like '%夜巡%')
+        and xl.xarea_id = x.id
+        and xl.staff_id = s.sys_staff_id
+        GROUP BY s.sys_staff_id) sb
+        GROUP BY SUBSTRING(sb.section_name,1,3)
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+    <!--夜间夜巡警力部署警力详情-->
+    <select id="selectNightTourPope" resultType="map">
+        select s.*,x.*,st.section_name from xarea x,staff s,xrelation xl,section st
+        where x.conment = '3'
+        <if test="battalion != null and battalion != ''">
+            and battalion = #{battalion}
+        </if>
+        AND st.sys_section_id=s.sys_section_id
+        and (x.detachment like '%夜巡%' or x.gridding like '%夜巡%')
+        and xl.xarea_id = x.id
+        and xl.staff_id = s.sys_staff_id
+        GROUP BY s.sys_staff_id
+    </select>
+    <!--高速/快速夜间警力部署-->
+    <select id="selectcelerity" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (select s.*,x.*,st.section_name from xarea x,staff s,xrelation xl,section st
+        where station = #{station}
+        AND st.sys_section_id=s.sys_section_id
+        and x.conment = '3'
+        and xl.xarea_id = x.id
+        and xl.staff_id = s.sys_staff_id
+        GROUP BY s.sys_staff_id) sb
+        GROUP BY SUBSTRING(sb.section_name,1,3)
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+    <!--高速/快速夜间警力部署详情-->
+    <select id="selectcelerityPope" resultType="map">
+        select s.*,x.*,st.section_name from xarea x,staff s,xrelation xl,section st
+        where
+        st.sys_section_id=s.sys_section_id
+        and x.conment = '3'
+        and xl.xarea_id = x.id
+        <if test="battalion != null and battalion != ''">
+            and battalion = #{battalion}
+        </if>
+        <if test="station != null and station != ''">
+            and station = #{station}
+        </if>
+        and xl.staff_id = s.sys_staff_id
+        GROUP BY s.sys_staff_id
+    </select>
+    <!--夜间其他-->
+    <select id="selectqita" resultType="map">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	 (select s.*,x.*,st.section_name from xarea x,staff s,xrelation xl,section st
+        where x.station != '固定岗' and x.station != '高峰岗'
+        and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
+        and x.station != '快速岗' and x.station != '区域'
+        and xl.xarea_id = x.id
+        AND s.sys_section_id=st.sys_section_id
+        and xl.staff_id = s.sys_staff_id
+        and x.conment = '3'
+        GROUP BY s.sys_staff_id) sb
+        GROUP BY SUBSTRING(sb.section_name,1,3)
+        ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+    <!--夜间其他详情-->
+    <select id="selectqitaPope" resultType="map">
+        select s.*,x.*,st.section_name from xarea x,staff s,xrelation xl,section st
+        where x.station != '固定岗' and x.station != '高峰岗'
+        and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
+        and x.station != '快速岗' and x.station != '区域'
+        and xl.xarea_id = x.id
+        <if test="battalion != null and battalion != ''">
+            and battalion = #{battalion}
+        </if>
+        AND s.sys_section_id=st.sys_section_id
+        and xl.staff_id = s.sys_staff_id
+        and x.conment = '3'
+        GROUP BY s.sys_staff_id
+    </select>
+
+    <select id="selectDemonstrationPlot" resultMap="BaseResultMap">
+        SELECT * from xarea where
+        <if test="station == null or station == ''">
+            station in ('九主','六块','示范区')
+        </if>
+        <if test="station != null and station != ''">
+            station=#{station}
+        </if>
+
+    </select>
+
+    <!--根据区域名字模糊匹配部署警力-->
+    <select id="selctStrength" resultType="map">
+        SELECT f.*,x.* from	 xarea x,xrelation xl,staff f
+        WHERE  f.sys_staff_id=xl.staff_id and x.id = xl.xarea_id
+        AND x.name LIKE CONCAT('%',#{name},'%') GROUP BY xl.staff_id
     </select>
 </mapper>

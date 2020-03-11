@@ -125,4 +125,33 @@ public interface XareaMapper {
 
     //日间其他警员详情
     List<HashMap> selectqtPope(String battalion);
+
+    //在线人警力部署
+    List<HashMap> selectInformant();
+    //在线人详情
+    List<HashMap> selectInformantPope(String battalion);
+
+    //夜间夜巡警力部署
+    List<HashMap> selectNightTour();
+
+    //夜间夜巡警力部署
+    List<HashMap> selectNightTourPope(String battalion);
+
+    //夜间快速/高速警力部署
+    List<HashMap> selectcelerity(String station);
+
+    //夜间快速/高速警力部署详情
+    List<HashMap> selectcelerityPope(@Param("station") String station,@Param("battalion") String battalion);
+
+    //夜间其他
+    List<HashMap> selectqita();
+
+    //夜间其他详情
+    List<HashMap> selectqitaPope(String battalion);
+
+    //九主六块十六示范区
+    List<Xarea> selectDemonstrationPlot(String station);
+
+    //根据区域名字模糊匹配部署警力
+    List<HashMap> selctStrength(String name);
 }
