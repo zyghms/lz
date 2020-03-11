@@ -1,6 +1,5 @@
 package com.zygh.lz.service.impl;
 
-import com.sun.org.apache.xerces.internal.xs.datatypes.ObjectList;
 import com.zygh.lz.admin.Gps;
 import com.zygh.lz.admin.Patrolrecord;
 import com.zygh.lz.admin.Staff;
