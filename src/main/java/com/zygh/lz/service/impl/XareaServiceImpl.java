@@ -568,7 +568,27 @@ public class XareaServiceImpl implements xareaService {
             System.out.println();
         }
 
-        return ResultUtil.setOK("success",listAll);
+
+
+        List<HashMap> resultList =new ArrayList<>();
+        List<String> ddNames = xareaMapper.findDd();
+        for (String sectionName : ddNames) {
+            HashMap<String, Object> ddMap = new HashMap<>();
+            List<HashMap> dDList =new ArrayList<>();
+            ddMap.put("sectionName",sectionName);
+            for (HashMap list : listAll) {
+                if (list.get("battalion").equals(sectionName)){
+                    dDList.add(list);
+                }
+            }
+            ddMap.put("count",dDList.size());
+            ddMap.put("personnel",dDList);
+
+            resultList.add(ddMap);
+        }
+
+
+        return ResultUtil.setOK("success",resultList);
     }
 
 
