@@ -370,7 +370,7 @@
         </if>
         and p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id and xl.xarea_id = x.id
-        and x.gridding like '%网格%' and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
+        and (x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%' and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>
 
     <!--统计日常勤务实到在线人数-->
@@ -384,7 +384,7 @@
         <if test="battalion != null and battalion != ''" >
             and x.battalion = #{battalion}
         </if>
-        and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2' or x.station = '固定岗' or conment = '4')
+        and ((((x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%') or x.station = '高速岗' or conment = '2' or x.station = '固定岗' or conment = '4')
         or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station != '区域'))
         and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>
@@ -438,7 +438,7 @@
         and  p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id
         and xl.xarea_id = x.id
-        and ((x.gridding like '%网格%' or x.station = '高速岗' or x.conment = '2' or x.station = '固定岗' or x.conment = '4'
+        and ((((x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%') or x.station = '高速岗' or x.conment = '2' or x.station = '固定岗' or x.conment = '4'
         <if test="battalion != null and battalion != ''" >
             or x.station = #{station}
         </if>)
@@ -586,7 +586,7 @@
         <if test="battalion != null and battalion != ''" >
             and x.battalion = #{battalion}
         </if>
-        and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2' or x.station = '固定岗' or conment = '4')
+        and ((((x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%') or x.station = '高速岗' or conment = '2' or x.station = '固定岗' or conment = '4')
         or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station != '区域'))
         and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>

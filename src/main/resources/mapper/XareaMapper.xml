@@ -315,7 +315,7 @@
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
-        and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2')
+        and ((((x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%') or x.station = '高速岗' or conment = '2')
         or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station
         != '快速岗' and station != '区域'))
         and x.id = xl.xarea_id
@@ -330,7 +330,7 @@
         where x.conment != '3'
         and x.battalion = #{battalion}
         and x.detachment = #{detachment}
-        and ((x.gridding like '%网格%' or x.station = '高速岗' or conment = '2')
+        and ((((x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%') or x.station = '高速岗' or conment = '2')
         or (station != '固定岗' and station != '高峰岗' and station != '高速岗' and conment != '2' and conment != '4' and station != '快速岗' and station != '区域'))
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
@@ -354,7 +354,7 @@
     <!--统计网格应到人数-->
     <select id="countWgSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select xl.staff_id from xarea x,staff s ,xrelation xl
-        where x.gridding like '%网格%'
+        where (x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%'
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
@@ -394,10 +394,11 @@
     <!--统计网格组数-->
     <select id="countWgZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select count(*) from xarea
-        where gridding like '%网格%'
+        where (gridding like '%网格%' or type = '面') and gridding is not null and gridding not like '%级网格%'
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
+        group by gridding
     </select>
 
     <!--统计其他岗组数-->
@@ -605,7 +606,7 @@
     <!--日间网格警力部署-->
     <select id="selectgriddingRJ" resultType="map">
         SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	 (select s.*,x.*,st.section_name  from xarea x,staff s ,xrelation xl,section st
-        where x.gridding like '%网格%'
+        where (x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%'
         and x.id = xl.xarea_id and s.sys_staff_id = xl.staff_id AND s.sys_section_id=st.sys_section_id GROUP BY xl.staff_id) sb
         GROUP BY SUBSTRING(sb.section_name,1,3)
         ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
@@ -613,7 +614,7 @@
     <!--日间网格警力人员详情-->
     <select id="selectgriddingPope" resultType="map">
         select s.*,x.*,st.* from xarea x,staff s ,xrelation xl,section st
-        where x.gridding like '%网格%'
+        where (x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%'
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
