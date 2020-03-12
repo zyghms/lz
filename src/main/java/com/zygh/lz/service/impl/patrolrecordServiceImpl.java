@@ -987,7 +987,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         gsMap.put("SDnum", gsSD);
 
 
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        /*SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
         String dayTime = df.format(new Date());// new Date()为获取当前系统时间
 
@@ -1004,14 +1004,14 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         boolean effectiveDate2 = isEffectiveDate(nowTime, startTime2, endTime2);
         //平峰期
         boolean effectiveDate3 = isEffectiveDate(nowTime, startTime3, endTime3);
-
+*/
         // 创建一个数值格式化对象
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
 
-        if (effectiveDate3) {
-            if (effectiveDate || effectiveDate2) {
+        /*if (effectiveDate3) {
+            if (effectiveDate || effectiveDate2) {*/
                 //早高峰
                 typeSumList.add(gdMap);
                 typeSumList.add(gfMap);
@@ -1021,7 +1021,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 typeSumList.add(qtMap);
                 typeSumList.add(gsMap);
 
-            } else {
+            /*} else {
                 gfMap.put("name", "高峰岗");
                 gfMap.put("YDnum", 0);
                 gfMap.put("Znum", gfZnum);
@@ -1081,7 +1081,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             typeSumList.add(zdMap);
             typeSumList.add(qtMap);
             typeSumList.add(gsMap);
-        }
+        }*/
 
         return typeSumList;
     }
@@ -1533,7 +1533,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         yxQtMap.put("SDnum", qtSD);
 
 
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+       /* SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
         String dayTime = df.format(new Date());// new Date()为获取当前系统时间
         Date startTime = ft.parse(dayTime + " 07:00:00");
@@ -1572,12 +1572,12 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             yXtypeSumList.add(yxGsMap);
             yXtypeSumList.add(yxKsMap);
             yXtypeSumList.add(yxQtMap);
-        } else {
+        } else {*/
             yXtypeSumList.add(yxMap);
             yXtypeSumList.add(yxGsMap);
             yXtypeSumList.add(yxKsMap);
             yXtypeSumList.add(yxQtMap);
-        }
+        //}
         return yXtypeSumList;
 
     }
