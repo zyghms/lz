@@ -28,5 +28,12 @@ public class xlevelserviceController {
         return xlevelserviceService.selectxleveBydj(hierarchy,sectionName);
     }
 
+    //按等级按大队查询等级勤务
+    @GetMapping("selectXlevedJ")
+    public ResultBean selectXlevedJ(Integer hierarchy){
+        return xlevelserviceService.selectXlevedJ(hierarchy);
+    }
+
+
 
 }

@@ -370,7 +370,7 @@
         </if>
         and p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id and xl.xarea_id = x.id
-        and (x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%' and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
+        and (x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%' and conment != '2' and conment != '3' and station = '区域' and p.patrol_record_endtime is null GROUP BY p.sys_staff_id
     </select>
 
     <!--统计日常勤务实到在线人数-->

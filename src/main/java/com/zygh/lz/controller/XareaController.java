@@ -139,7 +139,7 @@ public class XareaController {
         return xareaService.selctStrength(name);
     }
 
-    //九主六块多有人
+    //九主六块警力详情
     @GetMapping("selectAllByDemonstration")
     public ResultBean selectAllByDemonstration(String station) {
         return xareaService.selectAllByDemonstration(station);

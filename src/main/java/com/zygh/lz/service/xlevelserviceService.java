@@ -1,10 +1,6 @@
 package com.zygh.lz.service;
 
-import com.zygh.lz.admin.Xlevelservice;
 import com.zygh.lz.vo.ResultBean;
-
-import java.util.List;
-import java.util.Map;
 
 public interface xlevelserviceService {
 
@@ -15,4 +11,6 @@ public interface xlevelserviceService {
     ResultBean selectorderlydjyd(String sectionName);
 
     ResultBean selectxleveBydj(Integer hierarchy,String sectionName);
+
+    ResultBean selectXlevedJ(Integer hierarchy);
 }

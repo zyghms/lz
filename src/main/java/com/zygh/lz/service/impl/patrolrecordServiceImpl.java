@@ -562,7 +562,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int yxYDsum = yxPeoples.size();
 
         //高峰应到数
-        List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion);
+        List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion,null);
         for (HashMap gfPeople : gfPeoples) {
             for (Integer gf : gfList) {
                 if (gfPeople.get("sys_staff_id").equals(gf)) {
@@ -790,9 +790,9 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         HashMap<String, Object> TQMap = new HashMap<>();
         //应到
         //固定岗
-        int gdYDsum = xareaMapper.countYDSum("固定岗", battalion).size();
+        int gdYDsum = xareaMapper.countYDSum("固定岗", battalion,null).size();
         //高峰岗
-        int gfYDsum = xareaMapper.countYDSum("高峰岗", battalion).size();
+        int gfYDsum = xareaMapper.countYDSum("高峰岗", battalion,null).size();
         //铁骑2  夜巡3
         int tqYDsum = xareaMapper.countYxSum("2", battalion).size();
         //网格
@@ -815,7 +815,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int tqZnum = xareaMapper.countTqZSum(battalion).size();
         int gdZnum = xareaMapper.countggZSum("固定岗", battalion);
         int gfZnum = xareaMapper.countggZSum("高峰岗", battalion);
-        int wgZnum = xareaMapper.countWgZSum(battalion);
+        int wgZnum = xareaMapper.countWgZSum(battalion).size();
         int zdZnum = xareaMapper.countZdZSum(battalion);//重点岗
         int qtZnum = xareaMapper.countQtZSum(battalion, "");//其他岗
         int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion).size();
@@ -917,9 +917,9 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //应到
         //固定岗 +4为六大队应到
-        int gdYDsum = xareaMapper.countYDSum("固定岗", battalion).size();
+        int gdYDsum = xareaMapper.countYDSum("固定岗", battalion,null).size();
         //高峰岗
-        int gfYDsum = xareaMapper.countYDSum("高峰岗", battalion).size();
+        int gfYDsum = xareaMapper.countYDSum("高峰岗", battalion,null).size();
         //重点
         int zdYDsum = xareaMapper.countZdYDSum(battalion).size();
 
@@ -936,7 +936,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int tqZnum = xareaMapper.countTqZSum(battalion).size();
         int gdZnum = xareaMapper.countggZSum("固定岗", battalion);
         int gfZnum = xareaMapper.countggZSum("高峰岗", battalion);
-        int wgZnum = xareaMapper.countWgZSum(battalion);
+        int wgZnum = xareaMapper.countWgZSum(battalion).size();
         int zdZnum = xareaMapper.countZdZSum(battalion);//重点岗
         int qtZnum = xareaMapper.countQtZSum(battalion, null);//其他岗
         int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion).size();
@@ -1794,7 +1794,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         HashMap staffSumMap = new HashMap();
 
         //高峰应到数
-        List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion);
+        List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion,null);
         //网格+高速+铁骑+其他
         List<HashMap> rcPeoples = xareaMapper.countRcYDsumC2(battalion);
         //固定+重点

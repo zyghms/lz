@@ -265,8 +265,10 @@ public class XareaServiceImpl implements xareaService {
      */
     @Override
     public ResultBean selectfixationRJ(String station) {
+        List<HashMap> resultList = new ArrayList<>();
         //固定岗每个大队几个人查询
         List<HashMap> list = xareaMapper.selectfixationRJ(station);
+
         if (list.size() >= 0) {
             for (int i = 0; i < list.size(); i++) {
                 String sectionName = list.get(i).get("sectionName").toString();
@@ -274,8 +276,19 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> hashMaps = xareaMapper.countYDSum(station, list.get(i).get("sectionName").toString());
-                list.get(i).put("personnel", hashMaps);
+                //细分到中队
+                List<HashMap> hashMaps1 = xareaMapper.selectfixationzdRJ(station, list.get(i).get("sectionName").toString());
+
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(sectionName.indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    //System.out.println("===" + substring);
+                    List<HashMap> hashMaps = xareaMapper.countYDSum(station, dadui, substring);
+                    //System.out.println("=-=-" + hashMaps.size());
+                    hashMaps1.get(k).put("detachment", hashMaps);
+                }
+
+                list.get(i).put("detachment ", hashMaps1);
 
             }
 
@@ -381,7 +394,7 @@ public class XareaServiceImpl implements xareaService {
                     list.get(i).put("sectionName", sectionName1);
                 }
                 List<HashMap> hashMaps = xareaMapper.selectexpresswayPope("高速岗", list.get(i).get("sectionName").toString(), null);
-                System.out.println(hashMaps.size());
+                //System.out.println(hashMaps.size());
                 list.get(i).put("personnel", hashMaps);
 
             }
@@ -417,7 +430,7 @@ public class XareaServiceImpl implements xareaService {
         return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
 
-    /**
+    /**selectfixationRJ
      * 全部在线人
      *
      * @return
@@ -540,54 +553,54 @@ public class XareaServiceImpl implements xareaService {
 
     /**
      * 根据区域名字模糊匹配部署警力
+     *
      * @param name
      * @return
      */
     @Override
     public ResultBean selctStrength(String name) {
         List<HashMap> hashMaps = xareaMapper.selctStrength(name);
-        if(hashMaps.size()>=0){
-            return ResultUtil.setOK("success",hashMaps);
+        if (hashMaps.size() >= 0) {
+            return ResultUtil.setOK("success", hashMaps);
         }
-        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+        return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
 
     /**
      * 九主六块多有人
+     *
      * @return
      */
     @Override
     public ResultBean selectAllByDemonstration(String station) {
         //九主六块所有人
         List<Xarea> xareas = xareaMapper.selectDemonstrationPlot(station);
-        List<HashMap> listAll=new ArrayList<>();
-        for (int i=0;i<xareas.size();i++){
+        List<HashMap> listAll = new ArrayList<>();
+        for (int i = 0; i < xareas.size(); i++) {
             List<HashMap> list = xareaMapper.selctStrength(xareas.get(i).getGridding());
             listAll.addAll(list);
             System.out.println();
         }
 
-
-
-        List<HashMap> resultList =new ArrayList<>();
+        List<HashMap> resultList = new ArrayList<>();
         List<String> ddNames = xareaMapper.findDd();
         for (String sectionName : ddNames) {
             HashMap<String, Object> ddMap = new HashMap<>();
-            List<HashMap> dDList =new ArrayList<>();
-            ddMap.put("sectionName",sectionName);
+            List<HashMap> dDList = new ArrayList<>();
+            ddMap.put("sectionName", sectionName);
             for (HashMap list : listAll) {
-                if (list.get("battalion").equals(sectionName)){
+                if (list.get("battalion").equals(sectionName)) {
                     dDList.add(list);
                 }
             }
-            ddMap.put("count",dDList.size());
-            ddMap.put("personnel",dDList);
+            ddMap.put("count", dDList.size());
+            ddMap.put("personnel", dDList);
 
             resultList.add(ddMap);
         }
 
 
-        return ResultUtil.setOK("success",resultList);
+        return ResultUtil.setOK("success", resultList);
     }
 
 

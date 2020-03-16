@@ -276,6 +276,9 @@
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
+        <if test="detachment != null and detachment != ''">
+            and x.detachment = #{detachment}
+        </if>
         and x.id = xl.xarea_id
         and s.sys_staff_id = xl.staff_id
         and s.sys_section_id = st.sys_section_id
@@ -392,8 +395,8 @@
     </select>
 
     <!--统计网格组数-->
-    <select id="countWgZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
-        select count(*) from xarea
+    <select id="countWgZSum" resultType="java.lang.String" parameterType="java.lang.String">
+        select gridding from xarea
         where (gridding like '%网格%' or type = '面') and gridding is not null and gridding not like '%级网格%'
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
@@ -579,6 +582,18 @@
         GROUP BY s.sys_staff_id) sb GROUP BY SUBSTRING(sb.section_name,1,3)
         ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
     </select>
+    <!--固定岗/高峰岗细分到中队-->
+    <select id="selectfixationzdRJ" resultType="map">
+        SELECT st.section_name as sectionName,COUNT(s.sys_staff_id) AS count FROM
+        xarea x,staff s ,xrelation xl,section st
+        WHERE x.station = #{station}
+        AND x.id = xl.xarea_id
+        AND s.sys_staff_id = xl.staff_id
+        AND s.sys_section_id = st.sys_section_id
+        AND x.battalion=#{battalion}
+        GROUP BY st.section_name
+    </select>
+
     <!--日间重点机关岗-->
     <select id="selectemphasisRJ" resultType="map">
         SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	(select s.staff_name,st.section_name,s.sys_staff_id from xarea x,staff s ,xrelation xl,section st

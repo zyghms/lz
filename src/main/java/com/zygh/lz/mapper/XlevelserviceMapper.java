@@ -40,4 +40,13 @@ public interface XlevelserviceMapper {
 
     List<Xlevelservice> selectXleveAll();
 
+
+    //按等级按大队展示大队
+    List<HashMap> selectXlevedJ(Integer hierarchy);
+
+    //按等级按大队展示详情
+    List<Xlevelservice> selectXleverdJnum(@Param("hierarchy") Integer hierarchy,
+                                          @Param("sectionName") String sectionName);
+
+
 }

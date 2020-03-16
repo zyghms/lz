@@ -42,7 +42,7 @@ public interface XareaMapper {
 
     List<Xarea> selectXareaByid(Integer id);
 
-    List<HashMap> countYDSum(@Param("station") String station, @Param("battalion") String battalion);
+    List<HashMap> countYDSum(@Param("station") String station, @Param("battalion") String battalion, @Param("detachment") String detachment);
 
     List<HashMap> countYxSum(@Param("conment") String conment, @Param("battalion") String battalion);
 
@@ -60,7 +60,7 @@ public interface XareaMapper {
 
     int countggZSum(@Param("station") String station, @Param("battalion") String battalion);
 
-    int countWgZSum(String battalion);
+    List<String> countWgZSum(String battalion);
 
     int countZdZSum(String battalion);
 
@@ -100,6 +100,9 @@ public interface XareaMapper {
      */
     //日间固定岗部署人员按大队细分
     List<HashMap> selectfixationRJ(String station);
+    //细分到中队
+    List<HashMap> selectfixationzdRJ(@Param("station") String station,
+                                     @Param("battalion") String battalion);
 
     //日间重点单位岗
     List<HashMap> selectemphasisRJ();
@@ -154,4 +157,6 @@ public interface XareaMapper {
 
     //根据区域名字模糊匹配部署警力
     List<HashMap> selctStrength(String name);
+
+
 }
