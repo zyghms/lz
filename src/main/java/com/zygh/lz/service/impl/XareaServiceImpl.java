@@ -75,7 +75,9 @@ public class XareaServiceImpl implements xareaService {
             }
             conment += staff.size();
             xareas.get(i).setStaff(staff);
+
         }
+        //System.out.println(xareas.size());
         return ResultUtil.setOK("success", xareas);
     }
 
@@ -265,7 +267,6 @@ public class XareaServiceImpl implements xareaService {
      */
     @Override
     public ResultBean selectfixationRJ(String station) {
-        List<HashMap> resultList = new ArrayList<>();
         //固定岗每个大队几个人查询
         List<HashMap> list = xareaMapper.selectfixationRJ(station);
 
@@ -278,13 +279,10 @@ public class XareaServiceImpl implements xareaService {
                 }
                 //细分到中队
                 List<HashMap> hashMaps1 = xareaMapper.selectfixationzdRJ(station, list.get(i).get("sectionName").toString());
-
                 for (int k = 0; k < hashMaps1.size(); k++) {
                     String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     String substring = hashMaps1.get(k).get("sectionName").toString().substring(sectionName.indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
-                    //System.out.println("===" + substring);
                     List<HashMap> hashMaps = xareaMapper.countYDSum(station, dadui, substring);
-                    //System.out.println("=-=-" + hashMaps.size());
                     hashMaps1.get(k).put("detachment", hashMaps);
                 }
 
@@ -305,7 +303,7 @@ public class XareaServiceImpl implements xareaService {
      */
     @Override
     public ResultBean selectemphasisRJ() {
-        //重点机关岗
+        //重点机关岗各个大队人数
         List<HashMap> list = xareaMapper.selectemphasisRJ();
         if (list.size() >= 0) {
             for (int i = 0; i < list.size(); i++) {
@@ -314,8 +312,18 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> hashMaps = xareaMapper.selectemphasisPope();
-                list.get(i).put("personnel", hashMaps);
+                //各个中队人数
+                List<HashMap> hashMaps1 = xareaMapper.selectemphasisZd();
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(sectionName.indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    List<HashMap> hashMaps = xareaMapper.selectemphasisPope(dadui, substring);
+
+                    //详情添加到中队里
+                    hashMaps1.get(k).put("detachment", hashMaps);
+                }
+                //中队详情添加到大队里
+                list.get(i).put("detachment", hashMaps1);
 
             }
 
@@ -340,8 +348,29 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> hashMaps = xareaMapper.countYxSum("2", list.get(i).get("sectionName").toString());
-                list.get(i).put("personnel", hashMaps);
+                List<HashMap> hashMaps1 = xareaMapper.selectcavalryzdRJ();
+                String dadui = hashMaps1.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
+                String substring = hashMaps1.get(i).get("sectionName").toString().substring(hashMaps1.get(i).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(i).get("sectionName").toString().length());
+                List<HashMap> hashMaps = xareaMapper.countYxSum("2",dadui, substring);
+                //详情添加到中队里
+                hashMaps1.get(i).put("detachment", hashMaps);
+                for (int j=0;j<hashMaps1.size();j++) {
+                    Object detachment = hashMaps1.get(j).get("detachment");
+                    if(detachment==null){
+                        hashMaps1.get(j).remove("sectionName");
+                        hashMaps1.get(j).remove("count");
+                    }
+                }
+                for (int k=0;k<hashMaps1.size();k++) {
+                    if(hashMaps1.get(k)==null){
+                        System.out.println("sdf");
+                        hashMaps1.remove(hashMaps1.get(k));
+                    }
+
+                }
+                list.get(i).put("detachment", hashMaps1);
+                //中队详情添加到大队里
+
 
             }
 
@@ -366,8 +395,19 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> hashMaps = xareaMapper.selectgriddingPope(list.get(i).get("sectionName").toString());
-                list.get(i).put("personnel", hashMaps);
+                //List<HashMap> hashMaps = xareaMapper.selectgriddingPope(list.get(i).get("sectionName").toString());
+                //各个中队人数
+                List<HashMap> hashMaps1 = xareaMapper.selectgriddingZD();
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    System.out.println(substring);
+                    List<HashMap> hashMaps = xareaMapper.selectgriddingPope(dadui, substring);
+
+                    //详情添加到中队里
+                    hashMaps1.get(k).put("detachment", hashMaps);
+                }
+                list.get(i).put("detachment", hashMaps1);
 
             }
 
@@ -393,9 +433,16 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> hashMaps = xareaMapper.selectexpresswayPope("高速岗", list.get(i).get("sectionName").toString(), null);
-                //System.out.println(hashMaps.size());
-                list.get(i).put("personnel", hashMaps);
+                //各个中队人数
+                List<HashMap> hashMaps1 = xareaMapper.selectexpresswayZD();
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    List<HashMap> hashMaps = xareaMapper.selectexpresswayPope("高速岗",dadui, null,substring);
+                    //详情添加到中队里
+                    hashMaps1.get(k).put("detachment", hashMaps);
+                }
+                list.get(i).put("detachment", hashMaps1);
 
             }
 
@@ -420,18 +467,27 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> hashMaps = xareaMapper.selectqtPope(list.get(i).get("sectionName").toString());
-                list.get(i).put("personnel", hashMaps);
+                //各个中队人数
+                List<HashMap> hashMaps1 = xareaMapper.selectqtZD();
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    List<HashMap> hashMaps = xareaMapper.selectqtPope(dadui,substring);
+                    //详情添加到中队里
+                    hashMaps1.get(k).put("detachment", hashMaps);
+                }
+                list.get(i).put("detachment", hashMaps1);
 
             }
-
             return ResultUtil.setOK("success", list);
+
         }
         return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
 
-    /**selectfixationRJ
-     * 全部在线人
+    /**
+     *
+     * 全部在线人警力部署
      *
      * @return
      */
@@ -446,8 +502,31 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> sectionName1 = xareaMapper.selectInformantPope(list.get(i).get("sectionName").toString());
-                list.get(i).put("personnel", sectionName1);
+                //各个中队人数
+                List<HashMap> hashMaps1 = xareaMapper.selectInformantZD();
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    System.out.println("1:"+dadui);
+                    System.out.println("2:"+substring);
+                    List<HashMap> hashMaps = xareaMapper.selectInformantPope(dadui,substring);
+                    //String detachment = hashMaps.get(k).get("detachment").toString();
+                    //详情添加到中队里
+                    System.out.println(hashMaps.size());
+                    if(dadui.equals(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1))){
+                        hashMaps1.get(k).put("detachment", hashMaps);
+                    }
+
+                }
+                for (int j=0;j<hashMaps1.size();j++) {
+                    Object detachment = hashMaps1.get(j).get("detachment");
+                    if(detachment==null){
+                        hashMaps1.get(j).remove("sectionName");
+                        hashMaps1.get(j).remove("count");
+                    }
+                }
+
+                list.get(i).put("detachment", hashMaps1);
 
             }
 
@@ -472,8 +551,16 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> sectionName1 = xareaMapper.selectNightTourPope(list.get(i).get("sectionName").toString());
-                list.get(i).put("personnel", sectionName1);
+                //各个中队人数
+                List<HashMap> hashMaps1 = xareaMapper.selectNightTourZD();
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    List<HashMap> hashMaps = xareaMapper.selectNightTourPope(dadui,substring);
+                    //详情添加到中队里
+                    hashMaps1.get(k).put("detachment", hashMaps);
+                }
+                list.get(i).put("detachment", hashMaps1);
 
             }
 
@@ -499,8 +586,16 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> hashMaps = xareaMapper.selectcelerityPope(station, list.get(i).get("sectionName").toString());
-                list.get(i).put("personnel", hashMaps);
+                //各个中队人数
+                List<HashMap> hashMaps1 = xareaMapper.selectcelerityPopeZD();
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    List<HashMap> hashMaps = xareaMapper.selectcelerityPope(station,dadui,substring);
+                    //详情添加到中队里
+                    hashMaps1.get(k).put("detachment", hashMaps);
+                }
+                list.get(i).put("detachment", hashMaps1);
 
             }
 
@@ -525,8 +620,30 @@ public class XareaServiceImpl implements xareaService {
                     String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     list.get(i).put("sectionName", sectionName1);
                 }
-                List<HashMap> sectionName1 = xareaMapper.selectqitaPope(list.get(i).get("sectionName").toString());
-                list.get(i).put("personnel", sectionName1);
+                //各个中队人数
+                List<HashMap> hashMaps1 = xareaMapper.selectqita();
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    List<HashMap> hashMaps = xareaMapper.selectqitaPope(dadui,substring);
+                    //详情添加到中队里
+                    if(dadui.equals(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1))){
+                        hashMaps1.get(k).put("detachment", hashMaps);
+                    }
+
+                }
+                for (int j=0;j<hashMaps1.size();j++) {
+                    Object detachment = hashMaps1.get(j).get("detachment");
+                    if(detachment==null){
+                        hashMaps1.get(j).remove("sectionName");
+                        hashMaps1.get(j).remove("count");
+                    }
+                    if(hashMaps1.get(j).get("detachment")!=null){
+                        list.get(i).put("detachment", hashMaps1);
+                    }
+                }
+
+
 
             }
 

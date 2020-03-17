@@ -44,7 +44,9 @@ public interface XareaMapper {
 
     List<HashMap> countYDSum(@Param("station") String station, @Param("battalion") String battalion, @Param("detachment") String detachment);
 
-    List<HashMap> countYxSum(@Param("conment") String conment, @Param("battalion") String battalion);
+    List<HashMap> countYxSum(@Param("conment") String conment,
+                             @Param("battalion") String battalion,
+                             @Param("detachment") String detachment);
 
     List<HashMap> countRcYDsumC2(String battalion);
 
@@ -107,50 +109,75 @@ public interface XareaMapper {
     //日间重点单位岗
     List<HashMap> selectemphasisRJ();
     //日间重点单位岗人员详情
-    List<HashMap> selectemphasisPope();
+    List<HashMap> selectemphasisPope(@Param("battalion") String battalion,
+                                     @Param("detachment") String detachment);
+    //细分到中队
+    List<HashMap> selectemphasisZd();
 
     //日间铁骑
     List<HashMap> selectcavalryRJ();
+    //细分到中队
+    List<HashMap> selectcavalryzdRJ();
 
     //日间网格警组
     List<HashMap> selectgriddingRJ();
     //日间网格警力详情
-    List<HashMap> selectgriddingPope(String battalion);
+    List<HashMap> selectgriddingPope(@Param("battalion") String battalion,
+                                     @Param("detachment") String detachment);
+    //日间网格警力详情细分到中队
+    List<HashMap> selectgriddingZD();
 
     //日间高速/快速
     List<HashMap> selectexpresswayRJ(String station);
+    //细分到中队
+    List<HashMap> selectexpresswayZD();
     List<HashMap> selectexpresswayPope(@Param("station") String station,
                                        @Param("battalion") String battalion,
-                                       @Param("conment")String conment);
+                                       @Param("conment")String conment,
+                                       @Param("detachment")String detachment);
 
     //日间其他警力部署
     List<HashMap> selectqtRJ();
+    //日间其他警力部署细分到中队
+    List<HashMap> selectqtZD();
 
     //日间其他警员详情
-    List<HashMap> selectqtPope(String battalion);
+    List<HashMap> selectqtPope(@Param("battalion") String battalion,
+                               @Param("detachment") String detachment);
 
     //在线人警力部署
     List<HashMap> selectInformant();
+    //在线人警力部署中队
+    List<HashMap> selectInformantZD();
     //在线人详情
-    List<HashMap> selectInformantPope(String battalion);
+    List<HashMap> selectInformantPope(@Param("battalion") String battalion,
+                                      @Param("detachment") String detachment);
 
     //夜间夜巡警力部署
     List<HashMap> selectNightTour();
+    //夜间夜巡警力部署细分到中队
+    List<HashMap> selectNightTourZD();
 
-    //夜间夜巡警力部署
-    List<HashMap> selectNightTourPope(String battalion);
+    //夜间夜巡警力部署详情
+    List<HashMap> selectNightTourPope(@Param("battalion") String battalion,
+                                      @Param("detachment") String detachment);
 
     //夜间快速/高速警力部署
     List<HashMap> selectcelerity(String station);
 
     //夜间快速/高速警力部署详情
-    List<HashMap> selectcelerityPope(@Param("station") String station,@Param("battalion") String battalion);
+    List<HashMap> selectcelerityPope(@Param("station") String station,@Param("battalion") String battalion,
+                                     @Param("detachment") String detachment);
+
+    //夜间快速/高速警力部署细分到中队
+    List<HashMap> selectcelerityPopeZD();
 
     //夜间其他
     List<HashMap> selectqita();
 
     //夜间其他详情
-    List<HashMap> selectqitaPope(String battalion);
+    List<HashMap> selectqitaPope(@Param("battalion") String battalion,
+                                 @Param("detachment") String detachment);
 
     //九主六块十六示范区
     List<Xarea> selectDemonstrationPlot(String station);

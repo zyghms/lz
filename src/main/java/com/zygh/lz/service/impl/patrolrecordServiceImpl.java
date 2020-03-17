@@ -551,7 +551,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int rcSDsum = rcList.size();
 
         //夜巡
-        List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
+        List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion,null);
         for (HashMap yxPeople : yxPeoples) {
             for (Integer yx : yxList) {
                 if (yxPeople.get("sys_staff_id").equals(yx)) {
@@ -794,7 +794,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         //高峰岗
         int gfYDsum = xareaMapper.countYDSum("高峰岗", battalion,null).size();
         //铁骑2  夜巡3
-        int tqYDsum = xareaMapper.countYxSum("2", battalion).size();
+        int tqYDsum = xareaMapper.countYxSum("2", battalion,null).size();
         //网格
         int wgYDsum = xareaMapper.countWgSum(battalion).size();
         //重点
@@ -924,7 +924,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int zdYDsum = xareaMapper.countZdYDSum(battalion).size();
 
         //铁骑2
-        int tqYDsum = xareaMapper.countYxSum("2", battalion).size() / 2;
+        int tqYDsum = xareaMapper.countYxSum("2", battalion,null).size() / 2;
         //网格
         int wgYDsum = xareaMapper.countWgSum(battalion).size() / 2;
         //其他
@@ -1800,7 +1800,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         //固定+重点
         List<HashMap> rcPeoples1 = xareaMapper.countRcYDsum(battalion);
         //夜巡
-        List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion);
+        List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion,null);
 
         int gfYDSum = (gfPeoples.size()) + (rcPeoples.size()) + (rcPeoples1.size());
         int rcYDSum = (rcPeoples.size()) + (rcPeoples1.size());
