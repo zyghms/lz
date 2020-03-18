@@ -559,7 +559,48 @@
 
 
 
-    <!--根据岗位查询各大队在线民警详情-->
+    <!--根据岗位查询各大队下各中队在线民警-->
+    <select id="selectcountBydetachment" resultType="map"  parameterType="com.zygh.lz.admin.Xarea">
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from	 (
+            select s.*,st.section_name,x.detachment
+            from patrolrecord p,staff s,xarea x,xrelation xl,section st
+            where to_days(p.patrol_record_begintime) = to_days(now())
+            <if test="station!=null and station != '' ">
+                <if test="station!='其它岗'">
+                    and x.station = #{station}
+                </if>
+                <if test="station=='其它岗'">
+                    and x.station not in ('固定岗','高峰岗','高速岗','快速岗','区域')
+                    and x.conment not in ('2','4')
+                </if>
+            </if>
+            <if test="conment!=null and conment != '' ">
+                and  x.conment  =  #{conment}
+            </if>
+            <if test="gridding!=null and gridding != '' ">
+                and  x.gridding  LIKE '%${gridding}%'
+            </if>
+            <if test="detachment!=null and detachment != '' ">
+                and  (x.detachment  LIKE '%${detachment}%'or x.gridding  LIKE '%${gridding}%')
+            </if>
+            AND st.sys_section_id IN
+            (
+            SELECT sys_section_id FROM section
+            WHERE section_name LIKE '%${battalion}%'
+            )
+            and s.sys_section_id=st.sys_section_id
+            and  p.sys_staff_id = s.sys_staff_id
+            and s.sys_staff_id = xl.staff_id
+            and xl.xarea_id = x.id
+            and p.patrol_record_endtime is null
+            GROUP BY p.sys_staff_id
+        ) sb
+        GROUP BY sb.section_name
+    </select>
+
+
+
+    <!--根据岗位查询各中队在线民警详情-->
     <select id="selectAllBysection" resultMap="BaseResultMap"  parameterType="com.zygh.lz.admin.Xarea">
         SELECT *
         FROM patrolrecord p,staff s,xarea X,xrelation xl,section st,
@@ -586,7 +627,7 @@
         AND st.sys_section_id IN
         (
         SELECT sys_section_id FROM section
-        WHERE section_name LIKE '%${battalion}%'
+        WHERE section_name = '${battalion}'
         )
         AND s.sys_section_id=st.sys_section_id
         AND  p.sys_staff_id = s.sys_staff_id

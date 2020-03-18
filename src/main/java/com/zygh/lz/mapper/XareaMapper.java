@@ -183,7 +183,7 @@ public interface XareaMapper {
     List<Xarea> selectDemonstrationPlot(String station);
 
     //根据区域名字模糊匹配部署警力
-    List<HashMap> selctStrength(String name);
+    List<HashMap> selctStrength(@Param("name") String name,@Param("battalion") String battalion);
 
 
 }

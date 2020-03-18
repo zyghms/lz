@@ -662,7 +662,17 @@ public class staffServiceImpl implements staffService {
     }
 
     @Override
-    //根据岗位查询各大队在线民警详情
+    //根据岗位查询各大队下各中队在线民警
+    public ResultBean selectcountBydetachment(Xarea xarea) {
+        List<HashMap> selectcountBydetachment = staffMapper.selectcountBydetachment(xarea);
+        if (selectcountBydetachment.size() >= 0) {
+            return ResultUtil.setOK("success", selectcountBydetachment);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1, "success", selectcountBydetachment);
+    }
+
+    @Override
+    //根据岗位查询各中队在线民警详情
     public ResultBean selectAllBysection(Xarea xarea){
         List<HashMap> selectAllBysection = staffMapper.selectAllBysection(xarea);
         if (selectAllBysection.size() >= 0) {

@@ -946,6 +946,10 @@
     <select id="selctStrength" resultType="map">
         SELECT f.*,x.* from	 xarea x,xrelation xl,staff f
         WHERE  f.sys_staff_id=xl.staff_id and x.id = xl.xarea_id
-        AND x.name LIKE CONCAT('%',#{name},'%') GROUP BY xl.staff_id
+        AND x.name LIKE CONCAT('%',#{name},'%')
+        <if test="battalion != null and battalion != ''">
+            and battalion = #{battalion}
+        </if>
+        GROUP BY xl.staff_id
     </select>
 </mapper>

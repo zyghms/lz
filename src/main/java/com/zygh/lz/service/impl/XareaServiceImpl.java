@@ -286,7 +286,7 @@ public class XareaServiceImpl implements xareaService {
                     hashMaps1.get(k).put("detachment", hashMaps);
                 }
 
-                list.get(i).put("detachment ", hashMaps1);
+                list.get(i).put("detachment", hashMaps1);
 
             }
 
@@ -507,10 +507,7 @@ public class XareaServiceImpl implements xareaService {
                 for (int k = 0; k < hashMaps1.size(); k++) {
                     String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
                     String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
-                    System.out.println("1:"+dadui);
-                    System.out.println("2:"+substring);
                     List<HashMap> hashMaps = xareaMapper.selectInformantPope(dadui,substring);
-                    //String detachment = hashMaps.get(k).get("detachment").toString();
                     //详情添加到中队里
                     System.out.println(hashMaps.size());
                     if(dadui.equals(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1))){
@@ -676,7 +673,7 @@ public class XareaServiceImpl implements xareaService {
      */
     @Override
     public ResultBean selctStrength(String name) {
-        List<HashMap> hashMaps = xareaMapper.selctStrength(name);
+        List<HashMap> hashMaps = xareaMapper.selctStrength(name,null);
         if (hashMaps.size() >= 0) {
             return ResultUtil.setOK("success", hashMaps);
         }
@@ -690,17 +687,32 @@ public class XareaServiceImpl implements xareaService {
      */
     @Override
     public ResultBean selectAllByDemonstration(String station) {
-        //九主六块所有人
+        //根据九主六块查出的区域
         List<Xarea> xareas = xareaMapper.selectDemonstrationPlot(station);
-        List<HashMap> listAll = new ArrayList<>();
-        for (int i = 0; i < xareas.size(); i++) {
-            List<HashMap> list = xareaMapper.selctStrength(xareas.get(i).getGridding());
-            listAll.addAll(list);
-            System.out.println();
+        List<String> ddNames = xareaMapper.findDd();
+        List<HashMap> qyList = new ArrayList<>();
+        for (Xarea xarea : xareas) {
+            HashMap<String, Object> qyMap = new HashMap<>();
+            List<HashMap> ddList = new ArrayList<>();
+            for (String ddName : ddNames) {
+                HashMap<String, Object> ddMap = new HashMap<>();
+                ddMap.put("sectionName", ddName);
+                //根据区域名字模糊匹配部署警力
+                List<HashMap> list = xareaMapper.selctStrength(xarea.getGridding(),ddName);
+                ddMap.put("count", list.size());
+                ddMap.put("detachment", list);
+                ddList.add(ddMap);
+            }
+
+            qyMap.put("ddList",ddList);
+            qyMap.put("qyData",xarea.getName());
+            qyList.add(qyMap);
+
         }
 
-        List<HashMap> resultList = new ArrayList<>();
-        List<String> ddNames = xareaMapper.findDd();
+
+        /*List<HashMap> resultList = new ArrayList<>();
+
         for (String sectionName : ddNames) {
             HashMap<String, Object> ddMap = new HashMap<>();
             List<HashMap> dDList = new ArrayList<>();
@@ -711,13 +723,12 @@ public class XareaServiceImpl implements xareaService {
                 }
             }
             ddMap.put("count", dDList.size());
-            ddMap.put("personnel", dDList);
+            ddMap.put("detachment", dDList);
 
             resultList.add(ddMap);
-        }
+        }*/
 
-
-        return ResultUtil.setOK("success", resultList);
+        return ResultUtil.setOK("success", qyList);
     }
 
 

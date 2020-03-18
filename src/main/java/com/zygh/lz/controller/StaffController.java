@@ -114,7 +114,13 @@ public class StaffController {
         return staffService.selectcountBysection(xarea);
     }
 
-    //根据岗位查询各大队在线民警详情
+    //根据岗位查询各大队下各中队在线民警
+    @GetMapping("selectcountBydetachment")
+    public ResultBean selectcountBydetachment(Xarea xarea){
+        return staffService.selectcountBydetachment(xarea);
+    }
+
+    //根据岗位查询各中队在线民警详情
     @GetMapping("selectAllBysection")
     public ResultBean selectAllBysection(Xarea xarea){
         return staffService.selectAllBysection(xarea);

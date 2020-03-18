@@ -24,9 +24,9 @@ public interface staffService {
     ResultBean selectInfoByid(Integer staffId);
 
     //手机端登录
-    ResultBean appLogin(String user, String password,String IMEI,String sf);
+    ResultBean appLogin(String user, String password, String IMEI, String sf);
     //手机端登出
-    ResultBean  appLoginOut(String IMEI,String user);
+    ResultBean  appLoginOut(String IMEI, String user);
     //修改唯一标识
     ResultBean updateRegiser(Register register);
     //默认人
@@ -40,7 +40,7 @@ public interface staffService {
     ResultBean selectStaffInfo();
 
     //查询在岗人数
-    ResultBean selectStaffByzg(Integer sectionId,Integer sectionPid,String sectionName);
+    ResultBean selectStaffByzg(Integer sectionId, Integer sectionPid, String sectionName);
 
     //根据名字模糊查询
     ResultBean selectStaffByName(String Name, String staffHierarchy);
@@ -49,7 +49,7 @@ public interface staffService {
     ResultBean selectStaffInfoByid(Integer id);
     ResultBean selectStaffZx(Integer id);
 
-    ResultBean selectStaffYdByAll(String changeShifts,Integer SectionId);
+    ResultBean selectStaffYdByAll(String changeShifts, Integer SectionId);
 
     //查询所有在线民警，并把该民警岗位带出
     ResultBean selectpoliceZx(String station)throws Exception;
@@ -67,7 +67,7 @@ public interface staffService {
     //按大队查询昨日总警力
     ResultBean selecttotalforceszr();
 
-    ResultBean selectzaBystation(String station,String conment,String grid);
+    ResultBean selectzaBystation(String station, String conment, String grid);
 
     //查询其他在线民警
     ResultBean selectStaffByqita();
@@ -79,6 +79,10 @@ public interface staffService {
     //根据岗位查询各大队在线民警
     ResultBean selectcountBysection(Xarea xarea);
 
-    //根据岗位查询各大队在线民警详情
+
+    //根据岗位查询各大队下各中队在线民警
+    ResultBean selectcountBydetachment(Xarea xarea);
+
+    //根据岗位查询各中队在线民警详情
     ResultBean selectAllBysection(Xarea xarea);
 }

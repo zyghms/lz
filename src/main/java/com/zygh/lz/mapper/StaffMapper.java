@@ -143,7 +143,11 @@ public interface StaffMapper {
     //根据岗位查询各大队在线民警
     List<HashMap> selectcountBysection(Xarea xarea);
 
-    //根据岗位查询各大队在线民警详情
+
+    //根据岗位查询各大队下各中队在线民警
+    List<HashMap> selectcountBydetachment(Xarea xarea);
+
+    //根据岗位查询各中队在线民警详情
     List<HashMap> selectAllBysection(Xarea xarea);
 
 
