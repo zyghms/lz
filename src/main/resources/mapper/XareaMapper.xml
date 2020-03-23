@@ -759,6 +759,9 @@
         <if test="detachment != null and detachment != ''">
             and x.detachment = #{detachment}
         </if>
+        <if test="detachment == null or detachment == ''">
+            and (a.detachment = null or a.detachment = '')
+        </if>
         and x.conment != 3
         GROUP BY s.sys_staff_id
     </select>

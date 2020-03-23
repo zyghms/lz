@@ -8,6 +8,7 @@ import com.zygh.lz.mapper.TestMapper;
 import com.zygh.lz.mapper.XareaMapper;
 import com.zygh.lz.mapper.XlevelserviceMapper;
 import com.zygh.lz.service.GpsService;
+import com.zygh.lz.util.GCJ2WGSUtils;
 import com.zygh.lz.util.GPSTransformMars;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,29 @@ public class GPSController {
 
         //System.out.println(tests.size());
 
+    }
+    @GetMapping("pgs")
+    public String pgs(String gps){
+        //String gps="113.68909888362623,34.763538722849184,113.68551653471172,34.763674117695814,113.6820210988152,34.76377744384686,113.68205193275367,34.7602108935337,113.69152414242456,34.7599760430121,113.6916512642789,34.76354434981144";
+        String[] split = gps.split(",");
+        for (int i = 0; i < split.length; i++) {
+            System.out.println(split[i]);
+        }
+        String loastr = "";
+        String loc = "";
+        for (int k = 0; k < split.length; k++) {
+            if (k % 2 == 0) {
+                double lat = Double.valueOf(split[k + 1]); //标记纬度
+                double lng = Double.valueOf(split[k]);     //标记经度
+                double[] doubles = GCJ2WGSUtils.gcj02towgs84(lng, lat);
+                System.out.println();
+                loastr = String.valueOf(doubles[0]) + "," + String.valueOf(doubles[1])+",";
+                loc += loastr;
+            }
+        }
+
+        System.out.println(loc.substring(0,loc.length()-1));
+        return loc.substring(0,loc.length()-1);
     }
 
 }

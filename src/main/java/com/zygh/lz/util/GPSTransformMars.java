@@ -78,8 +78,8 @@ public class GPSTransformMars {
         return loc.substring(0, loc.length() - 1);
     }
 
-    /*public static void main(String[] args) {
-        String gps="113.62811826440429,34.72883778468898,113.6281317210885,34.73352311240929,113.6280593470841,34.73819935794014,113.62812917579652,34.74762157967071,113.62815336131666,34.75110037282444,113.62809171614839,34.754675982484905,113.62886964804079,34.75730500443749";
+    public static void main(String[] args) {
+        String gps="113.68909888362623,34.763538722849184,113.68551653471172,34.763674117695814,113.6820210988152,34.76377744384686,113.68205193275367,34.7602108935337,113.69152414242456,34.7599760430121,113.6916512642789,34.76354434981144";
         String[] split = gps.split(",");
         for (int i = 0; i < split.length; i++) {
             System.out.println(split[i]);
@@ -97,7 +97,7 @@ public class GPSTransformMars {
         }
 
         System.out.println(loc.substring(0,loc.length()-1));
-    }*/
+    }
 
 
 }

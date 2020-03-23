@@ -363,7 +363,6 @@ public class XareaServiceImpl implements xareaService {
                 }
                 for (int k=0;k<hashMaps1.size();k++) {
                     if(hashMaps1.get(k)==null){
-                        System.out.println("sdf");
                         hashMaps1.remove(hashMaps1.get(k));
                     }
 
@@ -401,7 +400,6 @@ public class XareaServiceImpl implements xareaService {
                 for (int k = 0; k < hashMaps1.size(); k++) {
                     String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
                     String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
-                    System.out.println(substring);
                     List<HashMap> hashMaps = xareaMapper.selectgriddingPope(dadui, substring);
 
                     //详情添加到中队里
@@ -473,8 +471,25 @@ public class XareaServiceImpl implements xareaService {
                     String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
                     String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
                     List<HashMap> hashMaps = xareaMapper.selectqtPope(dadui,substring);
+
                     //详情添加到中队里
                     hashMaps1.get(k).put("detachment", hashMaps);
+                }
+              /*  for (int k=0;k<hashMaps1.size();k++) {
+                    String detachment = hashMaps1.get(k).get("detachment").toString();
+                    System.out.println(detachment);
+                    if(detachment==null || detachment.equals("")){
+                        hashMaps1.get(k).remove("sectionName");
+                        hashMaps1.get(k).remove("count");
+                    }
+                }*/
+                for (int j=0;j<hashMaps1.size();j++) {
+                    String detachment = hashMaps1.get(j).get("sectionName").toString().substring(0, hashMaps1.get(j).get("sectionName").toString().indexOf("队") + 1);
+                    if(!detachment.equals(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1))){
+                        hashMaps1.get(j).remove("sectionName");
+                        hashMaps1.get(j).remove("count");
+                        hashMaps1.get(j).remove("detachment");
+                    }
                 }
                 list.get(i).put("detachment", hashMaps1);
 
@@ -705,7 +720,7 @@ public class XareaServiceImpl implements xareaService {
             }
 
             qyMap.put("ddList",ddList);
-            qyMap.put("qyData",xarea.getName());
+            qyMap.put("qyData",xarea.getGridding());
             qyList.add(qyMap);
 
         }

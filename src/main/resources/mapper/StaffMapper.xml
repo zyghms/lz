@@ -302,8 +302,8 @@
     </select>
 
     <select id="selectdefault" resultType="map">
-      SELECT f.* FROM problemstafftype pt,problemdetail pd,staff f
-      WHERE pt.id=pd.stafftype AND pt.department=f.sys_staff_id and pd.probleDetail=#{probleDetail}
+      SELECT f.* FROM problemtype pt,problemdetail pd,staff f
+      WHERE pt.id=pd.type AND pt.department=f.sys_staff_id and pd.probleDetail=#{probleDetail}
     </select>
     <select id="selectAllBySF" resultMap="BaseResultMap">
         SELECT s.section_name,f.sys_staff_id,f.staff_name from	 section s,staff f

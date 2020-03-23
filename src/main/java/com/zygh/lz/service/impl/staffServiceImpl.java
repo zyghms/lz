@@ -365,16 +365,17 @@ public class staffServiceImpl implements staffService {
             return ResultUtil.setError(SystemCon.RERROR1, "error", null);
         }
         if (staff.getStaffPost().equals("管理员") || staff.getStaffPost().equals("支队领导")) {
+            System.out.println("1");
             //实到
             List<Staff> staffglys = staffMapper.selectStaffByzg(null, null, null);
             for (int i = 0; i < staffglys.size(); i++) {
-
                 staffglys.get(i).setStaffOnline("1");
                 Gps gps = gpsMapper.gpsEnd(staffglys.get(i).getSysStaffId());
                 staffglys.get(i).setGps(gps);
             }
             return ResultUtil.setOK("success", staffglys);
         } else if (staff.getStaffPost().equals("大队长") || staff.getStaffPost().equals("副大队长")) {
+            System.out.println("2");
             //实到
             List<Staff> staffglys = staffMapper.selectStaffByzg(null, null, staff.getSectionName());
             for (int i = 0; i < staffglys.size(); i++) {
@@ -654,6 +655,19 @@ public class staffServiceImpl implements staffService {
                     String sectionName1 = selectcountBysection.get(i).get("sectionName").toString().substring(0,sectionName.indexOf("队")+1);
                     selectcountBysection.get(i).put("sectionName", sectionName1);
                 }
+                //细分到中队
+                xarea.setBattalion(String.valueOf(selectcountBysection.get(i).get("sectionName")));
+                List<HashMap> hashMaps1 = staffMapper.selectcountBydetachment(xarea);
+                for (int k = 0; k < hashMaps1.size(); k++) {
+                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
+                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(sectionName.indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                    xarea.setBattalion(String.valueOf(hashMaps1.get(k).get("sectionName")));
+                    List<HashMap> hashMaps = staffMapper.selectAllBysection(xarea);
+                    hashMaps1.get(k).put("detachment", hashMaps);
+                }
+
+                selectcountBysection.get(i).put("detachment", hashMaps1);
+
             }
 
             return ResultUtil.setOK("success", selectcountBysection);
