@@ -1,10 +1,10 @@
 package com.zygh.lz.controller;
 
 import com.zygh.lz.admin.Xarea;
-import com.zygh.lz.service.staffService;
 import com.zygh.lz.service.xareaService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class XareaController {
     @Autowired
     private xareaService xareaService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     //根据大队，中队，岗位，中队领导
     @GetMapping("selectXareabycondition")
@@ -23,8 +25,8 @@ public class XareaController {
     }
 
     @PostMapping("insertXarea")
-    public ResultBean insertXarea(Xarea xarea) {
-        return xareaService.insertXarea(xarea);
+    public ResultBean insertXarea(Xarea xarea,Integer staffId) {
+        return xareaService.insertXarea(xarea,staffId);
     }
 
     //修改
@@ -125,6 +127,13 @@ public class XareaController {
     public ResultBean selectcelerity(String station) {
         return xareaService.selectcelerity(station);
     }
+
+    //夜间快速/高速警力部署
+    @GetMapping("selectceleritygs")
+    public ResultBean selectceleritygs(String station) {
+        return xareaService.selectceleritygs(station);
+    }
+
     //夜间其他警力部署
     @GetMapping("selectqita")
     public ResultBean selectqita() {

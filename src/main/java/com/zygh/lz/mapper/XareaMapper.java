@@ -58,15 +58,15 @@ public interface XareaMapper {
 
     List<Integer> countQtYDSum(@Param("battalion") String battalion, @Param("conment") String conment);
 
-    List<Integer> countTqZSum(String battalion);
+    List<Integer> countTqZSum(@Param("battalion") String battalion, @Param("detachment") String detachment);
 
-    int countggZSum(@Param("station") String station, @Param("battalion") String battalion);
+    int countggZSum(@Param("station") String station, @Param("battalion") String battalion, @Param("detachment") String detachment);
 
-    List<String> countWgZSum(String battalion);
+    List<String> countWgZSum(@Param("battalion") String battalion, @Param("detachment") String detachment);
 
-    int countZdZSum(String battalion);
+    int countZdZSum(@Param("battalion") String battalion, @Param("detachment") String detachment);
 
-    int countQtZSum(@Param("battalion") String battalion, @Param("conment") String conment);
+    int countQtZSum(@Param("battalion") String battalion, @Param("conment") String conment,@Param("detachment") String detachment);
 
     List<Integer> countZDRc(@Param("battalion") String battalion, @Param("detachment") String detachment, @Param("station") String station);
 
@@ -78,7 +78,8 @@ public interface XareaMapper {
 
     List<String> findZd(@Param("battalion") String battaliont, @Param("conment") String conmen);
 
-    List<Integer> countGsOrKsZ(@Param("station") String station, @Param("battalion") String battalion);
+    List<Integer> countGsOrKsZ(@Param("station") String station, @Param("battalion") String battalion, @Param("detachment") String detachment);
+    List<Integer> countKsZ(@Param("station") String station, @Param("battalion") String battalion, @Param("detachment") String detachment);
 
     List<Integer> countTQZ(String battalion);
 
@@ -88,7 +89,7 @@ public interface XareaMapper {
     List<Xarea> selectks();
 
     //夜巡组数
-    List<Integer> countYxZ(String battalion);
+    List<Integer> countYxZ(@Param("battalion") String battalion, @Param("detachment") String detachment);
 
     //夜巡应到
     List<Integer> countYxYDsum(String battalion);
@@ -162,15 +163,25 @@ public interface XareaMapper {
     List<HashMap> selectNightTourPope(@Param("battalion") String battalion,
                                       @Param("detachment") String detachment);
 
-    //夜间快速/高速警力部署
+    //夜间快速警力部署
     List<HashMap> selectcelerity(String station);
 
-    //夜间快速/高速警力部署详情
+    //夜间快速警力部署详情
     List<HashMap> selectcelerityPope(@Param("station") String station,@Param("battalion") String battalion,
                                      @Param("detachment") String detachment);
 
-    //夜间快速/高速警力部署细分到中队
+    //夜间快速警力部署细分到中队
     List<HashMap> selectcelerityPopeZD();
+
+    //夜间高速警力部署
+    List<HashMap> selectceleritygs(String station);
+
+    //夜间高速警力部署详情
+    List<HashMap> selectceleritygsPope(@Param("station") String station,@Param("battalion") String battalion,
+                                       @Param("detachment") String detachment);
+
+    //夜间高速警力部署细分到中队
+    List<HashMap> selectceleritygsPopeZD();
 
     //夜间其他
     List<HashMap> selectqita();
@@ -185,5 +196,6 @@ public interface XareaMapper {
     //根据区域名字模糊匹配部署警力
     List<HashMap> selctStrength(@Param("name") String name,@Param("battalion") String battalion);
 
-
+    //查询区域最后一条
+    Xarea selectXareaEnd();
 }

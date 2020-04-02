@@ -45,12 +45,12 @@ public class StaffController {
     //应到民警
     @GetMapping("selectStaffYdByAll")
     public ResultBean selectStaffYdByAll(Integer SectionId) {
-        return staffService.selectStaffYdByAll(null,SectionId);
+        return staffService.selectStaffYdByAll(null, SectionId);
     }
 
     //在线民警
     @GetMapping("selectpoliceZx")
-    public ResultBean selectpoliceZx(String station)throws Exception {
+    public ResultBean selectpoliceZx(String station) throws Exception {
         return staffService.selectpoliceZx(station);
     }
 
@@ -62,67 +62,68 @@ public class StaffController {
 
     //根据民警id查询该民警所负责的路段里程，上班时长
     @GetMapping("selectStaffXareaByid")
-    public ResultBean selectStaffXareaByid(Integer id)throws Exception{
-       return staffService.selectStaffXareaByid(id);
+    public ResultBean selectStaffXareaByid(Integer id) throws Exception {
+        return staffService.selectStaffXareaByid(id);
     }
 
     //根据民警id查询该民警所负责的路段
     @GetMapping("selectXareaByid")
-    public ResultBean selectXareaByid(Integer id)throws Exception{
+    public ResultBean selectXareaByid(Integer id) throws Exception {
         return staffService.selectXareaByid(id);
     }
 
     //返回在线民警GPS
     @GetMapping("selectStaffZx")
-    public ResultBean selectStaffZx(Integer id){
+    public ResultBean selectStaffZx(Integer id) {
         return staffService.selectStaffZx(id);
     }
 
     //查询昨日总警力
     @GetMapping("selecttotalforces")
-    public ResultBean selecttotalforces(){
+    public ResultBean selecttotalforces() {
         return staffService.selecttotalforces();
     }
+
     //按大队查询昨日总警力
     @GetMapping("selecttotalforceszr")
-    public ResultBean selecttotalforceszr(){
+    public ResultBean selecttotalforceszr() {
         return staffService.selecttotalforceszr();
     }
 
     //根据不同岗位查询在线人数
     @GetMapping("selectzaBystation")
-    public ResultBean selectzaBystation(String station,String conment,String grid){
-        return staffService.selectzaBystation(station,conment,grid);
+    public ResultBean selectzaBystation(String station, String conment, String grid) {
+        return staffService.selectzaBystation(station, conment, grid);
     }
 
     //查询其他在岗人
     @GetMapping("selectStaffByqita")
-    public ResultBean selectStaffByqita(){
+    public ResultBean selectStaffByqita() {
         return staffService.selectStaffByqita();
     }
 
     //以单位为结构显示信息列表
     @GetMapping("selectAllbytype")
-    public ResultBean selectAllbytype(String battalion){
+    public ResultBean selectAllbytype(String battalion) {
         return staffService.selectAllbytype(battalion);
     }
 
 
     //根据岗位查询各大队在线民警
     @GetMapping("selectcountBysection")
-    public ResultBean selectcountBysection(Xarea xarea){
+    public ResultBean selectcountBysection(Xarea xarea) {
         return staffService.selectcountBysection(xarea);
     }
-    /*
-        //根据岗位查询各大队下各中队在线民警
-        @GetMapping("selectcountBydetachment")
-        public ResultBean selectcountBydetachment(Xarea xarea){
-            return staffService.selectcountBydetachment(xarea);
-        }
 
-        //根据岗位查询各中队在线民警详情
-        @GetMapping("selectAllBysection")
-        public ResultBean selectAllBysection(Xarea xarea){
-            return staffService.selectAllBysection(xarea);
-        }*/
+    //根据岗位查询各大队下各中队在线民警
+    @GetMapping("selectcountBydetachment")
+    public ResultBean selectcountBydetachment(Xarea xarea) {
+        return staffService.selectcountBydetachment(xarea);
+    }
+
+    //根据岗位查询各中队在线民警详情
+    @GetMapping("selectAllBysection")
+    public ResultBean selectAllBysection(Xarea xarea) {
+        return staffService.selectAllBysection(xarea);
+    }
 }

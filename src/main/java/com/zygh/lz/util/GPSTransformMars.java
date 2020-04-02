@@ -69,7 +69,8 @@ public class GPSTransformMars {
             if (k % 2 == 0) {
                 double lat = Double.valueOf(split[k + 1]); //标记纬度
                 double lng = Double.valueOf(split[k]);     //标记经度
-                double[] doubles = GCJ2WGSUtils.gcj02towgs84(lng, lat);
+                //double[] doubles = GCJ2WGSUtils.gcj02towgs84(lng, lat);
+                double[] doubles = GCJ2WGSUtils.wgs84togcj02(lng, lat);
                 loastr = String.valueOf(doubles[0]) + "," + String.valueOf(doubles[1]) + ",";
                 loc += loastr;
             }
@@ -79,7 +80,8 @@ public class GPSTransformMars {
     }
 
     public static void main(String[] args) {
-        String gps="113.68909888362623,34.763538722849184,113.68551653471172,34.763674117695814,113.6820210988152,34.76377744384686,113.68205193275367,34.7602108935337,113.69152414242456,34.7599760430121,113.6916512642789,34.76354434981144";
+        String gps="113.58042597770692,34.46205139160156";
+        //String gps="113.6996570974796,34.768613208461346";
         String[] split = gps.split(",");
         for (int i = 0; i < split.length; i++) {
             System.out.println(split[i]);
@@ -90,7 +92,8 @@ public class GPSTransformMars {
             if (k % 2 == 0) {
                 double lat = Double.valueOf(split[k + 1]); //标记纬度
                 double lng = Double.valueOf(split[k]);     //标记经度
-                double[] doubles = GCJ2WGSUtils.gcj02towgs84(lng, lat);
+                //double[] doubles = GCJ2WGSUtils.gcj02towgs84(lng, lat);
+                double[] doubles = GCJ2WGSUtils.wgs84togcj02(lng, lat);
                 loastr = String.valueOf(doubles[0]) + "," + String.valueOf(doubles[1])+",";
                 loc += loastr;
             }

@@ -5,6 +5,7 @@ import com.zygh.lz.admin.PaperValidationVo;
 import com.zygh.lz.admin.Staff;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.mapper.StaffMapper;
+import com.zygh.lz.util.Operation;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.util.ViLog;
 import com.zygh.lz.vo.ResultBean;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -35,9 +37,8 @@ public class DlqwController {
     @Autowired
     private StaffMapper staffMapper;
 
-
-    //@ViLog(logType="6",module="登录>解析认证")
     @PostMapping("/token")
+    @ViLog(logType = "6", module = "登录认证>解析认证")
     public ResultBean test(@RequestBody PaperValidationVo paperValidationVo, HttpServletResponse response, HttpServletRequest request) {
         System.out.println("解析认证");
         List<Object> list = new ArrayList<>();
@@ -46,7 +47,6 @@ public class DlqwController {
         String params = "{\"strToken\":" + "\"" + paperValidationVo.getToken() + "\"" + "}";
         System.out.println("params----:" + params);
         BufferedReader reader = null;
-        //HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         try {
             URL url = new URL(strURL);// 创建连接
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -70,20 +70,19 @@ public class DlqwController {
             while ((line = reader.readLine()) != null) {
                 res += line;
             }
+
             reader.close();
             //解析返回数据
-            System.out.println("res:" + res);
+            System.out.println("解析返回数据:" + res);
             Map<String, Object> policeMap = null;
             String policeNum = "";
             try {
-
                 Map<String, Object> map = (Map<String, Object>) JSON.parse(res);
                 policeMap = (Map<String, Object>) JSON.parse((map.get("userInfo").toString()));
                 policeNum = (String) policeMap.get("code");
                 request.setAttribute("policeNum", policeNum);
-                System.out.println("警号：====" + policeNum);
-                list.add(policeMap);
-                System.out.println("sagklja:" + policeMap.toString());
+                //list.add(policeMap);
+                System.out.println("警号----===:" + policeNum);
             } catch (Exception e) {
                 //信达捷安返回的数据有错误
                 e.printStackTrace();
@@ -93,7 +92,7 @@ public class DlqwController {
 
             }
             Staff staff = staffMapper.selectStaffByNum(policeNum);
-            System.out.println("staff:" + staff.toString());
+            System.out.println("本地警员信息staff:" + staff.toString());
             list.add(staff);
             System.out.println("list:" + list.size());
         } catch (IOException e) {
@@ -107,11 +106,9 @@ public class DlqwController {
             }
         }
         if (list.size() > 0 || list.size() == 0) {
-            //request.setAttribute("result",list);
+            request.setAttribute("result", list);
             return ResultUtil.setOK("success", list);
-
         }
         return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
-
 }

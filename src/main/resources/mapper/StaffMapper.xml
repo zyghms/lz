@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zygh.lz.mapper.StaffMapper">
+    <cache type="com.zygh.lz.cache.MybatisRedisCache"/>
     <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Staff">
         <id column="sys_staff_id" property="sysStaffId" jdbcType="INTEGER"/>
         <result column="staff_name" property="staffName" jdbcType="VARCHAR"/>
@@ -335,7 +336,7 @@
     where sys_staff_id = #{sysStaffId,jdbcType=INTEGER} and staff.sys_section_id=section.sys_section_id
   </select>
     <!--根据警号查询-->
-    <select id="selectStaffByNum" resultType="map">
+    <select id="selectStaffByNum" resultMap="BaseResultMap">
         select * from  staff where staff_num=#{staffNum}
     </select>
     <select id="selectStaffByXarea" resultMap="BaseResultMap">
@@ -546,8 +547,11 @@
         <if test="gridding!=null and gridding != '' ">
             and  x.gridding  LIKE '%${gridding}%'
         </if>
-        <if test="detachment!=null and detachment != '' ">
-            and  (x.detachment  LIKE '%${detachment}%'or x.gridding  LIKE '%${gridding}%')
+        <if test="type!=null and type!= '' ">
+            AND (x.gridding like '%网格%' or x.type = '面')
+            AND x.gridding IS NOT NULL
+            AND x.gridding NOT LIKE '%级网格%'
+            AND x.conment NOT IN ('2','3')
         </if>
         and s.sys_section_id=st.sys_section_id
         and  p.sys_staff_id = s.sys_staff_id
@@ -580,8 +584,11 @@
             <if test="gridding!=null and gridding != '' ">
                 and  x.gridding  LIKE '%${gridding}%'
             </if>
-            <if test="detachment!=null and detachment != '' ">
-                and  (x.detachment  LIKE '%${detachment}%'or x.gridding  LIKE '%${gridding}%')
+            <if test="type!=null and type!= '' ">
+                AND (x.gridding like '%网格%' or x.type = '面')
+                AND x.gridding IS NOT NULL
+                AND x.gridding NOT LIKE '%级网格%'
+                AND x.conment NOT IN ('2','3')
             </if>
             AND st.sys_section_id IN
             (
@@ -621,8 +628,11 @@
         <if test="gridding!=null and gridding != '' ">
             and  x.gridding  LIKE '%${gridding}%'
         </if>
-        <if test="detachment!=null and detachment != '' ">
-            and  (x.detachment  LIKE '%${detachment}%'or x.gridding  LIKE '%${gridding}%')
+        <if test="type!=null and type!= '' ">
+            AND (x.gridding like '%网格%' or x.type = '面')
+            AND x.gridding IS NOT NULL
+            AND x.gridding NOT LIKE '%级网格%'
+            AND x.conment NOT IN ('2','3')
         </if>
         AND st.sys_section_id IN
         (

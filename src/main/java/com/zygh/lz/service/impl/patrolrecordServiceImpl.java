@@ -812,14 +812,14 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         }
 
 
-        int tqZnum = xareaMapper.countTqZSum(battalion).size();
-        int gdZnum = xareaMapper.countggZSum("固定岗", battalion);
-        int gfZnum = xareaMapper.countggZSum("高峰岗", battalion);
-        int wgZnum = xareaMapper.countWgZSum(battalion).size();
-        int zdZnum = xareaMapper.countZdZSum(battalion);//重点岗
-        int qtZnum = xareaMapper.countQtZSum(battalion, "");//其他岗
-        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion).size();
-        int ksZnum = xareaMapper.countGsOrKsZ("快速岗", battalion).size();
+        int tqZnum = xareaMapper.countTqZSum(battalion,null).size();
+        int gdZnum = xareaMapper.countggZSum("固定岗", battalion,null);
+        int gfZnum = xareaMapper.countggZSum("高峰岗", battalion,null);
+        int wgZnum = xareaMapper.countWgZSum(battalion,null).size();
+        int zdZnum = xareaMapper.countZdZSum(battalion,null);//重点岗
+        int qtZnum = xareaMapper.countQtZSum(battalion, "",null);//其他岗
+        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion,null).size();
+        int ksZnum = xareaMapper.countGsOrKsZ("快速岗", battalion,null).size();
         int TQZnum = xareaMapper.countTQZ(battalion).size();
 
 
@@ -933,13 +933,13 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int gsYDsum = xareaMapper.countGsOrKsYDSum("高速岗", battalion, null).size() / 2;
 
 
-        int tqZnum = xareaMapper.countTqZSum(battalion).size();
-        int gdZnum = xareaMapper.countggZSum("固定岗", battalion);
-        int gfZnum = xareaMapper.countggZSum("高峰岗", battalion);
-        int wgZnum = xareaMapper.countWgZSum(battalion).size();
-        int zdZnum = xareaMapper.countZdZSum(battalion);//重点岗
-        int qtZnum = xareaMapper.countQtZSum(battalion, null);//其他岗
-        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion).size();
+        int tqZnum = xareaMapper.countTqZSum(battalion,null).size();
+        int gdZnum = xareaMapper.countggZSum("固定岗", battalion,null);
+        int gfZnum = xareaMapper.countggZSum("高峰岗", battalion,null);
+        int wgZnum = xareaMapper.countWgZSum(battalion,null).size();
+        int zdZnum = xareaMapper.countZdZSum(battalion,null);//重点岗
+        int qtZnum = xareaMapper.countQtZSum(battalion, null,null);//其他岗
+        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion,null).size();
 
 
         int gdSD = patrolrecordMapper.countGdorGfSDsum("固定岗", battalion).size();
@@ -1500,10 +1500,10 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int yxYDsum = xareaMapper.countYxYDsum(battalion).size();
 
 
-        int qtZnum = xareaMapper.countQtZSum(battalion, "3");//其他岗
-        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion).size();
-        int ksZnum = xareaMapper.countGsOrKsZ("快速岗", battalion).size();
-        int yxZnum = xareaMapper.countYxZ(battalion).size();
+        int qtZnum = xareaMapper.countQtZSum(battalion, "3",null);//其他岗
+        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion,null).size();
+        int ksZnum = xareaMapper.countKsZ("快速岗", battalion,null).size();
+        int yxZnum = xareaMapper.countYxZ(battalion,null).size();
 
 
         int qtSD = patrolrecordMapper.countQtSDsum(battalion).size();

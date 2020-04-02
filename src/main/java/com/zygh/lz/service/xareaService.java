@@ -11,7 +11,7 @@ public interface xareaService {
     ResultBean selectXareabycondition(String battalion, String detachment, String station, String leader, String grid, String type);
 
     //新增
-    ResultBean insertXarea(Xarea xarea);
+    ResultBean insertXarea(Xarea xarea,Integer staffId);
 
     //修改
     ResultBean updateXarea(Xarea xarea);
@@ -53,7 +53,7 @@ public interface xareaService {
     //网格警组
     ResultBean selectgriddingRJ();
 
-    //日间高速/快速
+    //日间高速
     ResultBean selectexpresswayRJ(String station);
 
     //日间其他警力部署
@@ -67,6 +67,9 @@ public interface xareaService {
 
     //夜间快速/高速警力部署
     ResultBean selectcelerity(String station);
+
+    //夜间快速/高速警力部署
+    ResultBean selectceleritygs(String station);
 
     //夜间其他
     ResultBean selectqita();

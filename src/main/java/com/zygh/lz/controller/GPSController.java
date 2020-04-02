@@ -36,22 +36,23 @@ public class GPSController {
         return gpsService.addGps(gps);
     }
 
-    @GetMapping("gps")
+    @GetMapping("gps84")
     public void gps() {
-        List<Test> tests = testMapper.selectTestAll();
-        /*for (int i = 0; i < tests.size(); i++) {
-            System.out.println("=====" + tests.get(i).getGps());
-            if (tests.get(i).getGps() != null) {
-                Test xarea = new Test();
-                String s = GPSTransformMars.GCj2TOWGS(tests.get(i).getGps());
+        //List<Test> tests = testMapper.selectTestAll();
+        List<Xarea> tests = xareaMapper.selectXareaAll();
+        for (int i = 0; i < tests.size(); i++) {
+            System.out.println("=====" + tests.get(i).getCentre());
+            if (tests.get(i).getCentre() != null && !tests.get(i).getCentre().equals("")) {
+                Xarea xarea = new Xarea();
+                String s = GPSTransformMars.GCj2TOWGS(tests.get(i).getCentre());
 
                 xarea.setId(tests.get(i).getId());
-                xarea.setGps(s);
-                testMapper.updateByPrimaryKeySelective(xarea);
+                xarea.setCentre(s);
+                xareaMapper.updateByPrimaryKeySelective(xarea);
             }
-        }*/
+        }
 
-        List<Xarea> xareas = xareaMapper.selectXareaAll();
+       /* List<Xarea> xareas = xareaMapper.selectXareaAll();
         for (int k = 0; k < xareas.size(); k++) {
             for (int i = 0; i < tests.size(); i++) {
                 String id = xareas.get(k).getId().toString();
@@ -65,7 +66,7 @@ public class GPSController {
                 }
             }
 
-        }
+        }*/
 
         //System.out.println(tests.size());
 

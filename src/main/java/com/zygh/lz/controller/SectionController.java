@@ -58,4 +58,6 @@ public class SectionController {
     public ResultBean selectBySectionId(Integer sectionId,String staffHierarchy){
         return sectionService.selectBySectionId(sectionId,staffHierarchy);
     }
+
+
 }
