@@ -12,27 +12,29 @@ spring:
     url:  jdbc:mysql://127.0.0.1:3306/lz?useSSL=false&characterEncoding=utf-8
     driver-class-name:  com.mysql.jdbc.Driver
     username:  root
-    password:  root
+    password:  123456
     type: com.alibaba.druid.pool.DruidDataSource
 
   # redis
-  redis:
-    database: 9
-    host: 41.5.252.223
-    port: 6379
-    password: zyghyfb
-  timeout: 3000
+ # redis:
+ #   database: 9
+ #   host: 41.5.252.223
+ #   port: 6379
+ #   password: zyghyfb
+ # timeout: 3000
     # password:
-  pool:
-    minIdle: 0
-    maxIdle: 10
-    maxWait: -1ms
-    maxActive: 100
-    timeout: 1000ms
+ # pool:
+ #   minIdle: 0
+ #   maxIdle: 10
+ #   maxWait: -1ms
+ #   maxActive: 100
+#    timeout: 1000ms
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
 server:
   port: 8090
+configuration:
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 pagehelper:
   helperDialect: mysql
@@ -41,6 +43,11 @@ pagehelper:
   params: count=countSql
 
 
+# 日志
+logging:
+  level:
+    com.chongdong.data.mapper : debug
+    com.chongdong: info
 
 
 #    # Redis数据库索引
