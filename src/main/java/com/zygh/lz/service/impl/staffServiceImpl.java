@@ -364,8 +364,10 @@ public class staffServiceImpl implements staffService {
         if (staff == null) {
             return ResultUtil.setError(SystemCon.RERROR1, "error", null);
         }
+        if(staff.getStaffPost()==null||staff.getStaffPost().equals("")){
+            return ResultUtil.setError(SystemCon.RERROR1, "error", null);
+        }
         if (staff.getStaffPost().equals("管理员") || staff.getStaffPost().equals("支队领导")) {
-            System.out.println("1");
             //实到
             List<Staff> staffglys = staffMapper.selectStaffByzg(null, null, null);
             for (int i = 0; i < staffglys.size(); i++) {
