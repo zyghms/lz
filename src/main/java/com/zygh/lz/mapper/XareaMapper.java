@@ -198,4 +198,8 @@ public interface XareaMapper {
 
     //查询区域最后一条
     Xarea selectXareaEnd();
+
+    //高峰岗部署警力
+    List<Xarea> selectXareapolic(@Param("battalion") String battalion,@Param("detachment") String detachment);
+
 }

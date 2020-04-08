@@ -271,61 +271,131 @@ public class XareaServiceImpl implements xareaService {
      */
     @Override
     public ResultBean selectfixationRJ(String station) {
-        //固定岗每个大队几个人查询
-        List<HashMap> list = xareaMapper.selectfixationRJ(station);
+        if(station.equals("固定岗")){
+            //固定岗每个大队几个人查询
+            List<HashMap> list = xareaMapper.selectfixationRJ(station);
 
-        if (list.size() >= 0) {
-            for (int i = 0; i < list.size(); i++) {
-                String sectionName = list.get(i).get("sectionName").toString();
-                if (sectionName.indexOf("大队") != -1) {
-                    String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
-                    list.get(i).put("sectionName", sectionName1);
-                }
-                //查询岗位数
-                int i1 = xareaMapper.countggZSum(station, list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1),null);
-                list.get(i).put("number",i1);
-                //细分到中队
-                List<HashMap> hashMaps1 = xareaMapper.selectfixationzdRJ(station, list.get(i).get("sectionName").toString());
-                for (int k = 0; k < hashMaps1.size(); k++) {
-                    List<HashMap> hashMaps = new ArrayList<>();
-                    String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
-                    String substring = hashMaps1.get(k).get("sectionName").toString().substring(sectionName.indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
-                    hashMaps = xareaMapper.countYDSum(station, dadui, substring);
-                    for (int t = 0; t < hashMaps.size(); t++) {
-                        if (!hashMaps.get(t).get("section_name").equals(hashMaps1.get(k).get("sectionName"))) {
-                            hashMaps.remove(t);
-                            //删除元素后，需要把下标减一。这是因为在每次删除元素后，ArrayList会将后面部分的元素依次往上挪一个位置(就是copy)，
-                            // 所以，下一个需要访问的下标还是当前下标，所以必须得减一才能把所有元素都遍历完
-                            t--;
+            if (list.size() >= 0) {
+
+                for (int i = 0; i < list.size(); i++) {
+                    String sectionName = list.get(i).get("sectionName").toString();
+                    if (sectionName.indexOf("大队") != -1) {
+                        String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
+                        list.get(i).put("sectionName", sectionName1);
+                    }
+                    //查询岗位数
+                    int i1 = xareaMapper.countggZSum(station, list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1),null);
+                    list.get(i).put("number",i1);
+                    //细分到中队
+                    List<HashMap> hashMaps1 = xareaMapper.selectfixationzdRJ(station, list.get(i).get("sectionName").toString());
+                    for (int k = 0; k < hashMaps1.size(); k++) {
+                        List<HashMap> hashMaps = new ArrayList<>();
+                        String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
+                        String substring = hashMaps1.get(k).get("sectionName").toString().substring(sectionName.indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                        hashMaps = xareaMapper.countYDSum(station, dadui, substring);
+                        for (int t = 0; t < hashMaps.size(); t++) {
+                            if (!hashMaps.get(t).get("section_name").equals(hashMaps1.get(k).get("sectionName"))) {
+                                hashMaps.remove(t);
+                                //删除元素后，需要把下标减一。这是因为在每次删除元素后，ArrayList会将后面部分的元素依次往上挪一个位置(就是copy)，
+                                // 所以，下一个需要访问的下标还是当前下标，所以必须得减一才能把所有元素都遍历完
+                                t--;
+                            }
+                        }
+                        int num = xareaMapper.countggZSum(station, list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1),substring);
+                        hashMaps1.get(k).put("number",num);
+                        hashMaps1.get(k).put("detachment", hashMaps);
+                    }
+                    for (int j = 0; j < hashMaps1.size(); j++) {
+                        String detachment = hashMaps1.get(j).get("sectionName").toString().substring(0, hashMaps1.get(j).get("sectionName").toString().indexOf("队") + 1);
+                        if (!detachment.equals(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1))) {
+                            hashMaps1.get(j).remove("sectionName");
+                            hashMaps1.get(j).remove("count");
+                            hashMaps1.get(j).remove("detachment");
                         }
                     }
-                    int num = xareaMapper.countggZSum(station, list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1),substring);
-                    hashMaps1.get(k).put("number",num);
-                    hashMaps1.get(k).put("detachment", hashMaps);
-                }
-                for (int j = 0; j < hashMaps1.size(); j++) {
-                    String detachment = hashMaps1.get(j).get("sectionName").toString().substring(0, hashMaps1.get(j).get("sectionName").toString().indexOf("队") + 1);
-                    if (!detachment.equals(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1))) {
-                        hashMaps1.get(j).remove("sectionName");
-                        hashMaps1.get(j).remove("count");
-                        hashMaps1.get(j).remove("detachment");
+                    for (int j = 0; j < hashMaps1.size(); j++) {
+                        Object detachment = hashMaps1.get(j).get("detachment");
+                        if (detachment == null) {
+                            hashMaps1.get(j).remove("sectionName");
+                            hashMaps1.get(j).remove("count");
+                        }
                     }
-                }
-                for (int j = 0; j < hashMaps1.size(); j++) {
-                    Object detachment = hashMaps1.get(j).get("detachment");
-                    if (detachment == null) {
-                        hashMaps1.get(j).remove("sectionName");
-                        hashMaps1.get(j).remove("count");
-                    }
-                }
-                list.get(i).put("detachment", hashMaps1);
+                    list.get(i).put("detachment", hashMaps1);
 
+                }
+
+                return ResultUtil.setOK("success", list);
             }
 
-            return ResultUtil.setOK("success", list);
-        }
+            return ResultUtil.setError(SystemCon.RERROR1, "error", null);
+        }else {//高峰岗
+            //固定岗每个大队几个人查询
+            List<HashMap> list = xareaMapper.selectfixationRJ(station);
+            if (list.size() >= 0) {
 
-        return ResultUtil.setError(SystemCon.RERROR1, "error", null);
+                for (int i = 0; i < list.size(); i++) {
+                    String sectionName = list.get(i).get("sectionName").toString();
+                    if (sectionName.indexOf("大队") != -1) {
+                        String sectionName1 = list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
+                        list.get(i).put("sectionName", sectionName1);
+                    }
+                    //高峰岗部署警力一岗一人
+                    List<Xarea> xareas = xareaMapper.selectXareapolic(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1), null);
+
+                    list.get(i).put("count",xareas.size());
+                    //查询岗位数
+                    int i1 = xareaMapper.countggZSum(station, list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1),null);
+                    list.get(i).put("number",i1);
+                    //细分到中队
+                    List<HashMap> hashMaps1 = xareaMapper.selectfixationzdRJ(station, list.get(i).get("sectionName").toString());
+                    for (int k = 0; k < hashMaps1.size(); k++) {
+                        String substring = hashMaps1.get(k).get("sectionName").toString().substring(sectionName.indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
+                        //高峰岗部署警力一岗一人
+                        List<Xarea> xareaes = xareaMapper.selectXareapolic(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1),substring);
+                       /* list.get(i).put("count",xareas.size());
+                        Integer count =Integer.valueOf(hashMaps1.get(k).get("count").toString());
+                        int cc = (int)Math.ceil(count/2)+1;//向上*/
+                        hashMaps1.get(k).put("count",xareaes.size());
+                        List<HashMap> hashMaps = new ArrayList<>();
+                        String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
+
+                        hashMaps = xareaMapper.countYDSum(station, dadui, substring);
+                        for (int t = 0; t < hashMaps.size(); t++) {
+                            if (!hashMaps.get(t).get("section_name").equals(hashMaps1.get(k).get("sectionName"))) {
+                                hashMaps.remove(t);
+                                //删除元素后，需要把下标减一。这是因为在每次删除元素后，ArrayList会将后面部分的元素依次往上挪一个位置(就是copy)，
+                                // 所以，下一个需要访问的下标还是当前下标，所以必须得减一才能把所有元素都遍历完
+                                t--;
+                            }
+                        }
+                        int num = xareaMapper.countggZSum(station, list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1),substring);
+                        hashMaps1.get(k).put("number",num);
+                        hashMaps1.get(k).put("detachment", hashMaps);
+                    }
+                    for (int j = 0; j < hashMaps1.size(); j++) {
+                        String detachment = hashMaps1.get(j).get("sectionName").toString().substring(0, hashMaps1.get(j).get("sectionName").toString().indexOf("队") + 1);
+                        if (!detachment.equals(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1))) {
+                            hashMaps1.get(j).remove("sectionName");
+                            hashMaps1.get(j).remove("count");
+                            hashMaps1.get(j).remove("detachment");
+                        }
+                    }
+                    for (int j = 0; j < hashMaps1.size(); j++) {
+                        Object detachment = hashMaps1.get(j).get("detachment");
+                        if (detachment == null) {
+                            hashMaps1.get(j).remove("sectionName");
+                            hashMaps1.get(j).remove("count");
+                        }
+                    }
+                    list.get(i).put("detachment", hashMaps1);
+
+                }
+
+                return ResultUtil.setOK("success", list);
+            }
+
+            return ResultUtil.setError(SystemCon.RERROR1, "error", null);
+        }
     }
 
     /**
@@ -456,6 +526,7 @@ public class XareaServiceImpl implements xareaService {
                     String dadui = hashMaps1.get(k).get("sectionName").toString().substring(0, hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1);
                     String substring = hashMaps1.get(k).get("sectionName").toString().substring(hashMaps1.get(k).get("sectionName").toString().indexOf("队") + 1, hashMaps1.get(k).get("sectionName").toString().length());
                     List<HashMap> hashMaps = xareaMapper.selectgriddingPope(dadui, substring);
+
                     List<String> num = xareaMapper.countWgZSum(list.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1),substring);
                     hashMaps1.get(k).put("number",num.size());
                     //详情添加到中队里

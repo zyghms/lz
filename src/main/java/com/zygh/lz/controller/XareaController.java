@@ -4,7 +4,6 @@ import com.zygh.lz.admin.Xarea;
 import com.zygh.lz.service.xareaService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class XareaController {
     @Autowired
     private xareaService xareaService;
-    @Autowired
-    private RedisTemplate redisTemplate;
 
     //根据大队，中队，岗位，中队领导
     @GetMapping("selectXareabycondition")

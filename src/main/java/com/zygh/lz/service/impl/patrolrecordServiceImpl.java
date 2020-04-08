@@ -46,13 +46,13 @@ public class patrolrecordServiceImpl implements patrolrecordService {
      */
     @Override
     public ResultBean addPatrolrecord(Patrolrecord patrolrecord) {
-        if (patrolrecord.getPatrolRecordGps() != null) {
+      /*  if (patrolrecord.getPatrolRecordGps() != null) {
             String patrolRecordGps = patrolrecord.getPatrolRecordGps();
             patrolRecordGps = pgs.replace(patrolRecordGps);
             String s = GPSTransformMars.GCj2TOWGS(patrolRecordGps);
             patrolrecord.setPatrolRecordGps(s);
         }
-
+*/
         int i = patrolrecordMapper.insertSelective(patrolrecord);
         if (i > 0) {
             //上线
@@ -86,7 +86,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             staff.setSysStaffId(patrolrecord1.getSysStaffId());
             staff.setStaffOnline("0");
             int i = staffMapper.updateByPrimaryKeySelective(staff);
-            System.out.println("=="+i);
+            //System.out.println("=="+i);
         }
 
         if (patrolrecord.getPatrolRecordGps() != null) {
@@ -151,7 +151,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         } else if (staffHierarchy.equals("总路长") || staffHierarchy.equals("分管路长")) {
             List<Patrolrecord> patrolrecordList = patrolrecordMapper.selectByRoadtype(sysSectionId, beginTime, endTime);
-            System.out.println(patrolrecordList);
+            //System.out.println(patrolrecordList);
             if (patrolrecordList.size() > 0) {
                 for (Patrolrecord patrolrecord : patrolrecordList) {
                     Integer staffID = patrolrecord.getSysStaffId();
@@ -2048,7 +2048,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 * Math.pow(Math.sin(b / 2), 2)));
         s = s * 6378.137 * 1000;
         s = Math.round(s);
-        System.out.println("s:  " + s);
+        //System.out.println("s:  " + s);
         if (s > r) {
             return false;
         }
@@ -2260,7 +2260,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
             sum += num;
         }
-        System.out.println(sum);
+        //System.out.println(sum);
         return resultList;
     }
 }

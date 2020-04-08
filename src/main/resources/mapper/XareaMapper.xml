@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zygh.lz.mapper.XareaMapper">
-    <cache type="com.zygh.lz.cache.MybatisRedisCache"/>
     <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Xarea">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
@@ -384,13 +383,14 @@
     <select id="countTqZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
         select id from xarea
         where conment = '2'
+        AND gridding LIKE '%铁骑%'
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
         <if test="detachment != null and detachment != ''">
             and detachment = #{detachment}
         </if>
-
+        /*GROUP BY gridding*/
     </select>
     <!--统计高峰岗 、固定岗组数-->
     <select id="countggZSum" resultType="java.lang.Integer" parameterType="java.lang.String">
@@ -406,8 +406,9 @@
 
     <!--统计网格组数-->
     <select id="countWgZSum" resultType="java.lang.String" parameterType="java.lang.String">
-        select gridding from xarea
-        where (gridding like '%网格%' or type = '面') and gridding is not null and gridding not like '%级网格%'
+        select id,gridding from xarea
+        where
+        gridding LIKE '%网格%'
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
@@ -439,6 +440,7 @@
     <!--统计夜巡组-->
     <select id="countYxZ" resultType="java.lang.Integer" parameterType="java.lang.String">
         select * from xarea where conment = 3 and battalion != '高架大队'
+        AND gridding LIKE '%夜巡%'  and station='区域'
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
@@ -621,6 +623,21 @@
         and s.sys_section_id = st.sys_section_id
         GROUP BY s.sys_staff_id) sb GROUP BY SUBSTRING(sb.section_name,1,3)
         ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
+    </select>
+    <!--高峰岗部署警力一岗一人-->
+    <select id="selectXareapolic" resultType="map">
+        SELECT x.id,x.name,x.battalion,x.station,x.detachment,f.sys_staff_id,f.staff_name,st.section_name from
+        xarea x,xrelation xl,staff f,section st
+        WHERE x.id=xl.xarea_id AND xl.staff_id=f.sys_staff_id
+        AND f.sys_section_id=st.sys_section_id
+        <if test="battalion != null and battalion != ''">
+            AND battalion=#{battalion}
+        </if>
+        <if test="detachment != null and detachment != ''">
+            AND detachment=#{detachment}
+        </if>
+        and station='高峰岗'
+        GROUP BY x.id ORDER BY  x.detachment
     </select>
     <!--固定岗/高峰岗细分到中队-->
     <select id="selectfixationzdRJ" resultType="map">

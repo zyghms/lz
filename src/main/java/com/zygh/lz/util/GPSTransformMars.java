@@ -80,7 +80,7 @@ public class GPSTransformMars {
     }
 
     public static void main(String[] args) {
-        String gps="113.58042597770692,34.46205139160156";
+        /*String gps="113.58042597770692,34.46205139160156";
         //String gps="113.6996570974796,34.768613208461346";
         String[] split = gps.split(",");
         for (int i = 0; i < split.length; i++) {
@@ -99,7 +99,12 @@ public class GPSTransformMars {
             }
         }
 
-        System.out.println(loc.substring(0,loc.length()-1));
+        System.out.println(loc.substring(0,loc.length()-1));*/
+        int cc1 = (int)Math.ceil(998/10);//向下
+
+        int cc = (int)Math.floor(997/10);//向上
+        System.out.println(cc1);
+        System.out.println(cc);
     }
 
 
