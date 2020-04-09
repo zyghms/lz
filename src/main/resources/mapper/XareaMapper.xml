@@ -488,7 +488,14 @@
         select id from xarea
         where station = #{station}
         and name is not null and name != ''
+
         and detachment != '' and detachment is not null
+        <if test="battalion != null and battalion != ''">
+            and battalion = #{battalion}
+        </if>
+        <if test="detachment != null and detachment != ''">
+            and detachment = #{detachment}
+        </if>
         GROUP BY name,battalion
     </select>
 

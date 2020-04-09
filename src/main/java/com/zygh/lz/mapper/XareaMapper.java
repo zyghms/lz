@@ -130,6 +130,10 @@ public interface XareaMapper {
 
     //日间高速/快速
     List<HashMap> selectexpresswayRJ(String station);
+    //日间高速岗组数
+    List<HashMap> countGsOrKsZSum(@Param("station") String station,
+                                  @Param("battalion") String battalion,
+                                  @Param("detachment") String detachment);
     //细分到中队
     List<HashMap> selectexpresswayZD();
     List<HashMap> selectexpresswayPope(@Param("station") String station,
