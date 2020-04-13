@@ -79,7 +79,6 @@ public class sectionServiceImpl implements sectionService {
         List<Section> sections = sectionMapper.selectAllSection();
         List<Section> sectionList = new ArrayList<Section>();
         for (int i = 0; i < sections.size(); i++) {
-            System.out.println(sections.get(i).getSectionPid());
             // 一级菜单没有parentId
             if (sections.get(i).getSectionPid() == 0) {
                 sectionList.add(sections.get(i));

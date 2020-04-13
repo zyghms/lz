@@ -346,7 +346,6 @@ public class staffServiceImpl implements staffService {
                 for (int q = 0; q < staffglys.size(); q++) {
                     if (staffglyy.get(i).getSysStaffId() == staffglys.get(q).getSysStaffId()) {
                         staffglyy.get(i).setStaffOnline("1");
-                        System.out.println();
                         Gps gps = gpsMapper.gpsEnd(staffglyy.get(i).getSysStaffId());
                         staffglyy.get(i).setGps(gps);
                     }
@@ -364,7 +363,7 @@ public class staffServiceImpl implements staffService {
         if (staff == null) {
             return ResultUtil.setError(SystemCon.RERROR1, "error", null);
         }
-        if(staff.getStaffPost()==null||staff.getStaffPost().equals("")){
+        if (staff.getStaffPost() == null || staff.getStaffPost().equals("")) {
             return ResultUtil.setError(SystemCon.RERROR1, "error", null);
         }
         if (staff.getStaffPost().equals("管理员") || staff.getStaffPost().equals("支队领导")) {
@@ -377,7 +376,6 @@ public class staffServiceImpl implements staffService {
             }
             return ResultUtil.setOK("success", staffglys);
         } else if (staff.getStaffPost().equals("大队长") || staff.getStaffPost().equals("副大队长")) {
-            System.out.println("2");
             //实到
             List<Staff> staffglys = staffMapper.selectStaffByzg(null, null, staff.getSectionName());
             for (int i = 0; i < staffglys.size(); i++) {
@@ -438,7 +436,7 @@ public class staffServiceImpl implements staffService {
             boolean effectiveDate3 = DataTime.hour(nowTime, startTime3, endTime3);
 
             //根据人查出来的岗位
-            List<Xarea> xareas = xareaMapper.selectXareaZgByStaffId(staff.get(i).getSysStaffId(),station);
+            List<Xarea> xareas = xareaMapper.selectXareaZgByStaffId(staff.get(i).getSysStaffId(), station);
             for (int f = 0; f < xareas.size(); f++) {
                 staff.get(i).setXarea(xareas.get(f));
 
@@ -487,7 +485,7 @@ public class staffServiceImpl implements staffService {
         boolean effectiveDate3 = DataTime.hour(nowTime, startTime3, endTime3);
         //根据人查出来的岗位
         Staff staff = staffMapper.selectInfoByid(id);
-        List<Xarea> xareas = xareaMapper.selectXareaZgByStaffId(id,null);
+        List<Xarea> xareas = xareaMapper.selectXareaZgByStaffId(id, null);
         List<Xarea> xareas1 = new ArrayList<>();
         //计算民警的上班时长跟巡查轨迹
         Patrolrecord patrolrecords = patrolrecordMapper.selectrecordByid(id);
@@ -495,10 +493,10 @@ public class staffServiceImpl implements staffService {
             String patrolRecordGps = patrolrecords.getPatrolRecordGps();
             Date date = new Date();
             //上班时长
-            String duration=null;
-            if(patrolrecords.getPatrolRecordEndtime()==null){
-                 duration = DataTime.getDatePoor(date, patrolrecords.getPatrolRecordBegintime());
-            }else {
+            String duration = null;
+            if (patrolrecords.getPatrolRecordEndtime() == null) {
+                duration = DataTime.getDatePoor(date, patrolrecords.getPatrolRecordBegintime());
+            } else {
                 duration = DataTime.getDatePoor(patrolrecords.getPatrolRecordEndtime(), patrolrecords.getPatrolRecordBegintime());
 
             }
@@ -508,8 +506,8 @@ public class staffServiceImpl implements staffService {
             //切割GPS点
             String[] split = patrolRecordGps.split(",");
             //距离，坐标个数乘以10
-            int num = (split.length)/2 * 10;
-            double lic=num/500.00;
+            int num = (split.length) / 2 * 10;
+            double lic = num / 500.00;
             //巡查时长  现在时间减去签到时长
             staff.setDuration(duration);
             //巡查距离  每十米上传一次，
@@ -539,10 +537,10 @@ public class staffServiceImpl implements staffService {
     @Override
     public ResultBean selectXareaByid(Integer id) throws Exception {
         List<Xarea> xareas = xareaMapper.selectXareaByid(id);
-        if(xareas.size()>0){
+        if (xareas.size() > 0) {
             return ResultUtil.setOK("success", xareas);
         }
-        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+        return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
 
     /**
@@ -561,6 +559,7 @@ public class staffServiceImpl implements staffService {
 
     /**
      * 查询昨日总警力
+     *
      * @return
      */
     @Override
@@ -571,7 +570,7 @@ public class staffServiceImpl implements staffService {
                 String sectionName = selecttotalforceszr.get(i).get("sectionName").toString();
                 if (sectionName.indexOf("大队") != -1) {
                     String sectionName1 = selecttotalforceszr.get(i).get("sectionName").toString();
-                    String dadui = sectionName1.substring(0, sectionName1.indexOf("大队")+2);
+                    String dadui = sectionName1.substring(0, sectionName1.indexOf("大队") + 2);
                     //String[] sectionName1 = selecttotalforceszr.get(i).get("sectionName").toString();
                     selecttotalforceszr.get(i).put("sectionName", dadui);
                 }
@@ -583,23 +582,23 @@ public class staffServiceImpl implements staffService {
     }
 
     @Override
-    public ResultBean selectzaBystation(String station,String conment,String grid) {
+    public ResultBean selectzaBystation(String station, String conment, String grid) {
         List<Staff> staff = staffMapper.selectzaBystation(station, conment, grid);
-        for (int i=0;i<staff.size();i++){
+        for (int i = 0; i < staff.size(); i++) {
             Gps gps = gpsMapper.gpsEnd(staff.get(i).getSysStaffId());
             staff.get(i).setGps(gps);
         }
-        return ResultUtil.setOK("success",staff);
+        return ResultUtil.setOK("success", staff);
     }
 
     @Override
     public ResultBean selectStaffByqita() {
         List<Staff> staff = staffMapper.selectStaffByqita();
-        for (int i=0;i<staff.size();i++){
+        for (int i = 0; i < staff.size(); i++) {
             Gps gps = gpsMapper.gpsEnd(staff.get(i).getSysStaffId());
             staff.get(i).setGps(gps);
         }
-        return ResultUtil.setOK("success",staff);
+        return ResultUtil.setOK("success", staff);
     }
 
     /**
@@ -635,26 +634,25 @@ public class staffServiceImpl implements staffService {
         List<Staff> qtSD = staffMapper.countQtSDsum(battalion);
         List<Staff> gsSD = staffMapper.countGsorKsSDsum("高速岗", battalion, null);*/
 
-        gdMap.put("固定岗",staff);
-        gdMap.put("people",gdorGfSDsum);
+        gdMap.put("固定岗", staff);
+        gdMap.put("people", gdorGfSDsum);
 
 
         typeSumList.add(gdMap);
-        return ResultUtil.setOK("success",typeSumList);
+        return ResultUtil.setOK("success", typeSumList);
     }
-
 
 
     @Override
     //根据岗位查询各大队在线民警
-    public ResultBean selectcountBysection(Xarea xarea){
+    public ResultBean selectcountBysection(Xarea xarea) {
 
         List<HashMap> selectcountBysection = staffMapper.selectcountBysection(xarea);
         if (selectcountBysection.size() >= 0) {
             for (int i = 0; i < selectcountBysection.size(); i++) {
                 String sectionName = selectcountBysection.get(i).get("sectionName").toString();
                 if (sectionName.indexOf("大队") != -1) {
-                    String sectionName1 = selectcountBysection.get(i).get("sectionName").toString().substring(0,sectionName.indexOf("队")+1);
+                    String sectionName1 = selectcountBysection.get(i).get("sectionName").toString().substring(0, sectionName.indexOf("队") + 1);
                     selectcountBysection.get(i).put("sectionName", sectionName1);
                 }
                 //细分到中队
@@ -689,7 +687,7 @@ public class staffServiceImpl implements staffService {
 
     @Override
     //根据岗位查询各中队在线民警详情
-    public ResultBean selectAllBysection(Xarea xarea){
+    public ResultBean selectAllBysection(Xarea xarea) {
         List<HashMap> selectAllBysection = staffMapper.selectAllBysection(xarea);
         if (selectAllBysection.size() >= 0) {
             return ResultUtil.setOK("success", selectAllBysection);

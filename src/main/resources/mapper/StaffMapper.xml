@@ -277,9 +277,8 @@
   </update>
     <!--登录-->
     <select id="selectByLogin" resultMap="BaseResultMap">
-      select *
-       from staff f,section c where staff_tel = #{staff_tel}
-      and staff_password= #{staff_password}
+      select * from staff f,section c where f.staff_tel = #{user}
+      and f.staff_password= #{password}
       AND f.sys_section_id=c.sys_section_id
   </select>
     <!--校验用户是否存在-->

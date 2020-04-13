@@ -62,8 +62,6 @@ public interface patrolrecordService {
     //根据id查询该人的巡查记录
     ResultBean selectAllPatrolrecordById(Integer id);
 
-    //
-
     List<HashMap> theDaySum(String battalion) throws Exception;
 
     List<HashMap> typeSum(String battalion) throws Exception;

@@ -86,7 +86,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             staff.setSysStaffId(patrolrecord1.getSysStaffId());
             staff.setStaffOnline("0");
             int i = staffMapper.updateByPrimaryKeySelective(staff);
-            //System.out.println("=="+i);
         }
 
         if (patrolrecord.getPatrolRecordGps() != null) {
@@ -136,7 +135,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             if (patrolrecords2.size() > 0) {
                 for (Patrolrecord patrolrecord : patrolrecords2) {
                     Integer staffID = patrolrecord.getSysStaffId();
-                    System.out.println();
                     int sysPatrolRecordId = patrolrecord.getSysPatrolRecordId();
                     Integer problemid = patrolrecord.getSysPatrolRecordId();
                     List<Gps> gpsList = gpsMapper.selectGpsByRecord(staffID, sysPatrolRecordId);
@@ -151,7 +149,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         } else if (staffHierarchy.equals("总路长") || staffHierarchy.equals("分管路长")) {
             List<Patrolrecord> patrolrecordList = patrolrecordMapper.selectByRoadtype(sysSectionId, beginTime, endTime);
-            //System.out.println(patrolrecordList);
             if (patrolrecordList.size() > 0) {
                 for (Patrolrecord patrolrecord : patrolrecordList) {
                     Integer staffID = patrolrecord.getSysStaffId();
@@ -513,7 +510,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                     childList.add(treemenu);
                 }
             }
-            System.out.println();
         }
         // 把子菜单的子菜单再循环一遍
         /*for (Treemenu treemenu : childList) {*/
@@ -532,7 +528,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
     public List<HashMap> theDaySum(String battalion) throws Exception {
         List<HashMap> daySumList = new ArrayList<>();
 
-        List<HashMap> peopleList = new ArrayList<>();
 
         //日常。。。。。。。
         HashMap<String, Object> gdMap = new HashMap<>();
@@ -550,53 +545,37 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         List<Integer> rcList = patrolrecordMapper.countRcSDsum(battalion);
         int rcSDsum = rcList.size();
 
+
         //夜巡
-        List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion,null);
-        for (HashMap yxPeople : yxPeoples) {
-            for (Integer yx : yxList) {
-                if (yxPeople.get("sys_staff_id").equals(yx)) {
-                    yxPeople.put("staff_online", "1");
-                }
-            }
-        }
-        int yxYDsum = yxPeoples.size();
-
+        Integer yxYDsum = xareaMapper.countYXYD(battalion, null) / 2;
+        Integer ksYDsum = xareaMapper.selectcelerityPope("快速岗", battalion, null).size() / 3;
+        yxYDsum = yxYDsum + ksYDsum;
+        //高峰岗=有民警的高峰岗岗位数+有民警的固定岗位数+机动岗所有民警数的一半+铁骑所有民警数的一半+有民警的重点机关岗的岗位数
+        //284	    166			            26		    62		            23	        	7
         //高峰应到数
-        List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion,null);
-        for (HashMap gfPeople : gfPeoples) {
-            for (Integer gf : gfList) {
-                if (gfPeople.get("sys_staff_id").equals(gf)) {
-                    gfPeople.put("staff_online", "1");
-                }
-            }
+        Integer gfYDsum = xareaMapper.countGFYD(battalion, null);
 
-        }
-        int gfYDsum = gfPeoples.size();
+        //日常勤务平峰期=（【高架大队（郑少+西南）除去事故中队和领导外全部民警人数的三分之一】   +【（机动+网格+固定+铁骑）的民警人数一半】
+        //202		                7         4						                    62   85      22
+        //固定
+        Integer gdYDsum = xareaMapper.countGDYD(battalion, null);
+        Integer gdYDzusum = xareaMapper.countggZSum("固定岗",null, null);
+        //重点
+        Integer zdYDsum = xareaMapper.countZDYD(battalion, null);
+        Integer zdYDjgsum = xareaMapper.countZdZSum(battalion, null);
+        //铁骑
+        Integer tqYDsum = xareaMapper.countTQYD(battalion, null);
+        //网格
+        Integer wgYDsum = xareaMapper.countWGYD(battalion, null);
+        //高速
+        Integer gsYDsum = xareaMapper.countGSYD(battalion, null);
+        //机动
+        Integer jdYDsum = xareaMapper.countJDYD(battalion, null).size() / 2;
+        //其他
+        Integer qtYDsum = xareaMapper.countQtYDSum(battalion, null).size() / 2;
 
-        //日常勤务
-        //网格+高速+铁骑+其他
-        List<HashMap> rcPeoples = xareaMapper.countRcYDsumC2(battalion);
-        for (HashMap rcPeople : rcPeoples) {
-            for (Integer rc : rcList) {
-                if (rcPeople.get("sys_staff_id").equals(rc)) {
-                    rcPeople.put("staff_online", "1");
-                }
-            }
-        }
-        int rcYDC2 = rcPeoples.size() / 2;
-        //固定+重点
-        List<HashMap> rcPeoples1 = xareaMapper.countRcYDsum(battalion);
-        for (HashMap hashMap : rcPeoples1) {
-            for (Integer rc : rcList) {
-                if (hashMap.get("sys_staff_id").equals(rc)) {
-                    hashMap.put("staff_online", "1");
-                }
-            }
-        }
+        int rcYDsum = gsYDsum + jdYDsum + wgYDsum + gdYDsum + tqYDsum;
 
-        rcPeoples.addAll(rcPeoples1);
-        //+4是六大队的 没有具体人
-        int rcYDsum = rcYDC2 + rcPeoples1.size();
 
         //特殊勤务
         Integer TQYDsum = xlevelserviceMapper.selectorderlyAll(battalion);
@@ -635,18 +614,19 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             //如果在早高峰
             if (effectiveDate) {
 
-                /*//早高峰
-                zgfMap.put("type","早高峰");
-                zgfMap.put("time","07:30-09:00");
-                zgfMap.put("gfYDsum",gfYDsum);
-                zgfMap.put("gfSDsum",gfSDsum);
-                zgfMap.put("gfZXL",numberFormat.format((float)gfSDsum/(float)gfYDsum*100));*/
-
-                int zgfYDsum = rcYDsum + gfYDsum;
+                //高峰岗=有民警的高峰岗岗位数+有民警的固定岗位数+机动岗所有民警数的一半+铁骑所有民警数的一半+有民警的重点机关岗的岗位数
+                //284	    166			            26		    62		            23	        	7
+                //int zgfYDsum = rcYDsum + gfYDsum;
+                int numtq=tqYDsum/ 2;
+                int zgfYDsum =  gfYDsum+gdYDzusum+jdYDsum+numtq+zdYDsum+zdYDjgsum;
+                System.out.println(gfYDsum);
+                System.out.println(gdYDzusum);
+                System.out.println(jdYDsum);
+                System.out.println(numtq);
+                System.out.println(zdYDsum);
+                System.out.println(zdYDjgsum);
+                System.out.println(zgfYDsum);
                 int zgfSDsum = rcSDsum + gfSDsum;
-
-                peopleList.addAll(gfPeoples);
-                peopleList.addAll(rcPeoples);
 
                 gdMap.put("type", "日常勤务");
                 gdMap.put("time", "早高峰7:30-8:30");
@@ -657,7 +637,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 } else {
                     gdMap.put("gfZXL", numberFormat.format((float) zgfSDsum / (float) zgfYDsum * 100));
                 }
-                gdMap.put("people", peopleList);
+
 
                 tsMap.put("type", "特殊勤务");
                 tsMap.put("time", "08:00-20:00");
@@ -676,14 +656,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 int wgfYDsum = rcYDsum + gfYDsum;
                 int wgfSDsum = rcSDsum + gfSDsum;
 
-                peopleList.addAll(gfPeoples);
-                peopleList.addAll(rcPeoples);
-
-                /*wgfMap.put("type","晚高峰");
-                wgfMap.put("time","17:30-18:30");
-                wgfMap.put("gfYDsum",gfYDsum);
-                wgfMap.put("gfSDsum",gfSDsum);
-                wgfMap.put("gfZXL",numberFormat.format((float)gfSDsum/(float)gfYDsum*100));*/
 
                 //晚高峰
                 gdMap.put("type", "日常勤务");
@@ -695,7 +667,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 } else {
                     gdMap.put("gfZXL", numberFormat.format((float) wgfSDsum / (float) wgfYDsum * 100));
                 }
-                gdMap.put("people", peopleList);
 
                 tsMap.put("type", "特殊勤务");
                 tsMap.put("time", "08:00-20:00");
@@ -709,7 +680,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
             } else {
 
-                peopleList.addAll(rcPeoples);
 
                 gdMap.put("type", "日常勤务");
                 if (effectiveDate4) {
@@ -724,7 +694,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 } else {
                     gdMap.put("gfZXL", numberFormat.format((float) rcSDsum / (float) rcYDsum * 100));
                 }
-                gdMap.put("people", peopleList);
 
 
                 tsMap.put("type", "特殊勤务");
@@ -738,7 +707,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
             }
         } else {
-            peopleList.addAll(yxPeoples);
 
             yxMap.put("type", "夜巡");
             yxMap.put("time", "20:00-次日07:00");
@@ -749,7 +717,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             } else {
                 gdMap.put("gfZXL", numberFormat.format((float) yxSDsum / (float) yxYDsum * 100));
             }
-            yxMap.put("people", peopleList);
 
             tsMap.put("type", "特殊勤务");
             tsMap.put("time", "20:00-次日07:00");
@@ -788,38 +755,49 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         HashMap<String, Object> ksMap = new HashMap<>();
         //特勤
         HashMap<String, Object> TQMap = new HashMap<>();
+        //夜巡
+        HashMap<String, Object> YXMap = new HashMap<>();
+
         //应到
-        //固定岗
-        int gdYDsum = xareaMapper.countYDSum("固定岗", battalion,null).size();
-        //高峰岗
-        int gfYDsum = xareaMapper.countYDSum("高峰岗", battalion,null).size();
-        //铁骑2  夜巡3
-        int tqYDsum = xareaMapper.countYxSum("2", battalion,null).size();
-        //网格
-        int wgYDsum = xareaMapper.countWgSum(battalion).size();
+
+        //夜巡
+        Integer yxYDsum = xareaMapper.countYXYD(battalion, null)/2;
+        Integer ksYDsum = xareaMapper.selectcelerityPope("快速岗", battalion, null).size() / 3;
+        yxYDsum = yxYDsum + ksYDsum;
+
+        //高峰应到数
+        Integer gfYDsum = xareaMapper.countGFYD(battalion, null);
+
+        //日常勤务 固定+重点+铁骑+网格+高速+其他
+        Integer gdYDsum = xareaMapper.countGDYD(battalion, null);
         //重点
-        int zdYDsum = xareaMapper.countZdYDSum(battalion).size();
+        Integer zdYDsum = xareaMapper.countZDYD(battalion, null);
+        //铁骑
+        Integer tqYDsum = xareaMapper.countTQYD(battalion, null);
+        //网格
+        Integer wgYDsum = xareaMapper.countWGYD(battalion, null);
+        //高速
+        Integer gsYDsum = xareaMapper.countGSYD(battalion, null);
         //其他
-        int qtYDsum = xareaMapper.countQtYDSum(battalion, null).size();
-        //日间高速应到
-        int gsYDsum = xareaMapper.countGsOrKsYDSum("高速岗", battalion, null).size();
-        //日间快速应到
-        int ksYDsum = xareaMapper.countGsOrKsYDSum("快速岗", battalion, null).size();
-        //特勤应道
+        Integer qtYDsum = xareaMapper.countQtYDSum(battalion, null).size() / 2;
+
+        int rcYDsum = gdYDsum + zdYDsum + tqYDsum + wgYDsum + gsYDsum + qtYDsum;
+
+        //特殊勤务
         Integer TQYDsum = xlevelserviceMapper.selectorderlyAll(battalion);
-        if (TQYDsum == null) {
+        /*if (TQYDsum == null) {
             TQYDsum = 0;
-        }
+        }*/
+        TQYDsum = 0;
 
-
-        int tqZnum = xareaMapper.countTqZSum(battalion,null).size();
-        int gdZnum = xareaMapper.countggZSum("固定岗", battalion,null);
-        int gfZnum = xareaMapper.countggZSum("高峰岗", battalion,null);
-        int wgZnum = xareaMapper.countWgZSum(battalion,null).size();
-        int zdZnum = xareaMapper.countZdZSum(battalion,null);//重点岗
-        int qtZnum = xareaMapper.countQtZSum(battalion, "",null);//其他岗
-        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion,null).size();
-        int ksZnum = xareaMapper.countGsOrKsZ("快速岗", battalion,null).size();
+        int tqZnum = xareaMapper.countTqZSum(battalion, null).size();
+        int gdZnum = xareaMapper.countggZSum("固定岗", battalion, null);
+        int gfZnum = xareaMapper.countggZSum("高峰岗", battalion, null);
+        int wgZnum = xareaMapper.countWgZSum(battalion, null).size();
+        int zdZnum = xareaMapper.countZdZSum(battalion, null);//重点岗
+        int qtZnum = xareaMapper.countQtZSum(battalion, "", null);//其他岗
+        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion, null).size();
+        int ksZnum = xareaMapper.countGsOrKsZ("快速岗", battalion, null).size();
         int TQZnum = xareaMapper.countTQZ(battalion).size();
 
 
@@ -833,65 +811,311 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         int ksSD = patrolrecordMapper.countGsorKsSDsum("快速岗", battalion, null).size();
 
 
-        gdMap.put("name", "固定岗");
-        gdMap.put("YDnum", gdYDsum);
-        gdMap.put("Znum", gdZnum);
-        gdMap.put("SDnum", gdSD);
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
+        String dayTime = df.format(new Date());// new Date()为获取当前系统时间
 
-        gfMap.put("name", "高峰岗");
-        gfMap.put("YDnum", gfYDsum);
-        gfMap.put("Znum", gfZnum);
-        gfMap.put("SDnum", gfSD);
+        Date startTime = ft.parse(dayTime + " 07:30:00");
+        Date endTime = ft.parse(dayTime + " 09:00:00");
+        Date startTime2 = ft.parse(dayTime + " 17:30:00");
+        Date endTime2 = ft.parse(dayTime + " 18:30:00");
+        Date startTime3 = ft.parse(dayTime + " 07:00:00");
+        Date endTime3 = ft.parse(dayTime + " 20:00:00");
+        Date startTime4 = ft.parse(dayTime + " 18:30:00");
+        Date endTime4 = ft.parse(dayTime + " 20:00:00");
+        Date nowTime = new Date();
+        //早高峰
+        boolean effectiveDate = isEffectiveDate(nowTime, startTime, endTime);
+        //晚高峰
+        boolean effectiveDate2 = isEffectiveDate(nowTime, startTime2, endTime2);
+        //固定岗
+        boolean effectiveDate3 = isEffectiveDate(nowTime, startTime3, endTime3);
+        boolean effectiveDate4 = isEffectiveDate(nowTime, startTime4, endTime4);
 
-        tqMap.put("name", "铁骑");
-        tqMap.put("YDnum", tqYDsum);
-        tqMap.put("Znum", tqZnum);
-        tqMap.put("SDnum", tqSD);
+        // 创建一个数值格式化对象
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        // 设置精确到小数点后2位
+        numberFormat.setMaximumFractionDigits(2);
 
-        wgMap.put("name", "网格");
-        wgMap.put("YDnum", wgYDsum);
-        wgMap.put("Znum", wgZnum);
-        wgMap.put("SDnum", wgSD);
+        if (effectiveDate3) {
+            //如果在早高峰
+            if (effectiveDate) {
 
-        zdMap.put("name", "重点");
-        zdMap.put("YDnum", zdYDsum);
-        zdMap.put("Znum", zdZnum);
-        zdMap.put("SDnum", zdSD);
+                gdMap.put("name", "固定岗");
+                gdMap.put("YDnum", gdYDsum);
+                gdMap.put("Znum", gdZnum);
+                gdMap.put("SDnum", gdSD);
 
-        qtMap.put("name", "其他");
-        qtMap.put("YDnum", qtYDsum);
-        qtMap.put("Znum", qtZnum);
-        qtMap.put("SDnum", qtSD);
+                gfMap.put("name", "高峰岗");
+                gfMap.put("YDnum", gfYDsum);
+                gfMap.put("Znum", gfZnum);
+                gfMap.put("SDnum", gfSD);
 
-        gsMap.put("name", "高速");
-        gsMap.put("YDnum", gsYDsum);
-        gsMap.put("Znum", gsZnum);
-        gsMap.put("SDnum", gsSD);
+                tqMap.put("name", "铁骑");
+                tqMap.put("YDnum", tqYDsum);
+                tqMap.put("Znum", tqZnum);
+                tqMap.put("SDnum", tqSD);
 
-        ksMap.put("name", "快速");
-        ksMap.put("YDnum", 6);
-        ksMap.put("Znum", ksZnum);
-        ksMap.put("SDnum", ksSD);
+                wgMap.put("name", "网格");
+                wgMap.put("YDnum", wgYDsum);
+                wgMap.put("Znum", wgZnum);
+                wgMap.put("SDnum", wgSD);
 
-        if (TQZnum == 0) {
-            TQYDsum = 0;
+                zdMap.put("name", "重点");
+                zdMap.put("YDnum", zdYDsum);
+                zdMap.put("Znum", zdZnum);
+                zdMap.put("SDnum", zdSD);
+
+                qtMap.put("name", "其他");
+                qtMap.put("YDnum", qtYDsum);
+                qtMap.put("Znum", qtZnum);
+                qtMap.put("SDnum", qtSD);
+
+                gsMap.put("name", "高速");
+                gsMap.put("YDnum", gsYDsum);
+                gsMap.put("Znum", gsZnum);
+                gsMap.put("SDnum", gsSD);
+
+                ksMap.put("name", "快速");
+                ksMap.put("YDnum", 0);
+                ksMap.put("Znum", ksZnum);
+                ksMap.put("SDnum", ksSD);
+
+                if (TQZnum == 0) {
+                    TQYDsum = 0;
+
+                }
+                TQMap.put("name", "特勤");
+                TQMap.put("YDnum", TQYDsum);
+                TQMap.put("Znum", TQZnum);
+                TQMap.put("SDnum", 0);
+
+                YXMap.put("name", "夜巡");
+                YXMap.put("YDnum", 0);
+                YXMap.put("Znum", 38);
+                YXMap.put("SDnum", 0);
+
+
+                //早高峰
+                typeSumList.add(gdMap);
+                typeSumList.add(gfMap);
+                typeSumList.add(tqMap);
+                typeSumList.add(wgMap);
+                typeSumList.add(zdMap);
+                typeSumList.add(qtMap);
+                typeSumList.add(gsMap);
+                typeSumList.add(ksMap);
+                typeSumList.add(TQMap);
+                typeSumList.add(YXMap);
+
+            } else if (effectiveDate2) {
+
+                gdMap.put("name", "固定岗");
+                gdMap.put("YDnum", gdYDsum);
+                gdMap.put("Znum", gdZnum);
+                gdMap.put("SDnum", gdSD);
+
+                gfMap.put("name", "高峰岗");
+                gfMap.put("YDnum", gfYDsum);
+                gfMap.put("Znum", gfZnum);
+                gfMap.put("SDnum", gfSD);
+
+                tqMap.put("name", "铁骑");
+                tqMap.put("YDnum", tqYDsum);
+                tqMap.put("Znum", tqZnum);
+                tqMap.put("SDnum", tqSD);
+
+                wgMap.put("name", "网格");
+                wgMap.put("YDnum", wgYDsum);
+                wgMap.put("Znum", wgZnum);
+                wgMap.put("SDnum", wgSD);
+
+                zdMap.put("name", "重点");
+                zdMap.put("YDnum", zdYDsum);
+                zdMap.put("Znum", zdZnum);
+                zdMap.put("SDnum", zdSD);
+
+                qtMap.put("name", "其他");
+                qtMap.put("YDnum", qtYDsum);
+                qtMap.put("Znum", qtZnum);
+                qtMap.put("SDnum", qtSD);
+
+                gsMap.put("name", "高速");
+                gsMap.put("YDnum", gsYDsum);
+                gsMap.put("Znum", gsZnum);
+                gsMap.put("SDnum", gsSD);
+
+                ksMap.put("name", "快速");
+                ksMap.put("YDnum", 0);
+                ksMap.put("Znum", ksZnum);
+                ksMap.put("SDnum", ksSD);
+
+                if (TQZnum == 0) {
+                    TQYDsum = 0;
+
+                }
+                TQMap.put("name", "特勤");
+                TQMap.put("YDnum", TQYDsum);
+                TQMap.put("Znum", TQZnum);
+                TQMap.put("SDnum", 0);
+
+                YXMap.put("name", "夜巡");
+                YXMap.put("YDnum", 0);
+                YXMap.put("Znum", 38);
+                YXMap.put("SDnum", 0);
+
+                //晚高峰
+                typeSumList.add(gdMap);
+                typeSumList.add(gfMap);
+                typeSumList.add(tqMap);
+                typeSumList.add(wgMap);
+                typeSumList.add(zdMap);
+                typeSumList.add(qtMap);
+                typeSumList.add(gsMap);
+                typeSumList.add(ksMap);
+                typeSumList.add(TQMap);
+                typeSumList.add(YXMap);
+
+            } else {
+                //平峰
+                System.out.println("平峰");
+                gdMap.put("name", "固定岗");
+                gdMap.put("YDnum", gdYDsum);
+                gdMap.put("Znum", gdZnum);
+                gdMap.put("SDnum", gdSD);
+
+                gfMap.put("name", "高峰岗");
+                gfMap.put("YDnum", 0);
+                gfMap.put("Znum", gfZnum);
+                gfMap.put("SDnum", gfSD);
+
+                tqMap.put("name", "铁骑");
+                tqMap.put("YDnum", tqYDsum);
+                tqMap.put("Znum", tqZnum);
+                tqMap.put("SDnum", tqSD);
+
+                wgMap.put("name", "网格");
+                wgMap.put("YDnum", wgYDsum);
+                wgMap.put("Znum", wgZnum);
+                wgMap.put("SDnum", wgSD);
+
+                zdMap.put("name", "重点");
+                zdMap.put("YDnum", zdYDsum);
+                zdMap.put("Znum", zdZnum);
+                zdMap.put("SDnum", zdSD);
+
+                qtMap.put("name", "其他");
+                qtMap.put("YDnum", qtYDsum);
+                qtMap.put("Znum", qtZnum);
+                qtMap.put("SDnum", qtSD);
+
+                gsMap.put("name", "高速");
+                gsMap.put("YDnum", gsYDsum);
+                gsMap.put("Znum", gsZnum);
+                gsMap.put("SDnum", gsSD);
+
+                ksMap.put("name", "快速");
+                ksMap.put("YDnum", 0);
+                ksMap.put("Znum", ksZnum);
+                ksMap.put("SDnum", ksSD);
+
+                if (TQZnum == 0) {
+                    TQYDsum = 0;
+
+                }
+                TQMap.put("name", "特勤");
+                TQMap.put("YDnum", TQYDsum);
+                TQMap.put("Znum", TQZnum);
+                TQMap.put("SDnum", 0);
+
+                YXMap.put("name", "夜巡");
+                YXMap.put("YDnum", 0);
+                YXMap.put("Znum", 38);
+                YXMap.put("SDnum", 0);
+
+
+                typeSumList.add(gdMap);
+                typeSumList.add(gfMap);
+                typeSumList.add(tqMap);
+                typeSumList.add(wgMap);
+                typeSumList.add(zdMap);
+                typeSumList.add(qtMap);
+                typeSumList.add(gsMap);
+                typeSumList.add(ksMap);
+                typeSumList.add(TQMap);
+                typeSumList.add(YXMap);
+            }
+        } else {
+
+            gdMap.put("name", "固定岗");
+            gdMap.put("YDnum", 0);
+            gdMap.put("Znum", gdZnum);
+            gdMap.put("SDnum", 0);
+
+            gfMap.put("name", "高峰岗");
+            gfMap.put("YDnum", 0);
+            gfMap.put("Znum", gfZnum);
+            gfMap.put("SDnum", 0);
+
+            tqMap.put("name", "铁骑");
+            tqMap.put("YDnum", 0);
+            tqMap.put("Znum", tqZnum);
+            tqMap.put("SDnum", 0);
+
+            wgMap.put("name", "网格");
+            wgMap.put("YDnum", 0);
+            wgMap.put("Znum", wgZnum);
+            wgMap.put("SDnum", 0);
+
+            zdMap.put("name", "重点");
+            zdMap.put("YDnum", 0);
+            zdMap.put("Znum", zdZnum);
+            zdMap.put("SDnum", 0);
+
+            qtMap.put("name", "其他");
+            qtMap.put("YDnum", 0);
+            qtMap.put("Znum", qtZnum);
+            qtMap.put("SDnum", 0);
+
+            gsMap.put("name", "高速");
+            gsMap.put("YDnum", 0);
+            gsMap.put("Znum", gsZnum);
+            gsMap.put("SDnum", 0);
+
+            ksMap.put("name", "快速");
+            ksMap.put("YDnum", ksYDsum);
+            ksMap.put("Znum", ksZnum);
+            ksMap.put("SDnum", ksSD);
+
+            if (TQZnum == 0) {
+                TQYDsum = 0;
+
+            }
+            TQMap.put("name", "特勤");
+            TQMap.put("YDnum", TQYDsum);
+            TQMap.put("Znum", TQZnum);
+            TQMap.put("SDnum", 0);
+            //夜巡
+            YXMap.put("name", "夜巡");
+            YXMap.put("YDnum", yxYDsum);
+            YXMap.put("Znum", 38);
+            YXMap.put("SDnum", 0);
+
+
+            typeSumList.add(gdMap);
+            typeSumList.add(gfMap);
+            typeSumList.add(tqMap);
+            typeSumList.add(wgMap);
+            typeSumList.add(zdMap);
+            typeSumList.add(qtMap);
+            typeSumList.add(gsMap);
+            typeSumList.add(ksMap);
+            typeSumList.add(TQMap);
+            typeSumList.add(YXMap);
 
         }
-        TQMap.put("name", "特勤");
-        TQMap.put("YDnum", TQYDsum);
-        TQMap.put("Znum", TQZnum);
-        TQMap.put("SDnum", 0);
 
 
-        typeSumList.add(gdMap);
-        typeSumList.add(gfMap);
-        typeSumList.add(tqMap);
-        typeSumList.add(wgMap);
-        typeSumList.add(zdMap);
-        typeSumList.add(qtMap);
-        typeSumList.add(gsMap);
-        typeSumList.add(ksMap);
-        typeSumList.add(TQMap);
         return typeSumList;
     }
 
@@ -917,29 +1141,29 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //应到
         //固定岗 +4为六大队应到
-        int gdYDsum = xareaMapper.countYDSum("固定岗", battalion,null).size();
+        int gdYDsum = xareaMapper.countYDSum("固定岗", battalion, null).size();
         //高峰岗
-        int gfYDsum = xareaMapper.countYDSum("高峰岗", battalion,null).size();
+        int gfYDsum = xareaMapper.countYDSum("高峰岗", battalion, null).size();
         //重点
         int zdYDsum = xareaMapper.countZdYDSum(battalion).size();
 
         //铁骑2
-        int tqYDsum = xareaMapper.countYxSum("2", battalion,null).size() / 2;
+        int tqYDsum = xareaMapper.countYxSum("2", battalion, null).size();
         //网格
-        int wgYDsum = xareaMapper.countWgSum(battalion).size() / 2;
+        int wgYDsum = xareaMapper.countWgSum(battalion).size();
         //其他
-        int qtYDsum = xareaMapper.countQtYDSum(battalion, null).size() / 2;
+        int qtYDsum = xareaMapper.countQtYDSum(battalion, null).size();
         //日间高速应到
-        int gsYDsum = xareaMapper.countGsOrKsYDSum("高速岗", battalion, null).size() / 2;
+        int gsYDsum = xareaMapper.countGsOrKsYDSum("高速岗", battalion, null, null).size();
 
 
-        int tqZnum = xareaMapper.countTqZSum(battalion,null).size();
-        int gdZnum = xareaMapper.countggZSum("固定岗", battalion,null);
-        int gfZnum = xareaMapper.countggZSum("高峰岗", battalion,null);
-        int wgZnum = xareaMapper.countWgZSum(battalion,null).size();
-        int zdZnum = xareaMapper.countZdZSum(battalion,null);//重点岗
-        int qtZnum = xareaMapper.countQtZSum(battalion, null,null);//其他岗
-        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion,null).size();
+        int tqZnum = xareaMapper.countTqZSum(battalion, null).size();
+        int gdZnum = xareaMapper.countggZSum("固定岗", battalion, null);
+        int gfZnum = xareaMapper.countggZSum("高峰岗", battalion, null);
+        int wgZnum = xareaMapper.countWgZSum(battalion, null).size();
+        int zdZnum = xareaMapper.countZdZSum(battalion, null);//重点岗
+        int qtZnum = xareaMapper.countQtZSum(battalion, null, null);//其他岗
+        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion, null).size();
 
 
         int gdSD = patrolrecordMapper.countGdorGfSDsum("固定岗", battalion).size();
@@ -1012,14 +1236,14 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         /*if (effectiveDate3) {
             if (effectiveDate || effectiveDate2) {*/
-                //早高峰
-                typeSumList.add(gdMap);
-                typeSumList.add(gfMap);
-                typeSumList.add(tqMap);
-                typeSumList.add(wgMap);
-                typeSumList.add(zdMap);
-                typeSumList.add(qtMap);
-                typeSumList.add(gsMap);
+        //早高峰
+        typeSumList.add(gdMap);
+        typeSumList.add(gfMap);
+        typeSumList.add(tqMap);
+        typeSumList.add(wgMap);
+        typeSumList.add(zdMap);
+        typeSumList.add(qtMap);
+        typeSumList.add(gsMap);
 
             /*} else {
                 gfMap.put("name", "高峰岗");
@@ -1086,7 +1310,13 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         return typeSumList;
     }
 
-
+    /**
+     * 日常勤务统计
+     *
+     * @param battalion
+     * @return
+     * @throws Exception
+     */
     @Override
     public List<HashMap> countZD(String battalion) throws Exception {
         List<HashMap> brigadeList = new ArrayList<>();
@@ -1113,14 +1343,14 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         NumberFormat numberFormat = NumberFormat.getInstance();
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
-
+        //白天
         if (effectiveDate3) {
             //如果在早高峰
             if (effectiveDate || effectiveDate2) {
-                //早高峰
+                //没有大队名称
                 if (StringUtils.isEmpty(battalion)) {
                     List<String> ddNames = xareaMapper.findDd();
-                    //大队名字
+
                     for (String ddName : ddNames) {
                         if (ddName.equals("高架大队")) {
                             continue;
@@ -1138,27 +1368,30 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         for (String zdName : zdNames) {
                             HashMap<String, Object> zdMap = new HashMap<>();
 
-                            //日常
-                            int rcYDC2 = xareaMapper.countZDRcC2(ddName, zdName).size();
-                            if (rcYDC2 % 2 != 0) {
-                                rcYDC2 = (rcYDC2 / 2) + 1;
-                            } else {
-                                rcYDC2 = rcYDC2 / 2;
-                            }
+                            //日常勤务 固定+重点+铁骑+网格+高速+其他
+                            Integer gdYDsum = xareaMapper.countGDYD(ddName, zdName);
+                            //重点
+                            Integer zdYDsum = xareaMapper.countZDYD(ddName, zdName);
+                            //铁骑
+                            Integer tqYDsum = xareaMapper.countTQYD(ddName, zdName);
+                            //网格
+                            Integer wgYDsum = xareaMapper.countWGYD(ddName, zdName);
+                            //高速
+                            Integer gsYDsum = xareaMapper.countGSYD(ddName, zdName);
+                            //其他
+                            Integer qtYDsum = xareaMapper.countQtYDSum(ddName, zdName).size() / 2;
+
+                            int rcYDC2 = gdYDsum + zdYDsum + tqYDsum + wgYDsum + gsYDsum + qtYDsum;
+
                             //高峰
                             int rcYD = xareaMapper.countZDRc(ddName, zdName, "高峰岗").size();
+                            //应有警力
                             int rcYDSum = rcYDC2 + rcYD;
-
+                            //实到警力
                             int gfSDSum = patrolrecordMapper.countZDRcSDsum(ddName, zdName, "高峰岗").size();
 
                             int zdYDSum = rcYDSum;
                             int zdSDSum = gfSDSum;
-
-                            /*if (ddName.equals("六大队")&&zdName.equals("二中队")){
-                                zdYDSum += 2;
-                            }else if (ddName.equals("六大队")&&zdName.equals("五中队")){
-                                zdYDSum += 2;
-                            }*/
 
 
                             zdMap.put("name", zdName);
@@ -1190,7 +1423,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
 
                 } else {
-                    //大队名字
+                    //高峰有大队名字
                     List<String> zdNames = xareaMapper.findZd(battalion, null);
 
                     HashMap<String, Object> ddMap = new HashMap<>();
@@ -1202,27 +1435,32 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                     //中队名字
                     for (String zdName : zdNames) {
                         HashMap<String, Object> zdMap = new HashMap<>();
+                        //日常勤务 固定+重点+铁骑+网格+高速+其他
+                        Integer gdYDsum = xareaMapper.countGDYD(battalion, zdName);
+                        //重点
+                        Integer zdYDsum = xareaMapper.countZDYD(battalion, zdName);
+                        //铁骑
+                        Integer tqYDsum = xareaMapper.countTQYD(battalion, zdName);
+                        //网格
+                        Integer wgYDsum = xareaMapper.countWGYD(battalion, zdName);
+                        //高速
+                        Integer gsYDsum = xareaMapper.countGSYD(battalion, zdName);
+                        //其他
+                        Integer qtYDsum = xareaMapper.countQtYDSum(battalion, zdName).size() / 2;
 
-                        //日常
-                        int rcYDC2 = xareaMapper.countZDRcC2(battalion, zdName).size();
-                        if (rcYDC2 % 2 != 0) {
-                            rcYDC2 = (rcYDC2 / 2) + 1;
-                        } else {
-                            rcYDC2 = rcYDC2 / 2;
-                        }
+                        int rcYDC2 = gdYDsum + zdYDsum + tqYDsum + wgYDsum + gsYDsum + qtYDsum;
+
+                        //高峰
                         int rcYD = xareaMapper.countZDRc(battalion, zdName, "高峰岗").size();
+                        //应有警力
                         int rcYDSum = rcYDC2 + rcYD;
+
 
                         int gfSDSum = patrolrecordMapper.countZDRcSDsum(battalion, zdName, "高峰岗").size();
 
                         int zdYDSum = rcYDSum;
                         int zdSDSum = gfSDSum;
 
-                       /* if (battalion.equals("六大队")&&zdName.equals("二中队")){
-                            zdYDSum += 2;
-                        }else if (battalion.equals("六大队")&&zdName.equals("五中队")){
-                            zdYDSum += 2;
-                        }*/
 
                         zdMap.put("name", zdName);
                         zdMap.put("YDnum", zdYDSum);
@@ -1251,7 +1489,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                 }
             } else {
-                //平峰期
+                //平峰
                 if (StringUtils.isEmpty(battalion)) {
                     List<String> ddNames = xareaMapper.findDd();
                     //大队名字
@@ -1271,16 +1509,23 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         for (String zdName : zdNames) {
                             HashMap<String, Object> zdMap = new HashMap<>();
 
-                            //日常
-                            int rcYDC2 = xareaMapper.countZDRcC2(ddName, zdName).size();
+                            //日常勤务 固定+重点+铁骑+网格+高速+其他
+                            Integer gdYDsum = xareaMapper.countGDYD(ddName, zdName);
+                            //重点
+                            Integer zdYDsum = xareaMapper.countZDYD(ddName, zdName);
+                            //铁骑
+                            Integer tqYDsum = xareaMapper.countTQYD(ddName, zdName);
+                            //网格
+                            Integer wgYDsum = xareaMapper.countWGYD(ddName, zdName);
+                            //高速
+                            Integer gsYDsum = xareaMapper.countGSYD(ddName, zdName);
+                            //其他
+                            Integer qtYDsum = xareaMapper.countQtYDSum(ddName, zdName).size() / 2;
 
-                            if (rcYDC2 % 2 != 0) {
-                                rcYDC2 = (rcYDC2 / 2) + 1;
-                            } else {
-                                rcYDC2 = rcYDC2 / 2;
-                            }
-                            int rcYD = xareaMapper.countZDRc(ddName, zdName, null).size();
-                            int rcYDSum = rcYDC2 + rcYD;
+                            int rcYDC2 = gdYDsum + zdYDsum + tqYDsum + wgYDsum + gsYDsum + qtYDsum;
+
+                            //应有警力
+                            int rcYDSum = rcYDC2;
 
                             int rcSDSum = patrolrecordMapper.countZDRcSDsum(ddName, zdName, null).size();
 
@@ -1334,12 +1579,25 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                     for (String zdName : zdNames) {
                         HashMap<String, Object> zdMap = new HashMap<>();
 
-                        int rcYDSum = xareaMapper.countZDRc(battalion, zdName, null).size();
-                        if (rcYDSum % 2 != 0) {
-                            rcYDSum = (rcYDSum / 2) + 1;
-                        } else {
-                            rcYDSum = rcYDSum / 2;
-                        }
+
+                        //日常勤务 固定+重点+铁骑+网格+高速+其他
+                        Integer gdYDsum = xareaMapper.countGDYD(battalion, zdName);
+                        //重点
+                        Integer zdYDsum = xareaMapper.countZDYD(battalion, zdName);
+                        //铁骑
+                        Integer tqYDsum = xareaMapper.countTQYD(battalion, zdName);
+                        //网格
+                        Integer wgYDsum = xareaMapper.countWGYD(battalion, zdName);
+                        //高速
+                        Integer gsYDsum = xareaMapper.countGSYD(battalion, zdName);
+                        //其他
+                        Integer qtYDsum = xareaMapper.countQtYDSum(battalion, zdName).size() / 2;
+
+                        int rcYDC2 = gdYDsum + zdYDsum + tqYDsum + wgYDsum + gsYDsum + qtYDsum;
+
+                        //应有警力
+                        int rcYDSum = rcYDC2;
+
                         int rcSDSum = patrolrecordMapper.countZDRcSDsum(battalion, zdName, null).size();
 
                         /*if (battalion.equals("六大队")&&zdName.equals("二中队")){
@@ -1397,7 +1655,10 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                     for (String zdName : zdNames) {
                         HashMap<String, Object> zdMap = new HashMap<>();
 
-                        int yxYDSum = xareaMapper.countZDYxorTq("3", ddName, zdName).size();
+                        //夜巡
+                        Integer yxYDsum = xareaMapper.countYXYD(ddName, zdName);
+                        Integer ksYDsum = xareaMapper.countKSYD(ddName, zdName);
+                        Integer yxYDSum = yxYDsum + ksYDsum;
 
                         int yxSDSum = patrolrecordMapper.countZDYxSDsum(ddName, zdName).size();
 
@@ -1442,7 +1703,10 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 for (String zdName : zdNames) {
                     HashMap<String, Object> zdMap = new HashMap<>();
 
-                    int yxYDSum = xareaMapper.countZDYxorTq("3", battalion, zdName).size();
+                    //夜巡
+                    Integer yxYDsum = xareaMapper.countYXYD(battalion, zdName);
+                    Integer ksYDsum = xareaMapper.countKSYD(battalion, zdName);
+                    Integer yxYDSum = yxYDsum + ksYDsum;
 
                     int yxSDSum = patrolrecordMapper.countZDYxSDsum(battalion, zdName).size();
 
@@ -1493,17 +1757,17 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         //夜间其他
         int qtYDsum = xareaMapper.countQtYDSum(battalion, "3").size();
         //夜间间高速应到
-        int gsYDsum = xareaMapper.countGsOrKsYDSum("高速岗", battalion, "3").size();
+        int gsYDsum = xareaMapper.countGsOrKsYDSum("高速岗", battalion, null, "4").size();
         //夜间快速应到
-        int ksYDsum = xareaMapper.countGsOrKsYDSum("快速岗", battalion, "3").size();
+        int ksYDsum = xareaMapper.countGsOrKsYDSum("快速岗", battalion, "3", null).size();
         //夜巡应到
         int yxYDsum = xareaMapper.countYxYDsum(battalion).size();
 
 
-        int qtZnum = xareaMapper.countQtZSum(battalion, "3",null);//其他岗
-        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion,null).size();
-        int ksZnum = xareaMapper.countKsZ("快速岗", battalion,null).size();
-        int yxZnum = xareaMapper.countYxZ(battalion,null).size();
+        int qtZnum = xareaMapper.countQtZSum(battalion, "3", null);//其他岗
+        int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion, null).size();
+        int ksZnum = xareaMapper.countKsZ("快速岗", battalion, null).size();
+        int yxZnum = xareaMapper.countYxZ(battalion, null).size();
 
 
         int qtSD = patrolrecordMapper.countQtSDsum(battalion).size();
@@ -1573,10 +1837,10 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             yXtypeSumList.add(yxKsMap);
             yXtypeSumList.add(yxQtMap);
         } else {*/
-            yXtypeSumList.add(yxMap);
-            yXtypeSumList.add(yxGsMap);
-            yXtypeSumList.add(yxKsMap);
-            yXtypeSumList.add(yxQtMap);
+        yXtypeSumList.add(yxMap);
+        yXtypeSumList.add(yxGsMap);
+        yXtypeSumList.add(yxKsMap);
+        yXtypeSumList.add(yxQtMap);
         //}
         return yXtypeSumList;
 
@@ -1598,7 +1862,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         Calendar date = Calendar.getInstance();
         date.setTime(nowTime);
-        System.out.println();
         Calendar begin = Calendar.getInstance();
         begin.setTime(startTime);
 
@@ -1619,34 +1882,34 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //固定岗
         HashMap<String, Object> gdMap = new HashMap<>();
-        gdMap.put("gangwei","固定岗");
+        gdMap.put("gangwei", "固定岗");
         //高峰岗
         HashMap<String, Object> gfMap = new HashMap<>();
-        gfMap.put("gangwei","高峰岗");
+        gfMap.put("gangwei", "高峰岗");
         //重点
         HashMap<String, Object> zdMap = new HashMap<>();
-        zdMap.put("gangwei","重点岗");
+        zdMap.put("gangwei", "重点岗");
         //铁骑
         HashMap<String, Object> tqMap = new HashMap<>();
-        tqMap.put("gangwei","铁骑");
+        tqMap.put("gangwei", "铁骑");
         //网格
         HashMap<String, Object> wgMap = new HashMap<>();
-        wgMap.put("gangwei","网格岗");
+        wgMap.put("gangwei", "网格岗");
         //夜巡
         HashMap<String, Object> yxMap = new HashMap<>();
-        yxMap.put("gangwei","夜巡");
+        yxMap.put("gangwei", "夜巡");
         //高速
         HashMap<String, Object> gsMap = new HashMap<>();
-        gsMap.put("gangwei","高速岗");
+        gsMap.put("gangwei", "高速岗");
         //快速
         HashMap<String, Object> ksMap = new HashMap<>();
-        ksMap.put("gangwei","快速岗");
+        ksMap.put("gangwei", "快速岗");
         //特勤
         HashMap<String, Object> TQMap = new HashMap<>();
-        TQMap.put("gangwei","特勤岗");
+        TQMap.put("gangwei", "特勤岗");
         //其他
         HashMap<String, Object> qtMap = new HashMap<>();
-        qtMap.put("gangwei","其他岗");
+        qtMap.put("gangwei", "其他岗");
 
         //固定
         List<HashMap> gdLsit = new ArrayList<>();
@@ -1684,26 +1947,27 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                         boolean result = isInPolygon(x, y, lon, lat);
                         if (result) {
-                            if (nowGps.get("station").toString().equals("固定岗")){
+                            if (nowGps.get("station").toString().equals("固定岗")) {
                                 gdLsit.add(nowGps);
-                            }else if(nowGps.get("station").toString().equals("高峰岗")){
+                            } else if (nowGps.get("station").toString().equals("高峰岗")) {
                                 gfLsit.add(nowGps);
-                            }else if(nowGps.get("conment").toString().equals("3")){
+                            } else if (nowGps.get("conment").toString().equals("3")) {
                                 yxLsit.add(nowGps);
-                            }else if(nowGps.get("conment").toString().equals("2")){
+                            } else if (nowGps.get("conment").toString().equals("2")) {
                                 tqLsit.add(nowGps);
-                            }else if (nowGps.get("gridding")!=null){
-                                if(nowGps.get("gridding").toString().contains("网格")){
-                                wgLsit.add(nowGps);}
-                            }else if(nowGps.get("conment").toString().equals("4")){
+                            } else if (nowGps.get("gridding") != null) {
+                                if (nowGps.get("gridding").toString().contains("网格")) {
+                                    wgLsit.add(nowGps);
+                                }
+                            } else if (nowGps.get("conment").toString().equals("4")) {
                                 zdLsit.add(nowGps);
-                            }else if(nowGps.get("station").toString().equals("高速岗")){
+                            } else if (nowGps.get("station").toString().equals("高速岗")) {
                                 gsLsit.add(nowGps);
-                            }else if(nowGps.get("station").toString().equals("快速岗")){
+                            } else if (nowGps.get("station").toString().equals("快速岗")) {
                                 ksLsit.add(nowGps);
-                            }else if(nowGps.get("station").toString().equals("特勤岗")){
+                            } else if (nowGps.get("station").toString().equals("特勤岗")) {
                                 TQLsit.add(nowGps);
-                            }else {
+                            } else {
                                 qtLsit.add(nowGps);
                             }
 
@@ -1714,26 +1978,26 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             }
         }
 
-        gdMap.put("data",gdLsit);
-        gdMap.put("num",gdLsit.size());
-        gfMap.put("data",gfLsit);
-        gfMap.put("num",gfLsit.size());
-        yxMap.put("data",yxLsit);
-        yxMap.put("num",yxLsit.size());
-        tqMap.put("data",tqLsit);
-        tqMap.put("num",tqLsit.size());
-        wgMap.put("data",wgLsit);
-        wgMap.put("num",wgLsit.size());
-        zdMap.put("data",zdLsit);
-        zdMap.put("num",zdLsit.size());
-        gsMap.put("data",gsLsit);
-        gsMap.put("num",gsLsit.size());
-        ksMap.put("data",ksLsit);
-        ksMap.put("num",ksLsit.size());
-        TQMap.put("data",TQLsit);
-        TQMap.put("num",TQLsit.size());
-        qtMap.put("data",qtLsit);
-        qtMap.put("num",qtLsit.size());
+        gdMap.put("data", gdLsit);
+        gdMap.put("num", gdLsit.size());
+        gfMap.put("data", gfLsit);
+        gfMap.put("num", gfLsit.size());
+        yxMap.put("data", yxLsit);
+        yxMap.put("num", yxLsit.size());
+        tqMap.put("data", tqLsit);
+        tqMap.put("num", tqLsit.size());
+        wgMap.put("data", wgLsit);
+        wgMap.put("num", wgLsit.size());
+        zdMap.put("data", zdLsit);
+        zdMap.put("num", zdLsit.size());
+        gsMap.put("data", gsLsit);
+        gsMap.put("num", gsLsit.size());
+        ksMap.put("data", ksLsit);
+        ksMap.put("num", ksLsit.size());
+        TQMap.put("data", TQLsit);
+        TQMap.put("num", TQLsit.size());
+        qtMap.put("data", qtLsit);
+        qtMap.put("num", qtLsit.size());
 
         inNowByGps.add(gdMap);
         inNowByGps.add(gfMap);
@@ -1794,13 +2058,13 @@ public class patrolrecordServiceImpl implements patrolrecordService {
         HashMap staffSumMap = new HashMap();
 
         //高峰应到数
-        List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion,null);
+        List<HashMap> gfPeoples = xareaMapper.countYDSum("高峰岗", battalion, null);
         //网格+高速+铁骑+其他
         List<HashMap> rcPeoples = xareaMapper.countRcYDsumC2(battalion);
         //固定+重点
         List<HashMap> rcPeoples1 = xareaMapper.countRcYDsum(battalion);
         //夜巡
-        List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion,null);
+        List<HashMap> yxPeoples = xareaMapper.countYxSum("3", battalion, null);
 
         int gfYDSum = (gfPeoples.size()) + (rcPeoples.size()) + (rcPeoples1.size());
         int rcYDSum = (rcPeoples.size()) + (rcPeoples1.size());
@@ -1892,34 +2156,34 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         //固定岗
         HashMap<String, Object> gdMap = new HashMap<>();
-        gdMap.put("gangwei","固定岗");
+        gdMap.put("gangwei", "固定岗");
         //高峰岗
         HashMap<String, Object> gfMap = new HashMap<>();
-        gfMap.put("gangwei","高峰岗");
+        gfMap.put("gangwei", "高峰岗");
         //重点
         HashMap<String, Object> zdMap = new HashMap<>();
-        zdMap.put("gangwei","重点岗");
+        zdMap.put("gangwei", "重点岗");
         //铁骑
         HashMap<String, Object> tqMap = new HashMap<>();
-        tqMap.put("gangwei","铁骑");
+        tqMap.put("gangwei", "铁骑");
         //网格
         HashMap<String, Object> wgMap = new HashMap<>();
-        wgMap.put("gangwei","网格岗");
+        wgMap.put("gangwei", "网格岗");
         //夜巡
         HashMap<String, Object> yxMap = new HashMap<>();
-        yxMap.put("gangwei","夜巡");
+        yxMap.put("gangwei", "夜巡");
         //高速
         HashMap<String, Object> gsMap = new HashMap<>();
-        gsMap.put("gangwei","高速岗");
+        gsMap.put("gangwei", "高速岗");
         //快速
         HashMap<String, Object> ksMap = new HashMap<>();
-        ksMap.put("gangwei","快速岗");
+        ksMap.put("gangwei", "快速岗");
         //特勤
         HashMap<String, Object> TQMap = new HashMap<>();
-        TQMap.put("gangwei","特勤岗");
+        TQMap.put("gangwei", "特勤岗");
         //其他
         HashMap<String, Object> qtMap = new HashMap<>();
-        qtMap.put("gangwei","其他岗");
+        qtMap.put("gangwei", "其他岗");
 
         //固定
         List<HashMap> gdLsit = new ArrayList<>();
@@ -1957,26 +2221,27 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
                     boolean result = distencePC(x, y, circleX, circleY, r);
                     if (result) {
-                        if (nowGps.get("station").toString().equals("固定岗")){
+                        if (nowGps.get("station").toString().equals("固定岗")) {
                             gdLsit.add(nowGps);
-                        }else if(nowGps.get("station").toString().equals("高峰岗")){
+                        } else if (nowGps.get("station").toString().equals("高峰岗")) {
                             gfLsit.add(nowGps);
-                        }else if(nowGps.get("conment").toString().equals("3")){
+                        } else if (nowGps.get("conment").toString().equals("3")) {
                             yxLsit.add(nowGps);
-                        }else if(nowGps.get("conment").toString().equals("2")){
+                        } else if (nowGps.get("conment").toString().equals("2")) {
                             tqLsit.add(nowGps);
-                        }else if(nowGps.get("gridding")!=null){
-                            if(nowGps.get("gridding").toString().contains("网格")){
-                            wgLsit.add(nowGps);}
-                        }else if(nowGps.get("conment").toString().equals("4")){
+                        } else if (nowGps.get("gridding") != null) {
+                            if (nowGps.get("gridding").toString().contains("网格")) {
+                                wgLsit.add(nowGps);
+                            }
+                        } else if (nowGps.get("conment").toString().equals("4")) {
                             zdLsit.add(nowGps);
-                        }else if(nowGps.get("station").toString().equals("高速岗")){
+                        } else if (nowGps.get("station").toString().equals("高速岗")) {
                             gsLsit.add(nowGps);
-                        }else if(nowGps.get("station").toString().equals("快速岗")){
+                        } else if (nowGps.get("station").toString().equals("快速岗")) {
                             ksLsit.add(nowGps);
-                        }else if(nowGps.get("station").toString().equals("特勤岗")){
+                        } else if (nowGps.get("station").toString().equals("特勤岗")) {
                             TQLsit.add(nowGps);
-                        }else {
+                        } else {
                             qtLsit.add(nowGps);
                         }
 
@@ -1985,26 +2250,26 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             }
         }
 
-        gdMap.put("data",gdLsit);
-        gdMap.put("num",gdLsit.size());
-        gfMap.put("data",gfLsit);
-        gfMap.put("num",gfLsit.size());
-        yxMap.put("data",yxLsit);
-        yxMap.put("num",yxLsit.size());
-        tqMap.put("data",tqLsit);
-        tqMap.put("num",tqLsit.size());
-        wgMap.put("data",wgLsit);
-        wgMap.put("num",wgLsit.size());
-        zdMap.put("data",zdLsit);
-        zdMap.put("num",zdLsit.size());
-        gsMap.put("data",gsLsit);
-        gsMap.put("num",gsLsit.size());
-        ksMap.put("data",ksLsit);
-        ksMap.put("num",ksLsit.size());
-        TQMap.put("data",TQLsit);
-        TQMap.put("num",TQLsit.size());
-        qtMap.put("data",qtLsit);
-        qtMap.put("num",qtLsit.size());
+        gdMap.put("data", gdLsit);
+        gdMap.put("num", gdLsit.size());
+        gfMap.put("data", gfLsit);
+        gfMap.put("num", gfLsit.size());
+        yxMap.put("data", yxLsit);
+        yxMap.put("num", yxLsit.size());
+        tqMap.put("data", tqLsit);
+        tqMap.put("num", tqLsit.size());
+        wgMap.put("data", wgLsit);
+        wgMap.put("num", wgLsit.size());
+        zdMap.put("data", zdLsit);
+        zdMap.put("num", zdLsit.size());
+        gsMap.put("data", gsLsit);
+        gsMap.put("num", gsLsit.size());
+        ksMap.put("data", ksLsit);
+        ksMap.put("num", ksLsit.size());
+        TQMap.put("data", TQLsit);
+        TQMap.put("num", TQLsit.size());
+        qtMap.put("data", qtLsit);
+        qtMap.put("num", qtLsit.size());
 
         inNowByGps.add(gdMap);
         inNowByGps.add(gfMap);
@@ -2048,7 +2313,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                 * Math.pow(Math.sin(b / 2), 2)));
         s = s * 6378.137 * 1000;
         s = Math.round(s);
-        //System.out.println("s:  " + s);
         if (s > r) {
             return false;
         }
@@ -2067,7 +2331,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             HashMap<String, Object> nowGps = patrolrecordMapper.findNowGps(nowId);
             nowGpsList.add(nowGps);
         }
-
 
 
         for (HashMap map : typeGPSList) {
@@ -2102,7 +2365,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
 
             if (nowIds.size() > 0) {
-                for (int l = 0;l<nowGpsList.size();l++) {
+                for (int l = 0; l < nowGpsList.size(); l++) {
                     if (nowGpsList.get(l) != null) {
                         String gps_x = (String) nowGpsList.get(l).get("gps_x");
                         String gps_y = (String) nowGpsList.get(l).get("gps_y");
@@ -2132,7 +2395,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
     //热力图统计
     @Override
-    public List<HashMap> heatMapYD(){
+    public List<HashMap> heatMapYD() {
         //查询网格
         List<HashMap> typeGPSList = patrolrecordMapper.findByType();
 
@@ -2142,7 +2405,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
         List<HashMap> resultList = new ArrayList<>();
 
-        int sum =0;
+        int sum = 0;
 
         for (HashMap map : typeGPSList) {
             String gps = map.get("gps").toString();
@@ -2175,7 +2438,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             }
 
             //点
-            for (int a=0;a<dianList.size();a++) {
+            for (int a = 0; a < dianList.size(); a++) {
                 String gps_x = dianList.get(a).get("gps").toString().split(",")[0];
                 String gps_y = dianList.get(a).get("gps").toString().split(",")[1];
 
@@ -2190,8 +2453,8 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             }
 
             //线
-            for (int b=0;b<xianList.size();b++) {
-                if (!StringUtils.isEmpty(xianList.get(b).get("centre"))){
+            for (int b = 0; b < xianList.size(); b++) {
+                if (!StringUtils.isEmpty(xianList.get(b).get("centre"))) {
                     String gps_x = xianList.get(b).get("centre").toString().split(",")[0];
                     String gps_y = xianList.get(b).get("centre").toString().split(",")[1];
 
@@ -2203,7 +2466,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         num++;
                         xianList.remove(b);
                     }
-                }else{
+                } else {
                     String gps_x = xianList.get(b).get("gps").toString().split(",")[0];
                     String gps_y = xianList.get(b).get("gps").toString().split(",")[1];
 
@@ -2220,8 +2483,8 @@ public class patrolrecordServiceImpl implements patrolrecordService {
             }
 
             //面
-            for (int c=0;c<mianList.size();c++) {
-                if (!StringUtils.isEmpty(mianList.get(c).get("centre"))){
+            for (int c = 0; c < mianList.size(); c++) {
+                if (!StringUtils.isEmpty(mianList.get(c).get("centre"))) {
                     String gps_x = mianList.get(c).get("centre").toString().split(",")[0];
                     String gps_y = mianList.get(c).get("centre").toString().split(",")[1];
 
@@ -2233,7 +2496,7 @@ public class patrolrecordServiceImpl implements patrolrecordService {
                         num++;
                         mianList.remove(c);
                     }
-                }else{
+                } else {
                     String gps_x = mianList.get(c).get("gps").toString().split(",")[0];
                     String gps_y = mianList.get(c).get("gps").toString().split(",")[1];
 
@@ -2260,7 +2523,6 @@ public class patrolrecordServiceImpl implements patrolrecordService {
 
             sum += num;
         }
-        //System.out.println(sum);
         return resultList;
     }
 }

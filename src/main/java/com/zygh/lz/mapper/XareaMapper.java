@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
+import javax.swing.event.ListDataEvent;
 import java.util.HashMap;
 import java.util.List;
 
@@ -83,7 +84,7 @@ public interface XareaMapper {
 
     List<Integer> countTQZ(String battalion);
 
-    List<Integer> countGsOrKsYDSum(@Param("station") String station, @Param("battalion") String battalion, @Param("conment") String conmen);
+    List<Integer> countGsOrKsYDSum(@Param("station") String station, @Param("battalion") String battalion, @Param("conment") String conmen, @Param("changeShifts") String changeShifts);
 
     //查询夜间快速大队警组，警员
     List<Xarea> selectks();
@@ -204,6 +205,19 @@ public interface XareaMapper {
     Xarea selectXareaEnd();
 
     //高峰岗部署警力
-    List<Xarea> selectXareapolic(@Param("battalion") String battalion,@Param("detachment") String detachment);
+    List<Xarea> selectXareapolic(@Param("station") String station,
+                                 @Param("battalion") String battalion,@Param("detachment") String detachment);
+
+    /*日常勤务*/
+    Integer countGFYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    Integer countGDYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    Integer countZDYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    Integer countTQYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    Integer countWGYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    Integer countGSYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    Integer countKSYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    Integer countYXYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    List<HashMap> countJDYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
+
 
 }

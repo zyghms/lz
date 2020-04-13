@@ -22,7 +22,7 @@ public interface StaffMapper {
     int updateByPrimaryKey(Staff record);
 
     //登录
-    Staff selectByLogin(@Param("staff_tel") String staff_tel, @Param("staff_password") String staff_password);
+    Staff selectByLogin(@Param("user") String user, @Param("password") String password);
 
     //校验
     Staff selectByName(String name);
