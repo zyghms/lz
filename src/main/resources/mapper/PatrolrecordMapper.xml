@@ -187,6 +187,9 @@
         <if test="sysSectionId != null and sysSectionId != ''">
             AND sf.sys_section_id = #{sysSectionId}
         </if>
+        <if test="sectionPid != null and sectionPid != ''">
+            AND s.section_pid = #{sectionPid}
+        </if>
         <if test="beginTime != null and beginTime != ''">
             AND pr.patrol_record_begintime> #{beginTime}
         </if>
@@ -323,7 +326,6 @@
         <if test="battalion != null and battalion != ''" >
             and x.battalion = #{battalion}
         </if>
-
         and  p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id
         and xl.xarea_id = x.id
@@ -438,6 +440,7 @@
         and  p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id
         and xl.xarea_id = x.id
+        and s.stafftype=#{stafftype}
         and ((((x.gridding like '%网格%' or x.type = '面') and x.gridding is not null and x.gridding not like '%级网格%') or x.station = '高速岗' or x.conment = '2' or x.station = '固定岗' or x.conment = '4'
         <if test="battalion != null and battalion != ''" >
             or x.station = #{station}
@@ -452,6 +455,7 @@
         where to_days(p.patrol_record_begintime) = to_days(now())
         and x.battalion = #{battalion}
         and x.detachment = #{detachment}
+        and s.stafftype=#{stafftype}
         and  p.sys_staff_id = s.sys_staff_id
         and s.sys_staff_id = xl.staff_id
         and xl.xarea_id = x.id

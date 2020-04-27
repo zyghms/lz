@@ -23,7 +23,8 @@ public interface SectionMapper {
                                      @Param("staffPost") String staffPost,
                                      @Param("staffName") String staffName,
                                      @Param("staffPid") String staffPid,
-                                     @Param("sectionName") String sectionName);
+                                     @Param("sectionName") String sectionName,
+                                     @Param("stafftype") String stafftype);
 
     //查询所有部门
     List<Section> selectAllSection();

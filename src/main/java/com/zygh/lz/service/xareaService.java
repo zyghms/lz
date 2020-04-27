@@ -82,4 +82,15 @@ public interface xareaService {
 
     //九主六块多有人
     ResultBean selectAllByDemonstration(String station);
+
+    /**
+     * 对接市局接口
+     * 根据不同条件查询标注信息
+     */
+    ResultBean selectXareaByInfo(Xarea xarea);
+    ResultBean selectPoliceNumber(Xarea xarea);
+    //根据区域查询相应警力
+    ResultBean selctStrengthById(Xarea xarea);
+
+
 }

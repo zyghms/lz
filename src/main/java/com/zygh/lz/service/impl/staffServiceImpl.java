@@ -500,8 +500,6 @@ public class staffServiceImpl implements staffService {
                 duration = DataTime.getDatePoor(patrolrecords.getPatrolRecordEndtime(), patrolrecords.getPatrolRecordBegintime());
 
             }
-
-
             DecimalFormat dub = new DecimalFormat("######0.00");
             //切割GPS点
             String[] split = patrolRecordGps.split(",");
@@ -525,10 +523,11 @@ public class staffServiceImpl implements staffService {
                 staff.setXareaList(xareas1);
             } else if (effectiveDate3 && xareas.get(f).getStation().equals("固定岗")) {
                 staff.setXareaList(xareas);
+            }else{
+                staff.setXareaList(xareas);
             }
 
         }
-        //staff.setXareaList(xareas);
         Gps gps = gpsMapper.gpsEnd(staff.getSysStaffId());
         staff.setGps(gps);
         return ResultUtil.setOK("success", staff);
@@ -544,41 +543,97 @@ public class staffServiceImpl implements staffService {
     }
 
     /**
-     * 查询昨日在岗警力人数
+     * 查询昨日总警力人数
      *
      * @return
      */
     @Override
     public ResultBean selecttotalforces() {
-        Integer selecttotalforces = staffMapper.selecttotalforces();
+        /*Integer selecttotalforces = staffMapper.selecttotalforces();
         if (selecttotalforces != null || selecttotalforces != null) {
             return ResultUtil.setOK("success", staffMapper.selecttotalforces());
         }
-        return ResultUtil.setError(SystemCon.RERROR1, "error", null);
+        return ResultUtil.setError(SystemCon.RERROR1, "error", null);*/
+        /**
+         * 辅警
+         * 日常勤务平峰期=（【高速大队（郑少+西南）除去事故中队和领导外全部民警人数的三分之一】   +【（机动+网格+固定+铁骑）的民警人数一半】
+         */
+        //郑少高速大队
+        Integer zsgsnum = xareaMapper.selectAssistPolice("高速岗", "郑少高速大队", null, null, null, null).size() / 3;
+        //西南绕城高速大队
+        Integer xngsnum = xareaMapper.selectAssistPolice("高速岗", "西南绕城高速大队", null, null, null, null).size() / 3;
+        //网格
+        Integer wgnum = xareaMapper.selectAssistPolice("区域", null, null, null, "网格", null).size() / 2;
+        //固定
+        Integer gdnum = xareaMapper.selectAssistPolice("固定岗", null, null, null, null, null).size() / 2;
+        //铁骑
+        Integer tqnum = xareaMapper.selectAssistPolice(null, null, null, null, "铁骑", "2").size() / 2;
+        //机动
+        Integer jdnum = xareaMapper.selectAssistPolice("机动岗", null, null, null, null, null).size() / 2;
+        //辅警高峰岗
+        Integer fjgsnum = xareaMapper.selectAssistPolice("高峰岗", null, null, null, null, null).size();
+
+        //高峰岗=有民警的高峰岗岗位数+有民警的固定岗位数+机动岗所有民警数的一半+铁骑所有民警数的一半+有民警的重点机关岗的岗位数
+        //284	    166			            26		    62		            23	        	7
+        //固定岗组数
+        Integer gdYDzusum = xareaMapper.countggZSum("固定岗", null, null);
+        //重点岗位数
+        Integer zdYDjgsum = xareaMapper.countZdZSum(null, null);
+
+        //郑少高速大队
+        Integer fjzsgsnum = xareaMapper.selectAssistPolice("高速岗", null, null, "辅警", null, null).size() / 3;
+        //西南绕城高速大队
+        Integer fjxngsnum = xareaMapper.selectAssistPolice("高速岗", null, null, "辅警", null, null).size() / 3;
+        //夜巡辅警
+        Integer yxnum = xareaMapper.selectAssistPolice("区域", null, null, "辅警", "夜巡", "3").size() / 2;
+        /**
+         * 平峰期民警辅警总数
+         */
+        int fjYDsum = zsgsnum + xngsnum + jdnum + wgnum + gdnum+tqnum;
+        /**
+         * 高峰期民警辅警总数
+         */
+        int rcYDSum = fjgsnum + gdYDzusum + jdnum + tqnum + zdYDjgsum;
+        /**
+         * 夜巡
+         */
+        Integer fjyxYDSum = fjzsgsnum + fjxngsnum+yxnum;
+        Integer sum=fjYDsum+rcYDSum+fjyxYDSum;
+        return ResultUtil.setOK("success", sum);
     }
 
     /**
-     * 查询昨日总警力
+     * 查询昨日总警力详情
      *
      * @return
      */
     @Override
     public ResultBean selecttotalforceszr() {
-        List<HashMap> selecttotalforceszr = staffMapper.selecttotalforceszr();
+        List<HashMap> selecttotalforceszr = staffMapper.selecttotalforcfb("民警");
+        List<HashMap> selecttotalfjorceszr = staffMapper.selecttotalforcfb("辅警");
+        for (int i = 0; i < selecttotalforceszr.size(); i++) {
+            for (int k = 0; k < selecttotalfjorceszr.size(); k++) {
+                if(selecttotalfjorceszr.get(k).get("sectionName").equals(selecttotalforceszr.get(i).get("sectionName"))){
+                    selecttotalforceszr.get(i).put("funum",selecttotalfjorceszr.get(k).get("count"));
+                }
+            }
+        }
+        return ResultUtil.setOK("success", selecttotalforceszr);
+        /*List<HashMap> selecttotalforceszr = staffMapper.selecttotalforceszr();
         if (selecttotalforceszr.size() > 0) {
             for (int i = 0; i < selecttotalforceszr.size(); i++) {
                 String sectionName = selecttotalforceszr.get(i).get("sectionName").toString();
                 if (sectionName.indexOf("大队") != -1) {
                     String sectionName1 = selecttotalforceszr.get(i).get("sectionName").toString();
                     String dadui = sectionName1.substring(0, sectionName1.indexOf("大队") + 2);
-                    //String[] sectionName1 = selecttotalforceszr.get(i).get("sectionName").toString();
                     selecttotalforceszr.get(i).put("sectionName", dadui);
                 }
+
             }
 
             return ResultUtil.setOK("success", selecttotalforceszr);
         }
-        return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+        return ResultUtil.setError(SystemCon.RERROR1, "success", null);*/
     }
 
     @Override
@@ -587,6 +642,7 @@ public class staffServiceImpl implements staffService {
         for (int i = 0; i < staff.size(); i++) {
             Gps gps = gpsMapper.gpsEnd(staff.get(i).getSysStaffId());
             staff.get(i).setGps(gps);
+
         }
         return ResultUtil.setOK("success", staff);
     }
@@ -628,11 +684,6 @@ public class staffServiceImpl implements staffService {
         //实到在线人数
         List<Staff> gdorGfSDsum = staffMapper.countGdorGfSDsum("固定岗", battalion);
         List<Staff> staff = staffMapper.countGdorGfSDsumtj();
-      /*  List<Staff> tqSD = staffMapper.countTqSDsum(battalion);
-        List<Staff> wgSD = staffMapper.countWgSDsum(battalion);
-        List<Staff> zdSD = staffMapper.countZdSDsum(battalion);//重点
-        List<Staff> qtSD = staffMapper.countQtSDsum(battalion);
-        List<Staff> gsSD = staffMapper.countGsorKsSDsum("高速岗", battalion, null);*/
 
         gdMap.put("固定岗", staff);
         gdMap.put("people", gdorGfSDsum);
@@ -693,6 +744,15 @@ public class staffServiceImpl implements staffService {
             return ResultUtil.setOK("success", selectAllBysection);
         }
         return ResultUtil.setError(SystemCon.RERROR1, "success", null);
+    }
+
+    /**
+     * 对接市局接口  人员信息列表
+     * @return
+     */
+    @Override
+    public ResultBean selectStaffByInfo() {
+        return ResultUtil.setOK("success", staffMapper.selectStaffByInfo());
     }
 
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class XrelationController {
     @Autowired
     private XrelationService xrelationService;
-    //新增
+    //新增关联
     @PostMapping("insertXrelation")
     public ResultBean insertXrelation(Xrelation xrelation){
         return xrelationService.insertXrelation(xrelation);

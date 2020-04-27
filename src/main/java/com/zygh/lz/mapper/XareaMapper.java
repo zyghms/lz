@@ -67,7 +67,9 @@ public interface XareaMapper {
 
     int countZdZSum(@Param("battalion") String battalion, @Param("detachment") String detachment);
 
-    int countQtZSum(@Param("battalion") String battalion, @Param("conment") String conment,@Param("detachment") String detachment);
+    int countQtZSum(@Param("battalion") String battalion,
+                    @Param("conment") String conment,
+                    @Param("detachment") String detachment);
 
     List<Integer> countZDRc(@Param("battalion") String battalion, @Param("detachment") String detachment, @Param("station") String station);
 
@@ -143,13 +145,14 @@ public interface XareaMapper {
                                        @Param("detachment")String detachment);
 
     //日间其他警力部署
-    List<HashMap> selectqtRJ();
+    List<HashMap> selectqtRJ(String stafftype);
     //日间其他警力部署细分到中队
     List<HashMap> selectqtZD();
 
     //日间其他警员详情
     List<HashMap> selectqtPope(@Param("battalion") String battalion,
-                               @Param("detachment") String detachment);
+                               @Param("detachment") String detachment,
+                               @Param("stafftype") String stafftype);
 
     //在线人警力部署
     List<HashMap> selectInformant();
@@ -193,7 +196,8 @@ public interface XareaMapper {
 
     //夜间其他详情
     List<HashMap> selectqitaPope(@Param("battalion") String battalion,
-                                 @Param("detachment") String detachment);
+                                 @Param("detachment") String detachment,
+                                 @Param("stafftype") String stafftype);
 
     //九主六块十六示范区
     List<Xarea> selectDemonstrationPlot(String station);
@@ -219,5 +223,22 @@ public interface XareaMapper {
     Integer countYXYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
     List<HashMap> countJDYD(@Param("battalion") String battalion, @Param("detachment") String detachment);
 
+    //统计辅警部署人
+    List<HashMap> selectAssistPolice(@Param("station") String station,
+                                     @Param("battalion") String battalion,
+                                     @Param("detachment") String detachment,
+                                     @Param("stafftype") String stafftype,
+                                     @Param("gridding") String gridding,
+                                     @Param("conment") String conment);
 
+    /**
+     * 对接市局接口
+     * 根据不同条件查询标注信息
+     */
+    List<Xarea> selectXareaByInfo(Xarea xarea);
+
+    List<HashMap> selectPoliceNumber(Xarea xarea);
+
+    //根据区域名字模糊匹配部署警力
+    List<HashMap> selctStrengthById(Xarea xarea);
 }

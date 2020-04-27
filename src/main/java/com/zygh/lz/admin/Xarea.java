@@ -27,6 +27,16 @@ public class Xarea {
 
     private String gps;
 
+    private String stafftype;
+
+    public String getStafftype() {
+        return stafftype;
+    }
+
+    public void setStafftype(String stafftype) {
+        this.stafftype = stafftype;
+    }
+
     //应到人员
     public List<Staff> staff ;
 

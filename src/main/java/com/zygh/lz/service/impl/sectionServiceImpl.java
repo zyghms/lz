@@ -62,8 +62,8 @@ public class sectionServiceImpl implements sectionService {
      * @return
      */
     @Override
-    public ResultBean selectAllBySection(String sex,String staffPost,String staffName,String staffPid,String sectionName) {
-        List<Section> sections = sectionMapper.selectAllBySection(sex,staffPost,staffName,staffPid,sectionName);
+    public ResultBean selectAllBySection(String sex,String staffPost,String staffName,String staffPid,String sectionName,String stafftype) {
+        List<Section> sections = sectionMapper.selectAllBySection(sex,staffPost,staffName,staffPid,sectionName,stafftype);
         if(sections.size() > 0){
             return ResultUtil.setOK("success",sections);
         }

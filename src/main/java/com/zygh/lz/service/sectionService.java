@@ -11,7 +11,7 @@ public interface sectionService {
     //根据id删除部门
     ResultBean delSectionById(Integer id);
     //根据性别,路长，部门查询
-    ResultBean selectAllBySection(String sex,String staffPost,String staffName,String staffPid,String sectionName);
+    ResultBean selectAllBySection(String sex,String staffPost,String staffName,String staffPid,String sectionName,String stafftype);
     //按层级推送
     ResultBean selectAllSection();
     //查询所有

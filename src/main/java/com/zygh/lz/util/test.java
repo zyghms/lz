@@ -1,5 +1,13 @@
 package com.zygh.lz.util;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
+
 public class test {
     static double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
     // π
@@ -166,11 +174,4 @@ public class test {
     }
 
 
-    public static void main(String[] args) {
-        //x
-        double[] v1 = test.gcj02towgs84(113.497036,35.197844);
-        //y
-        System.out.println(v1[0]);
-        System.out.println(v1[1]);
-    }
 }

@@ -85,4 +85,10 @@ public interface staffService {
 
     //根据岗位查询各中队在线民警详情
     ResultBean selectAllBysection(Xarea xarea);
+
+    /**
+     * 对接市局接口  人员信息列表
+     * @return
+     */
+    ResultBean selectStaffByInfo();
 }

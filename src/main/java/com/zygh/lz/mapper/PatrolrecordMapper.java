@@ -25,7 +25,9 @@ public interface PatrolrecordMapper {
 
     //根据道路名称、部门查询所有巡查信息
     List<Patrolrecord> selectByRoadtype(@Param("sysSectionId") Integer sysSectionId,
-                                        @Param("beginTime") String beginTime, @Param("endTime") String endTime);
+                                        @Param("beginTime") String beginTime,
+                                        @Param("endTime") String endTime,
+                                        @Param("sectionPid") Integer sectionPid);
 
     //根据层级显示相对信息（一级路长）
     List<Patrolrecord> selectByhierarchy(String staffHierarchy, Integer sysSectionId, String roadType);
@@ -107,9 +109,12 @@ public interface PatrolrecordMapper {
     //其他岗实到
     List<Integer> countQtSDsum(String battalion);
 
-    List<Integer> countZDRcSDsum(@Param("battalion") String battalion, @Param("detachment") String detachment, @Param("station") String station);
+    List<Integer> countZDRcSDsum(@Param("battalion") String battalion,
+                                 @Param("detachment") String detachment,
+                                 @Param("station") String station,
+                                 @Param("stafftype") String stafftype);
 
-    List<Integer> countZDYxSDsum(@Param("battalion") String battalion, @Param("detachment") String detachment);
+    List<Integer> countZDYxSDsum(@Param("battalion") String battalion, @Param("detachment") String detachment,@Param("stafftype") String stafftype);
 
     //统计固定岗/高峰岗实到
     List<Integer> countGsorKsSDsum(@Param("station") String station, @Param("battalion") String battalion, @Param("conment") String conmen);

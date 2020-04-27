@@ -245,7 +245,7 @@
         </where>
 
     </select>
-    <select id="selectXareaByName" resultMap="BaseResultMap">
+    <select id="selectXareaByName" resultType="map">
         SELECT * from xarea
         <where>
             <if test="Name!=null and Name!='' ">
@@ -260,7 +260,7 @@
     <!--根据人员id查他的岗位-->
     <select id="selectXareaZgByStaffId" resultMap="BaseResultMap">
         SELECT * FROM xarea a,xrelation x,staff s WHERE a.id=x.xarea_id
-        AND s.sys_staff_id=x.staff_id and  a.gps is not null and x.staff_id=#{id}
+        AND s.sys_staff_id=x.staff_id  and x.staff_id=#{id}
     </select>
     <!--根据人员id查他的岗位-->
     <select id="selectXareaByid" resultType="map">
@@ -282,8 +282,8 @@
             and x.detachment = #{detachment}
         </if>
         AND f.stafftype='民警'
-         and station=#{station}
-        GROUP BY f.sys_staff_id ORDER BY  x.detachment
+        and station=#{station}
+        GROUP BY f.sys_staff_id ORDER BY x.detachment
     </select>
 
     <!--统计夜巡 / 铁骑应到人数-->
@@ -443,12 +443,13 @@
         <if test="detachment != null and detachment != ''">
             and detachment = #{detachment}
         </if>
+
     </select>
 
     <!--统计夜巡组-->
     <select id="countYxZ" resultType="java.lang.Integer" parameterType="java.lang.String">
         select * from xarea where conment = 3 and battalion != '高架大队'
-        AND gridding LIKE '%夜巡%'  and station='区域'
+        AND gridding LIKE '%夜巡%' and station='区域'
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
@@ -661,9 +662,9 @@
             AND detachment=#{detachment}
         </if>
         <if test="station != null and station != ''">
-            and	station=#{station}
+            and station=#{station}
         </if>
-        GROUP BY f.sys_staff_id ORDER BY  x.detachment
+        GROUP BY f.sys_staff_id ORDER BY x.detachment
     </select>
     <!--固定岗/高峰岗细分到中队-->
     <select id="selectfixationzdRJ" resultType="map">
@@ -808,16 +809,20 @@
     </select>
     <!--日间其他警力部署-->
     <select id="selectqtRJ" resultType="map">
-        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (select s.*,x.*,st.section_name from xarea x,staff s,xrelation xl ,section st
+        SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count FROM (select s.*,x.*,st.section_name from
+        xarea x,staff s,xrelation xl ,section st
         where x.station != '固定岗' and x.station != '高峰岗'
         AND s.sys_section_id=st.sys_section_id
         and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
         and x.station != '快速岗' and x.station != '区域'
         and xl.xarea_id = x.id
         and xl.staff_id = s.sys_staff_id
-        and x.conment != 3 AND s.stafftype='民警'
+        and x.conment != 3
+        <if test="stafftype != null and stafftype != ''">
+            AND s.stafftype=#{stafftype}
+        </if>
         GROUP BY s.sys_staff_id) sb
-        GROUP BY SUBSTRING(sb.section_name,1,3) 
+        GROUP BY SUBSTRING(sb.section_name,1,3)
         ORDER BY FIELD(SUBSTRING(sb.section_name,1,3),'一大队','二大队','三大队','四大队','五大队','六大队','七大队','八大队','九大队','十大队')
     </select>
     <select id="selectqtZD" resultType="map">
@@ -838,7 +843,7 @@
         AND s.sys_section_id=st.sys_section_id
         and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
         and x.station != '快速岗' and x.station != '区域'
-        and xl.xarea_id = x.id AND s.stafftype='民警'
+        and xl.xarea_id = x.id
         and xl.staff_id = s.sys_staff_id
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
@@ -846,8 +851,11 @@
         <if test="detachment != null and detachment != ''">
             and x.detachment = #{detachment}
         </if>
-        <if test="detachment == null or detachment == ''">
+        <!--<if test="detachment == null or detachment == ''">
             and (x.detachment = null or x.detachment = '')
+        </if>-->
+        <if test="stafftype == null or stafftype == ''">
+            AND s.stafftype=#{stafftype}
         </if>
         and x.conment != 3
         GROUP BY s.sys_staff_id
@@ -882,7 +890,7 @@
     </select>
     <!--全部在线人详情-->
     <select id="selectInformantPope" resultType="map">
-        SELECT f.*,a.*,s.section_name
+        SELECT f.sys_staff_id,f.staff_name,f.staff_tel,f.stafftype,a.*,s.section_name
         FROM patrolrecord p,staff f,section s,xarea a,xrelation x
         WHERE
         a.id=x.xarea_id
@@ -982,7 +990,7 @@
         <if test="detachment != null and detachment != ''">
             and x.detachment = #{detachment}
         </if>
-        GROUP BY f.sys_staff_id ORDER BY  x.detachment
+        GROUP BY f.sys_staff_id ORDER BY x.detachment
     </select>
     <!--夜间其他-->
     <select id="selectqita" resultType="map">
@@ -1008,7 +1016,9 @@
         and x.station != '高速岗' and x.conment != '2' and x.conment != '4'
         and x.station != '快速岗' and x.station != '区域'
         and xl.xarea_id = x.id
-        AND s.stafftype='民警'
+        <if test="stafftype != null and stafftype != ''">
+            AND s.stafftype=#{stafftype}
+        </if>
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
@@ -1037,7 +1047,7 @@
         SELECT f.*,x.* from xarea x,xrelation xl,staff f
         WHERE f.sys_staff_id=xl.staff_id and x.id = xl.xarea_id
         AND x.name LIKE CONCAT('%',#{name},'%')
-        AND s.stafftype='民警'
+        AND f.stafftype='民警'
         <if test="battalion != null and battalion != ''">
             and battalion = #{battalion}
         </if>
@@ -1112,7 +1122,7 @@
     </select>
     <!--统计日常勤务高峰岗应到在线人数-->
     <select id="countGFYD" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT COUNT(DISTINCT xarea.id) AS num  FROM xarea,xrelation
+        SELECT COUNT(DISTINCT xarea.id) AS num FROM xarea,xrelation
         where xarea.station = '高峰岗'
         <if test="battalion != null and battalion != ''">
             and xarea.battalion = #{battalion}
@@ -1124,8 +1134,11 @@
     </select>
     <!--统计日常勤务固定岗应到在线人数-->
     <select id="countGDYD" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT ROUND(COUNT(DISTINCT staff_id)/2) AS num   FROM xarea x,xrelation xr
-        WHERE station='固定岗'    AND x.id = xr.xarea_id AND leader=''
+        SELECT ROUND(COUNT(DISTINCT staff_id)/2) AS num from
+        xarea x,xrelation xl,staff f,section st
+        WHERE x.id=xl.xarea_id AND xl.staff_id=f.sys_staff_id
+        AND f.sys_section_id=st.sys_section_id AND station = '固定岗'
+        AND f.stafftype='民警' AND (leader='' or leader is null)
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
@@ -1135,8 +1148,8 @@
     </select>
     <!--统计日常勤务重点岗应到在线人数-->
     <select id="countZDYD" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT ROUND(COUNT(DISTINCT staff_id)/2) AS num   FROM xarea x,xrelation xr
-        WHERE station='重点岗'    AND x.id = xr.xarea_id AND (leader='' or  leader is null)
+        SELECT ROUND(COUNT(DISTINCT staff_id)/2) AS num FROM xarea x,xrelation xr
+        WHERE station='重点机关岗' AND x.id = xr.xarea_id AND (leader='' or leader is null)
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
         </if>
@@ -1149,7 +1162,7 @@
         SELECT ROUND(COUNT(DISTINCT staff_id)) AS num from
         xarea x,xrelation xl,staff f,section st
         WHERE x.id=xl.xarea_id AND xl.staff_id=f.sys_staff_id
-        AND f.sys_section_id=st.sys_section_id  and	conment ='2'  and leader is NULL
+        AND f.sys_section_id=st.sys_section_id and conment ='2' AND (leader='' or leader is null)
         AND f.stafftype='民警'
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
@@ -1160,10 +1173,10 @@
     </select>
     <!--统计日常勤务网格岗应到在线人数-->
     <select id="countWGYD" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT ROUND(COUNT(DISTINCT staff_id)/2) AS num  from
+        SELECT ROUND(COUNT(DISTINCT staff_id)/2) AS num from
         xarea x,xrelation xl,staff f,section st
         WHERE x.id=xl.xarea_id AND xl.staff_id=f.sys_staff_id
-        AND f.sys_section_id=st.sys_section_id  and	station='区域' AND gridding LIKE '%网格%'
+        AND f.sys_section_id=st.sys_section_id and station='区域' AND gridding LIKE '%网格%'
         AND f.stafftype='民警'
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
@@ -1174,19 +1187,22 @@
     </select>
     <!--统计日常勤务高速岗应到在线人数-->
     <select id="countGSYD" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT ROUND(COUNT(DISTINCT staff_id)/3) AS num   FROM xarea,xrelation
-        WHERE station='高速岗'  AND xarea.id = xrelation.xarea_id AND leader=''
+        SELECT ROUND(COUNT(DISTINCT staff_id)/3) AS num from
+        xarea x,xrelation xl,staff f,section st
+        WHERE x.id=xl.xarea_id AND xl.staff_id=f.sys_staff_id
+        AND f.sys_section_id=st.sys_section_id AND station = '高速岗' AND f.stafftype='民警'
+        AND (leader='' or leader is null)
         <if test="battalion != null and battalion != ''">
-            and xarea.battalion = #{battalion}
+            and x.battalion = #{battalion}
         </if>
         <if test="detachment != null and detachment != ''">
-            and xarea.detachment = #{detachment}
+            and x.detachment = #{detachment}
         </if>
     </select>
     <!--统计日常勤务快速岗应到在线人数-->
     <select id="countKSYD" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT ROUND(COUNT(DISTINCT staff_id)/3) AS num   FROM xarea,xrelation
-        WHERE station='快速岗'  AND xarea.id = xrelation.xarea_id AND leader=''
+        SELECT ROUND(COUNT(DISTINCT staff_id)/3) AS num FROM xarea,xrelation
+        WHERE station='快速岗' AND xarea.id = xrelation.xarea_id AND leader=''
         <if test="battalion != null and battalion != ''">
             and xarea.battalion = #{battalion}
         </if>
@@ -1195,10 +1211,11 @@
         </if>
     </select>
     <select id="countYXYD" resultType="java.lang.Integer" parameterType="java.lang.String">
-        SELECT ROUND(COUNT(DISTINCT staff_id)) num from
+        SELECT ROUND(COUNT(DISTINCT staff_id)/2) num from
         xarea x,xrelation xl,staff f,section st
         WHERE x.id=xl.xarea_id AND xl.staff_id=f.sys_staff_id
-        AND f.sys_section_id=st.sys_section_id  and	conment ='3'  and (leader is NULL OR leader ='') AND gridding LIKE '%夜巡%'
+        AND f.sys_section_id=st.sys_section_id and conment ='3' and (leader is NULL OR leader ='') AND gridding LIKE
+        '%夜巡%'
         AND f.stafftype='民警'
         <if test="battalion != null and battalion != ''">
             and x.battalion = #{battalion}
@@ -1206,5 +1223,99 @@
         <if test="detachment != null and detachment != ''">
             and x.detachment = #{detachment}
         </if>
+    </select>
+    <!--统计辅警-->
+    <select id="selectAssistPolice" resultType="map">
+        SELECT * from xarea x,xrelation xl,staff f,section st
+        WHERE x.id=xl.xarea_id AND xl.staff_id=f.sys_staff_id
+        AND f.sys_section_id=st.sys_section_id
+        <if test="station != null and station != ''">
+            AND x.station = #{station}
+        </if>
+        <if test="station == '高速岗' ">
+            AND (leader='' or leader is null)
+            AND detachment!='事故中队'
+        </if>
+        <if test="stafftype != null and stafftype != ''">
+            AND f.stafftype=#{stafftype}
+        </if>
+        <if test="battalion != null and battalion != ''">
+            and x.battalion = #{battalion}
+        </if>
+        <if test="detachment != null and detachment != ''">
+            and x.detachment = #{detachment}
+        </if>
+        <if test="gridding != null and gridding != ''">
+            AND gridding LIKE CONCAT('%',#{gridding},'%')
+        </if>
+        <if test="conment != null and conment != ''">
+            AND conment LIKE CONCAT('%',#{conment},'%')
+        </if>
+        GROUP BY f.sys_staff_id ORDER BY x.detachment
+    </select>
+    <!--对接市局接口  根据不同条件查询标注信息-->
+    <select id="selectXareaByInfo" resultType="map">
+        SELECT * from xarea where gps is not null
+        AND type = #{type}
+        <if test="name!=null and name!='' ">
+            and `name` LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="station!=null and station!='' ">
+            AND `station`= #{station}
+        </if>
+
+        <if test="battalion!=null and battalion!='' ">
+            AND `battalion` = #{battalion}
+        </if>
+        <if test="detachment!=null and detachment!='' ">
+            AND `detachment` = #{detachment}
+        </if>
+        ORDER BY id asc
+
+    </select>
+    <select id="selectPoliceNumber" resultType="map">
+        SELECT x.*,st.section_name,f.sys_staff_id,f.staff_name,f.staff_num,f.stafftype from xarea x,xrelation xl,staff
+        f,section st
+        WHERE x.id=xl.xarea_id AND xl.staff_id=f.sys_staff_id
+        AND f.sys_section_id=st.sys_section_id
+        <if test="station != null and station != ''">
+            AND x.station = #{station}
+        </if>
+        <if test="station == '高速岗' ">
+            AND (leader='' or leader is null)
+            AND detachment!='事故中队'
+        </if>
+        <if test="stafftype != null and stafftype != ''">
+            AND f.stafftype=#{stafftype}
+        </if>
+        <if test="battalion != null and battalion != ''">
+            and x.battalion = #{battalion}
+        </if>
+        <if test="detachment != null and detachment != ''">
+            and x.detachment = #{detachment}
+        </if>
+        <if test="gridding != null and gridding != ''">
+            AND gridding LIKE CONCAT('%',#{gridding},'%')
+        </if>
+        <if test="conment != null and conment != ''">
+            AND conment LIKE CONCAT('%',#{conment},'%')
+        </if>
+        GROUP BY f.sys_staff_id ORDER BY x.battalion asc
+    </select>
+
+    <!--根据区域id匹配部署警力-->
+    <select id="selctStrengthById" resultType="map">
+        SELECT x.id,x.`name`,x.station,x.type,x.gps,x.battalion,
+        x.detachment,x.gridding,x.rank,x.centre,f.staff_name,f.staff_num,f.stafftype
+        from xarea x,xrelation xl,staff f
+        WHERE f.sys_staff_id=xl.staff_id and x.id = xl.xarea_id
+        AND x.id =#{id}
+        <if test="stafftype != null and stafftype != ''">
+            AND f.stafftype=#{stafftype}
+        </if>
+        <if test="battalion != null and battalion != ''">
+            and battalion = #{battalion}
+        </if>
+        GROUP BY xl.staff_id
     </select>
 </mapper>

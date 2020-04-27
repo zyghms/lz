@@ -122,6 +122,9 @@
     <if test="sectionName != null" >
       AND s.section_name LIKE concat('%',#{sectionName},'%')
     </if>
+    <if test="stafftype!=null and stafftype != '' ">
+      and f.stafftype = #{stafftype}
+    </if>
   </select>
 
   <select id="selectAllSection" resultMap="BaseResultMap">

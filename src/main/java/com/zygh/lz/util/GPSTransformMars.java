@@ -3,6 +3,15 @@ package com.zygh.lz.util;
 import com.zygh.lz.mapper.XareaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
+
 public class GPSTransformMars {
     /*
      * GPS坐标转换为高德地图坐标
@@ -77,34 +86,6 @@ public class GPSTransformMars {
         }
 
         return loc.substring(0, loc.length() - 1);
-    }
-
-    public static void main(String[] args) {
-        /*String gps="113.58042597770692,34.46205139160156";
-        //String gps="113.6996570974796,34.768613208461346";
-        String[] split = gps.split(",");
-        for (int i = 0; i < split.length; i++) {
-            System.out.println(split[i]);
-        }
-        String loastr = "";
-        String loc = "";
-        for (int k = 0; k < split.length; k++) {
-            if (k % 2 == 0) {
-                double lat = Double.valueOf(split[k + 1]); //标记纬度
-                double lng = Double.valueOf(split[k]);     //标记经度
-                //double[] doubles = GCJ2WGSUtils.gcj02towgs84(lng, lat);
-                double[] doubles = GCJ2WGSUtils.wgs84togcj02(lng, lat);
-                loastr = String.valueOf(doubles[0]) + "," + String.valueOf(doubles[1])+",";
-                loc += loastr;
-            }
-        }
-
-        System.out.println(loc.substring(0,loc.length()-1));*/
-        int cc1 = (int)Math.ceil(998/10);//向下
-
-        int cc = (int)Math.floor(997/10);//向上
-        System.out.println(cc1);
-        System.out.println(cc);
     }
 
 

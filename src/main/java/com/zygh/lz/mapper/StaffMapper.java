@@ -1,6 +1,5 @@
 package com.zygh.lz.mapper;
 
-import com.zygh.lz.admin.Patrolrecord;
 import com.zygh.lz.admin.Staff;
 import com.zygh.lz.admin.Xarea;
 import org.apache.ibatis.annotations.Param;
@@ -112,6 +111,7 @@ public interface StaffMapper {
      */
     //统计固定岗/高峰岗实到
     List<Staff> countGdorGfSDsum(@Param("station") String station, @Param("battalion") String battalion);
+
     List<Staff> countGdorGfSDsumtj();
 
     //统计夜巡实到
@@ -150,5 +150,13 @@ public interface StaffMapper {
     //根据岗位查询各中队在线民警详情
     List<HashMap> selectAllBysection(Xarea xarea);
 
+    //民警辅警各大队分布详情
+    List<HashMap> selecttotalforcfb(String stafftype);
 
+    /**
+     * 对接市局接口  人员信息列表
+     *
+     * @return
+     */
+    List<Staff> selectStaffByInfo();
 }

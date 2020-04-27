@@ -87,6 +87,8 @@ public class XareaController {
     //日间铁骑
     @GetMapping("selectcavalryRJ")
     public ResultBean selectcavalryRJ() {
+        ResultBean resultBean = xareaService.selectcavalryRJ();
+        System.out.println(resultBean.getData());
         return xareaService.selectcavalryRJ();
     }
 

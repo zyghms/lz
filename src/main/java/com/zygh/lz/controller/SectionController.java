@@ -33,8 +33,8 @@ public class SectionController {
 
     //根据姓名，性别，职位，部门，领导模糊查询所有部门人员(查询人员的模糊查询)
     @GetMapping("selectAllBySection")
-    public ResultBean selectAllBySection(String sex,String staffPost,String staffName,String staffPid,String sectionName) {
-        return sectionService.selectAllBySection(sex,staffPost,staffName,staffPid,sectionName);
+    public ResultBean selectAllBySection(String sex,String staffPost,String staffName,String staffPid,String sectionName,String stafftype) {
+        return sectionService.selectAllBySection(sex,staffPost,staffName,staffPid,sectionName,stafftype);
     }
 
     //按层级推送
