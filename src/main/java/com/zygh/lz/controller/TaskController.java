@@ -74,7 +74,8 @@ public class TaskController {
     }
     //查询本大队的任务
     @GetMapping("selectTaskBySection")
-    public ResultBean selectTaskBySection(Integer sectionId,String taskTitle,String taskCreatetime,String taskFinishtime){return taskService.selectTaskBySection(sectionId,taskTitle,taskCreatetime,taskFinishtime);}
+    public ResultBean selectTaskBySection(Integer sectionId,String taskTitle,String taskCreatetime,String taskFinishtime){
+        return taskService.selectTaskBySection(sectionId,taskTitle,taskCreatetime,taskFinishtime);}
     //查询任务细节为空的任务数据
     @GetMapping("selectTaskDescribe")
     public ResultBean selectTaskDescribe(Integer sectionId,String taskTitle,String taskCreatetime,String taskFinishtime) {return taskService.selectTaskDescribe(sectionId,taskTitle,taskCreatetime,taskFinishtime);}

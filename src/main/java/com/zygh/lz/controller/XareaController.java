@@ -22,8 +22,8 @@ public class XareaController {
     }
 
     @PostMapping("insertXarea")
-    public ResultBean insertXarea(Xarea xarea,Integer staffId) {
-        return xareaService.insertXarea(xarea,staffId);
+    public ResultBean insertXarea(Xarea xarea) {
+        return xareaService.insertXarea(xarea);
     }
 
     //修改
@@ -40,8 +40,8 @@ public class XareaController {
 
     //根据名字模糊查询
     @GetMapping("selectXareaByName")
-    public ResultBean selectXareaByName(String name) {
-        return xareaService.selectXareaByName(name);
+    public ResultBean selectXareaByName(String name,String battalion,String detachment) {
+        return xareaService.selectXareaByName(name,battalion,detachment);
     }
 
     //查询所有区域

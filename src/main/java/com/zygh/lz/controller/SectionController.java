@@ -58,6 +58,9 @@ public class SectionController {
     public ResultBean selectBySectionId(Integer sectionId,String staffHierarchy){
         return sectionService.selectBySectionId(sectionId,staffHierarchy);
     }
-
-
+    //根据大队id查询大队下面的中队
+    @GetMapping("selectDetachmentByid")
+    public ResultBean selectDetachmentByid(Integer id){
+        return sectionService.selectDetachmentByid(id);
+    }
 }

@@ -55,4 +55,13 @@ public class buttJointController {
         return xareaServce.selectInformant();
     }
 
+    //任务组信息
+    @GetMapping("selectTaskSetInfo")
+    public ResultBean selectTaskSetInfo(){return xareaServce.selectTaskSetInfo();}
+    //任务信息
+    @GetMapping("selectTaskInfo")
+    public ResultBean selectTaskInfo(){
+        return xareaServce.selectTaskInfo();}
+
+
 }

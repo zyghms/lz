@@ -16,7 +16,6 @@ public class DutyController {
 
     //责任明细
     @GetMapping("selectAllDuty")
-    @ViLog(logType = "1",module = "selectAllDuty,责任明细查询")
     public ResultBean selectAllDuty(){
         return dutyService.selectAllDuty();
     }
@@ -24,27 +23,23 @@ public class DutyController {
 
     //模糊查询
     @GetMapping("seleteDimAsset")
-    @ViLog(logType = "1",module = "seleteDimAsset,责任明细模糊查询")
     public ResultBean seleteDimAsset(Duty duty){
         return dutyService.seleteDimAsset(duty);
     }
 
     //删除
     @GetMapping("deleteSomeDuty")
-    @ViLog(logType = "4",module = "deleteSomeDuty,道路责任明细删除")
     public ResultBean deleteSomeDuty(Integer id){
         return dutyService.delDuty(id);
     }
 
     //修改
     @GetMapping("updateDuty")
-    @ViLog(logType = "3",module = "updateDuty,道路责任明细修改")
     public ResultBean updateDuty(Duty duty){
         return dutyService.updateDuty(duty);
     }
     //新增
     @PostMapping("insertDuty")
-    @ViLog(logType = "2",module = "insertDuty,道路责任明细新增")
     public ResultBean insertDuty(Duty duty){
         return dutyService.addDuty(duty);
     }
