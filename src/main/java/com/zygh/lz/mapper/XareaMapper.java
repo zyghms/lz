@@ -34,7 +34,8 @@ public interface XareaMapper {
                                        @Param("type") String type);
 
     //根据名字模糊查询
-    List<Xarea> selectXareaByName(String Name);
+    List<Xarea> selectXareaByName(@Param("Name") String Name,
+                                  @Param("battalion") String battalion,@Param("detachment") String detachment);
 
     //查询所有区域
     List<Xarea> selectXareaAll();
@@ -241,4 +242,9 @@ public interface XareaMapper {
 
     //根据区域名字模糊匹配部署警力
     List<HashMap> selctStrengthById(Xarea xarea);
+
+    //任务组信息
+    List<Xarea> selectTaskSetInfo();
+    //任务信息
+    List<Xarea> selectTaskInfo();
 }

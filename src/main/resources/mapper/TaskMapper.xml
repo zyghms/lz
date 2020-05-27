@@ -238,7 +238,7 @@
         WHERE t.sys_problem_id=p.problem_id and s.sys_section_id=f.sys_section_id
         AND f.sys_staff_id=p.sys_staff_id
         <if test="sectionId != null and sectionId != ''">
-            and f.sys_section_id=#{sectionId}
+            and s.section_pid=#{sectionId}
         </if>
         <if test="taskState != null and taskState != ''">
             AND task_state=#{taskState}
@@ -290,10 +290,14 @@
     </delete>
     <!--查询本大队的任务-->
     <select id="selectTaskBySection" resultType="map">
-        select t.*,f.*,s.*,(SELECT staff_name FROM staff WHERE sys_staff_id=launch_staff_id) as launchName,(SELECT
+        select t.*,f.*,s.section_name,(SELECT staff_name FROM staff WHERE sys_staff_id=launch_staff_id) as launchName,(SELECT
         staff_name FROM staff WHERE sys_staff_id=accept_staff_id) AS acceptName FROM task t,staff f,section s WHERE
-        t.accept_staff_id=f.sys_staff_id
-        and f.sys_section_id=s.sys_section_id AND s.sys_section_id = #{sectionId}
+        t.launch_staff_id=f.sys_staff_id
+        and f.sys_section_id=s.sys_section_id
+        <if test="sectionId != null and sectionId != ''">
+            AND s.sys_section_id = #{sectionId}
+        </if>
+
         <if test="taskTitle != null and taskTitle != ''">
             AND t.task_title LIKE CONCAT('%',#{taskTitle},'%')
         </if>

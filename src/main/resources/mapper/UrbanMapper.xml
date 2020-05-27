@@ -89,7 +89,7 @@
     <!--按照大队统计各管辖区域发现问题数目。统计-->
     <select id="selectUrbanByCount" resultType="map">
         SELECT u.urban_name,COUNT(distinct p.problem_id) as num FROM urban u LEFT JOIN section s ON
-        u.sys_section_id=s.sys_section_id LEFT JOIN staff f ON s.sys_section_id=f.sys_section_id
+        u.sys_section_id=s.section_pid LEFT JOIN staff f ON s.sys_section_id=f.sys_section_id
         LEFT JOIN problem p ON f.sys_staff_id=p.sys_staff_id
         <where>
             <if test="sectionId != null and sectionId != ''">

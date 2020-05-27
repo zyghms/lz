@@ -39,4 +39,7 @@ public interface SectionMapper {
     //根据部门id查询所有部门人员
     List<Object> selectBySectionId(@Param("SectionId") Integer SectionId,
                                    @Param("staffHierarchy") String staffHierarchy);
+
+    //根据大队id查询大队下面的中队
+    List<Section> selectDetachmentByid(Integer id);
 }

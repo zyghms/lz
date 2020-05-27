@@ -43,19 +43,20 @@ public class problemServiceImpl implements problemService {
 
         /*坐标纠偏转换*/
         GPSTransformMars gpsTransformMars = new GPSTransformMars();
-        double x = Double.valueOf(problem.getProblemGpsX());
-        double y = Double.valueOf(problem.getProblemGpsY());
-        System.out.println("转换前x：" + x);
-        System.out.println("转换前y：" + y);
-        double[] m = gpsTransformMars.transLatLng(x, y);
-        problem.setProblemGpsX(String.valueOf(m[0]));
-        problem.setProblemGpsY(String.valueOf(m[1]));
+        if (problem.getProblemGpsX() != null) {
+            double x = Double.valueOf(problem.getProblemGpsX());
+            double y = Double.valueOf(problem.getProblemGpsY());
+            //System.out.println("转换前x：" + x);
+            //System.out.println("转换前y：" + y);
+            double[] m = gpsTransformMars.transLatLng(x, y);
+            problem.setProblemGpsX(String.valueOf(m[0]));
+            problem.setProblemGpsY(String.valueOf(m[1]));
 
-        System.out.println("转换后x：" + m[0]);
-        System.out.println("转换后y：" + m[1]);
+        }
+
         int i = problemMapper.insertSelective(problem);
-        if (i > 0) {
-            Problem problem1 = problemMapper.selectByProblemEnd();
+        Problem problem1 = problemMapper.selectByProblemEnd();
+        if (i > 0 && problem1 != null) {
             message message = new message();
             message.setMessageType("1");
             message.setMessagePid(problem1.getProblemId());
@@ -263,33 +264,35 @@ public class problemServiceImpl implements problemService {
      * @return
      */
     @Override
-    public ResultBean selectDims(HttpServletRequest request,Integer sysStaffId, String roadType, String staffName, String sectionName, String problemStrat, String staffHierarchy, String beginTime, String endTime, String problemCheck, String problemDetail) {
+    public ResultBean selectDims(HttpServletRequest request, Integer sysStaffId, String roadType, String staffName, String sectionName, String problemStrat, String staffHierarchy, String beginTime, String endTime, String problemCheck, String problemDetail) {
         Staff staff = staffMapper.selectByPrimaryKey(sysStaffId);
         List<Object> problemList = null;
         //提取个人信息中得所属大队
         Section section = sectionMapper.selectByPrimaryKey(staff.getSysSectionId());
         sectionName = section.getSectionName();
         String Hierarchy = staff.getStaffHierarchy();
-        if (Hierarchy.equals("二级路长") || Hierarchy.equals("一级路长")) {
-            staffName = staff.getStaffName();
-            problemList = this.problemMapper.selectDim(roadType, staffName, sectionName, problemStrat, staffHierarchy, beginTime, endTime, problemCheck,problemDetail);
-            if (problemList.size() > 0 || problemList.size() == 0) {
+            if (Hierarchy.equals("二级路长") || Hierarchy.equals("一级路长")) {
+                staffName = staff.getStaffName();
+                problemList = this.problemMapper.selectDim(roadType, staffName, sectionName, problemStrat, staffHierarchy, beginTime, endTime, problemCheck, problemDetail);
+                if (problemList.size() > 0 || problemList.size() == 0) {
+                    return ResultUtil.setOK("success", problemList);
+                }
+            } else if (Hierarchy.equals("总路长") || Hierarchy.equals("分管路长")) {
+                staffName = null;
+                problemList = this.problemMapper.selectDim(roadType, staffName, sectionName, problemStrat, staffHierarchy, beginTime, endTime, problemCheck, problemDetail);
+                if (problemList.size() > 0 || problemList.size() == 0) {
+                    return ResultUtil.setOK("success", problemList);
+                }
+            }else if (staff.getStaffNum().equals("2245") || staff.getStaffNum().equals("007828")) {
+                problemList = this.problemMapper.selectDim(roadType, staffName, sectionName, problemStrat, staffHierarchy, beginTime, endTime, problemCheck, problemDetail);
                 return ResultUtil.setOK("success", problemList);
-            }
-        } else if (Hierarchy.equals("总路长") || Hierarchy.equals("分管路长")) {
-            staffName = null;
-            problemList = this.problemMapper.selectDim(roadType, staffName, sectionName, problemStrat, staffHierarchy, beginTime, endTime, problemCheck,problemDetail);
-            if (problemList.size() > 0 || problemList.size() == 0) {
-                return ResultUtil.setOK("success", problemList);
-            }
-        } else {
-            staffName = null;
-            sectionName = null;
-            problemList = this.problemMapper.selectDim(roadType, staffName, sectionName, problemStrat, staffHierarchy, beginTime, endTime, problemCheck,problemDetail);
-            if (problemList.size() > 0 || problemList.size() == 0) {
-                System.out.println("======"+problemList);
-                return ResultUtil.setOK("success", problemList);
-            }
+            } else {
+                staffName = null;
+                sectionName = null;
+                problemList = this.problemMapper.selectDim(roadType, staffName, sectionName, problemStrat, staffHierarchy, beginTime, endTime, problemCheck, problemDetail);
+                if (problemList.size() > 0 || problemList.size() == 0) {
+                    return ResultUtil.setOK("success", problemList);
+                }
         }
         return ResultUtil.setError(SystemCon.RERROR1, "error", null);
 
@@ -729,7 +732,13 @@ public class problemServiceImpl implements problemService {
         List<Problem> problemList4 = problemMapper.selectProblemByRosove("协调解决");
         Map<String, Object> map = null;
         List<Object> list = new ArrayList<>();
-        int[] str = new int[]{25, 26, 27, 28, 29, 30};
+        List<Section> sections = sectionMapper.selectAllSection();
+        //int[] str = new int[]{25, 26, 27, 28, 29, 30, 86};
+        int[] str = new int[255];
+        for (int p = 0; p < sections.size(); p++) {
+            str[p] = sections.get(p).getSysSectionId();
+
+        }
         List<Problem> problemtotal2 = null;
         for (int u = 0; u < str.length; u++) {
             map = new HashMap<>();
@@ -761,6 +770,7 @@ public class problemServiceImpl implements problemService {
         json.put("统计", sectiontotal);
         json.put("count", list);
         return ResultUtil.setOK("success", json);
+
     }
 
 

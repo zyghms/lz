@@ -83,12 +83,12 @@ public class XareaServiceImpl implements xareaService {
      * @return
      */
     @Override
-    public ResultBean insertXarea(Xarea xarea, Integer staffId) {
+    public ResultBean insertXarea(Xarea xarea) {
         int i = xareaMapper.insertSelective(xarea);
         if (i > 0) {
             Xarea xarea1 = xareaMapper.selectXareaEnd();
             Xrelation xrelation = new Xrelation();
-            xrelation.setStaffId(staffId);
+            xrelation.setStaffId(xarea.getStaffId());
             xrelation.setXareaId(xarea1.getId());
             return ResultUtil.execOp(xrelationMapper.insertSelective(xrelation), "新增");
         }
@@ -102,12 +102,17 @@ public class XareaServiceImpl implements xareaService {
 
     @Override
     public ResultBean deleteXarea(Integer id) {
-        return ResultUtil.execOp(xareaMapper.deleteByPrimaryKey(id), "删除");
+        int i = xareaMapper.deleteByPrimaryKey(id);
+        if(i>0){
+            xrelationMapper.deleteByPrimaryKey(id);
+            return ResultUtil.execOp(i, "删除");
+        }
+        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
     }
 
     @Override
-    public ResultBean selectXareaByName(String name) {
-        List<Xarea> xareas = xareaMapper.selectXareaByName(name);
+    public ResultBean selectXareaByName(String Name,String battalion,String detachment) {
+        List<Xarea> xareas = xareaMapper.selectXareaByName(Name,battalion,detachment);
         if (xareas.size() >= 0) {
             return ResultUtil.setOK("success", xareas);
         }
@@ -1001,6 +1006,7 @@ public class XareaServiceImpl implements xareaService {
     /**
      * 对接市局接口
      * 根据不同条件查询标注信息
+     *
      * @param xarea
      * @return
      */
@@ -1018,6 +1024,26 @@ public class XareaServiceImpl implements xareaService {
     @Override
     public ResultBean selctStrengthById(Xarea xarea) {
         return ResultUtil.setOK("success", xareaMapper.selctStrengthById(xarea));
+    }
+
+    /**
+     * 任务组信息
+     *
+     * @return
+     */
+    @Override
+    public ResultBean selectTaskSetInfo() {
+        return ResultUtil.setOK("success", xareaMapper.selectTaskSetInfo());
+    }
+
+    /**
+     * 任务信息
+     *
+     * @return
+     */
+    @Override
+    public ResultBean selectTaskInfo() {
+        return ResultUtil.setOK("success", xareaMapper.selectTaskInfo());
     }
 
 

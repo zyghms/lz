@@ -29,6 +29,16 @@ public class Xarea {
 
     private String stafftype;
 
+    private Integer staffId;
+
+    public Integer getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(Integer staffId) {
+        this.staffId = staffId;
+    }
+
     public String getStafftype() {
         return stafftype;
     }

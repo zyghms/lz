@@ -11,7 +11,7 @@ public interface xareaService {
     ResultBean selectXareabycondition(String battalion, String detachment, String station, String leader, String grid, String type);
 
     //新增
-    ResultBean insertXarea(Xarea xarea,Integer staffId);
+    ResultBean insertXarea(Xarea xarea);
 
     //修改
     ResultBean updateXarea(Xarea xarea);
@@ -20,7 +20,7 @@ public interface xareaService {
     ResultBean deleteXarea(Integer id);
 
     //根据名字模糊查询
-    ResultBean selectXareaByName(String Name);
+    ResultBean selectXareaByName(String Name,String battalion,String detachment);
 
     //查询所有区域
     ResultBean selectXareaAll();
@@ -91,6 +91,9 @@ public interface xareaService {
     ResultBean selectPoliceNumber(Xarea xarea);
     //根据区域查询相应警力
     ResultBean selctStrengthById(Xarea xarea);
-
+    //任务组信息
+    ResultBean selectTaskSetInfo();
+    //任务信息
+    ResultBean selectTaskInfo();
 
 }
