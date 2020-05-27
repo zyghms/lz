@@ -1,6 +1,9 @@
 package com.zygh.lz.service.impl;
 
+import com.zygh.lz.admin.Staff;
 import com.zygh.lz.admin.Xdeclare;
+import com.zygh.lz.constant.SystemCon;
+import com.zygh.lz.mapper.StaffMapper;
 import com.zygh.lz.mapper.XdeclareMapper;
 import com.zygh.lz.service.xdeclareService;
 import com.zygh.lz.util.ResultUtil;
@@ -14,6 +17,8 @@ import java.util.Date;
 public class xdeclareServiceImpl implements xdeclareService {
     @Autowired
     private XdeclareMapper xdeclareMapper;
+    @Autowired
+    private StaffMapper staffMapper;
 
     /**
      * 新增申报
@@ -24,5 +29,17 @@ public class xdeclareServiceImpl implements xdeclareService {
     public ResultBean insertXdeclare(Xdeclare xdeclare) {
         xdeclare.setEstablishtime(new Date());
         return ResultUtil.execOp(xdeclareMapper.insertSelective(xdeclare),"新增");
+    }
+
+    @Override
+    public ResultBean selectDefaultMan(Integer staffid) {
+        //查询当前登录人信息
+        Staff staff = staffMapper.selectByPrimaryKey(staffid);
+        //查询当前登录人直系领导
+        Staff staff1 = staffMapper.selectStaffBypid(staff.getStafffPid());
+        if(staff1!=null){
+            return ResultUtil.setOK("success",staff1);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1,"error","没有直系领导，请联系管理员！");
     }
 }

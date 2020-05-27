@@ -236,6 +236,9 @@ public class taskServiceImpl implements taskService {
      */
     @Override
     public ResultBean selectTaskBySection(Integer sectionId,String taskTitle,String taskCreatetime,String taskFinishtime) {
+        if(sectionId==74){
+            sectionId=null;
+        }
         List<Task> tasks = taskMapper.selectTaskBySection(sectionId,taskTitle,taskCreatetime,taskFinishtime);
         if (tasks.size() > 0 || tasks.size() == 0) {
             return ResultUtil.setOK("success", tasks);

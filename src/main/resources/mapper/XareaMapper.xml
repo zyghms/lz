@@ -249,7 +249,13 @@
         SELECT * from xarea
         <where>
             <if test="Name!=null and Name!='' ">
-                `name` LIKE CONCAT('%',#{Name},'%')
+                and `name` LIKE CONCAT('%',#{Name},'%')
+            </if>
+            <if test="battalion!=null and battalion!='' ">
+                and battalion=#{battalion}
+            </if>
+            <if test="detachment!=null and detachment!='' ">
+                AND section_Zid=#{detachment}
             </if>
         </where>
     </select>
@@ -1317,5 +1323,16 @@
             and battalion = #{battalion}
         </if>
         GROUP BY xl.staff_id
+    </select>
+    <!--对接市局-->
+    <!--任务组信息-->
+    <select id="selectTaskSetInfo" resultType="map">
+        SELECT s.section_name AS RWZMC,CONCAT_WS('-',s.section_name,x.gridding,x.name) AS RWZMS
+        FROM xarea x,section s WHERE x.section_Did=s.sys_section_id AND gridding LIKE '%网格%'  GROUP BY gridding
+    </select>
+    <!--任务信息-->
+    <select id="selectTaskInfo" resultType="map">
+        SELECT s.section_name AS RWMC,CONCAT_WS('-',s.section_name,x.gridding,x.name) AS RWMS
+        FROM xarea x,section s WHERE x.section_Zid=s.sys_section_id AND gridding LIKE '%网格%'  GROUP BY gridding
     </select>
 </mapper>

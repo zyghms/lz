@@ -7,4 +7,7 @@ public interface xdeclareService {
 
     //新增
     ResultBean insertXdeclare(Xdeclare xdeclare);
+
+    //上报默认人
+    ResultBean selectDefaultMan(Integer staffid);
 }

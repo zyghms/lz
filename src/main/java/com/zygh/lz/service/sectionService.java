@@ -18,7 +18,8 @@ public interface sectionService {
     ResultBean selectAllSectionInfo();
     //部门人员信息查询那里的模糊查询
     ResultBean selectSectionByCt(String sex,String staffHierarchy,String sectionName);
-
     //根据部门id查询所有部门人员
     ResultBean selectBySectionId(Integer sectionId,String staffHierarchy);
+    //根据大队id查询大队下面的中队
+    ResultBean selectDetachmentByid(Integer id);
 }

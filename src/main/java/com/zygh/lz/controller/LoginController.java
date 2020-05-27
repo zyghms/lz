@@ -42,15 +42,11 @@ public class LoginController {
         return staffService.modifuByPass(staff);
     }
 
-
-
     //删除
     @GetMapping("delUserBySysId")
     public ResultBean delUserBySysId(Integer id){
         return staffService.delStaffInfoById(id);
     }
-
-
     //登录
     @PostMapping("appLogin")
     public ResultBean appLogin(String user, String password,String IMEI,String sf){

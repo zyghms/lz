@@ -334,7 +334,7 @@
         (SELECT staff_name FROM staff WHERE sys_staff_id=p.accept_id) AS acceptName
         FROM problem p,staff s,section se,problemtype y
         <where>
-            p.sys_staff_id=s.sys_staff_id AND
+            p.accept_id=s.sys_staff_id AND
             s.sys_section_id=se.sys_section_id
             AND p.problem_type=y.id
             <if test="roadName!=null and roadName!='' ">
@@ -446,7 +446,7 @@
         SELECT COUNT(p.problem_id) as num FROM section s,staff f,problem p WHERE
         s.sys_section_id=f.sys_section_id AND f.sys_staff_id=p.sys_staff_id
         <if test="sectionId != null and sectionId !=''">
-            and f.sys_section_id=#{sectionId}
+            and s.section_pid=#{sectionId}
         </if>
         <if test="problemState != null and problemState !=''">
             AND p.problem_state=#{problemState}

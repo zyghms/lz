@@ -118,7 +118,7 @@ public class noticeSerciceImpl implements noticeService {
             notice.get(i).setNoticeSectionName(sectionname);
 
         }
-        System.out.println("个数："+notice.size());
+       // System.out.println("个数："+notice.size());
         /*LinkedHashMap<String, Object> json = new LinkedHashMap<>();
         json.put("content", notice);*/
         if(notice.size()>0||notice.size()==0){

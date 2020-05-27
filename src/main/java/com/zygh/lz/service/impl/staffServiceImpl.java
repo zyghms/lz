@@ -8,6 +8,7 @@ import com.zygh.lz.util.DataTime;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.util.md5;
 import com.zygh.lz.vo.ResultBean;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.omg.PortableInterceptor.INACTIVE;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,10 @@ public class staffServiceImpl implements staffService {
                 Subsystem subsystem = subsystemMapper.selectByPrimaryKey(subsystemid);
                 subsystems.add(subsystem);
             }
+            //封装用户登录数据
+            UsernamePasswordToken token =new UsernamePasswordToken(staff_tel,staff_password);
             LinkedHashMap<String, Object> json = new LinkedHashMap<>();
+            json.put("token",token);
             json.put("staff", staff);
             json.put("subsystems", subsystems);
             return ResultUtil.setOK("登录成功", json);
@@ -78,7 +82,8 @@ public class staffServiceImpl implements staffService {
      */
     @Override
     public ResultBean register(Staff staff) {
-        md5.MD5Encode(staff.getStaffPassword(), "utf-8");
+        String password = md5.MD5Encode(staff.getStaffPassword(), "utf-8");
+        staff.setStaffPassword(password);
         return ResultUtil.execOp(staffMapper.insertSelective(staff), "注册");
     }
 
@@ -105,6 +110,8 @@ public class staffServiceImpl implements staffService {
      */
     @Override
     public ResultBean updaStaffInfoById(Staff staff) {
+        String password = md5.MD5Encode(staff.getStaffPassword(), "utf-8");
+        staff.setStaffPassword(password);
         return ResultUtil.execOp(staffMapper.updateByPrimaryKeySelective(staff), "修改");
     }
 

@@ -136,6 +136,20 @@ public class sectionServiceImpl implements sectionService {
         return ResultUtil.setError(SystemCon.RERROR1,"error",null);
     }
 
+    /**
+     * 根据大队id查询大队下面的中队
+     * @param id
+     * @return
+     */
+    @Override
+    public ResultBean selectDetachmentByid(Integer id) {
+        List<Section> sections = sectionMapper.selectDetachmentByid(id);
+        if(sections.size()>0){
+            return ResultUtil.setOK("success",sections);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+    }
+
 
     private List<Section> getChild(int id, List<Section> sections) {//int id  id 是指当前菜单id，rootMenu是指要查找的列表
         List<Section> childList = new ArrayList<>();
