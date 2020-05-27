@@ -15,6 +15,8 @@ public class Gps {
 
     private Integer sysPatrolRecordId;
 
+
+
     public Integer getSysGpsId() {
         return sysGpsId;
     }
