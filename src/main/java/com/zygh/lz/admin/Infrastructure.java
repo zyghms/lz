@@ -1,6 +1,15 @@
 package com.zygh.lz.admin;
 
-public class Infrastructure {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Infrastructure implements Serializable{
     private Integer sysInfrastructureId;
 
     private Integer sysRoadId;

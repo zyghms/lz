@@ -1,6 +1,15 @@
 package com.zygh.lz.admin;
 
-public class Xrelation {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Xrelation implements Serializable{
     private Integer id;
 
     private Integer staffId;
@@ -10,44 +19,4 @@ public class Xrelation {
     private String conmnet;
 
     private Integer pcty;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getStaffId() {
-        return staffId;
-    }
-
-    public void setStaffId(Integer staffId) {
-        this.staffId = staffId;
-    }
-
-    public Integer getXareaId() {
-        return xareaId;
-    }
-
-    public void setXareaId(Integer xareaId) {
-        this.xareaId = xareaId;
-    }
-
-    public String getConmnet() {
-        return conmnet;
-    }
-
-    public void setConmnet(String conmnet) {
-        this.conmnet = conmnet == null ? null : conmnet.trim();
-    }
-
-    public Integer getPcty() {
-        return pcty;
-    }
-
-    public void setPcty(Integer pcty) {
-        this.pcty = pcty;
-    }
 }
