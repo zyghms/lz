@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.UrbanMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Urban">
+<mapper namespace="com.zygh.lz.dao.UrbanMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Urban">
         <id column="sys_urban_id" property="sysUrbanId" jdbcType="INTEGER"/>
         <result column="sys_section_id" property="sysSectionId" jdbcType="INTEGER"/>
         <result column="urban_name" property="urbanName" jdbcType="VARCHAR"/>
@@ -19,13 +19,13 @@
     delete from urban
     where sys_urban_id = #{sysUrbanId,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Urban">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Urban">
     insert into urban (sys_urban_id, sys_section_id, urban_name
       )
     values (#{sysUrbanId,jdbcType=INTEGER}, #{sysSectionId,jdbcType=INTEGER}, #{urbanName,jdbcType=VARCHAR}
       )
   </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Urban">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Urban">
         insert into urban
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sysUrbanId != null">
@@ -50,7 +50,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Urban">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Urban">
         update urban
         <set>
             <if test="sysSectionId != null">
@@ -62,7 +62,7 @@
         </set>
         where sys_urban_id = #{sysUrbanId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Urban">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Urban">
     update urban
     set sys_section_id = #{sysSectionId,jdbcType=INTEGER},
       urban_name = #{urbanName,jdbcType=VARCHAR}

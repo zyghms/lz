@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.TaskMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Task">
+<mapper namespace="com.zygh.lz.dao.TaskMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Task">
         <id column="sys_task_id" property="sysTaskId" jdbcType="INTEGER"/>
         <result column="task_num" property="taskNum" jdbcType="VARCHAR"/>
         <result column="sys_problem_id" property="sysProblemId" jdbcType="INTEGER"/>
@@ -31,7 +31,7 @@
     delete from task
     where sys_task_id = #{sysTaskId,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Task">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Task">
     insert into task (sys_task_id, task_num, sys_problem_id, 
       launch_staff_id, accept_staff_id, task_state, 
       task_createtime, task_finishtime, task_title, 
@@ -43,7 +43,7 @@
       #{taskDescribe,jdbcType=VARCHAR}, #{taskMoney,jdbcType=VARCHAR}, #{taskPlanMoney,jdbcType=VARCHAR}, 
       #{taskDetail,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Task">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Task">
         insert into task
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sysTaskId != null">
@@ -128,7 +128,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Task">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Task">
         update task
         <set>
             <if test="taskNum != null">
@@ -170,7 +170,7 @@
         </set>
         where sys_task_id = #{sysTaskId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Task">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Task">
     update task
     set task_num = #{taskNum,jdbcType=VARCHAR},
       sys_problem_id = #{sysProblemId,jdbcType=INTEGER},

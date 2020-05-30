@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.XlevelserviceMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Xlevelservice">
+<mapper namespace="com.zygh.lz.dao.XlevelserviceMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Xlevelservice">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="callsign" property="callsign" jdbcType="VARCHAR"/>
         <result column="place" property="place" jdbcType="VARCHAR"/>
@@ -27,7 +27,7 @@
     delete from xlevelservice
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Xlevelservice">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Xlevelservice">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -40,7 +40,7 @@
         #{location,jdbcType=VARCHAR}, #{hierarchy,jdbcType=VARCHAR}, #{conment,jdbcType=VARCHAR}
         )
     </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Xlevelservice">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Xlevelservice">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -104,7 +104,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Xlevelservice">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Xlevelservice">
         update xlevelservice
         <set>
             <if test="callsign != null">
@@ -137,7 +137,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Xlevelservice">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Xlevelservice">
     update xlevelservice
     set callsign = #{callsign,jdbcType=VARCHAR},
       place = #{place,jdbcType=VARCHAR},

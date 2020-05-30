@@ -1,6 +1,6 @@
 package com.zygh.lz.service;
 
-import com.zygh.lz.admin.Gps;
+import com.zygh.lz.entity.Gps;
 import com.zygh.lz.vo.ResultBean;
 
 public interface GpsService {

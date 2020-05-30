@@ -1,8 +1,8 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Patrolrecord;
-import com.zygh.lz.mapper.PatrolrecordMapper;
-import com.zygh.lz.service.patrolrecordService;
+import com.zygh.lz.entity.Patrolrecord;
+import com.zygh.lz.dao.PatrolrecordMapper;
+import com.zygh.lz.service.PatrolrecordService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 public class PatrolrecordController {
     @Autowired
-    private patrolrecordService patrolrecordService;
+    private PatrolrecordService patrolrecordService;
     @Autowired
     private PatrolrecordMapper patrolrecordMapper;
 

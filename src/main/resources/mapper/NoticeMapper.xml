@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.NoticeMapper" >
-  <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Notice" >
+<mapper namespace="com.zygh.lz.dao.NoticeMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Notice" >
     <id column="sys_notice_id" property="sysNoticeId" jdbcType="INTEGER" />
     <result column="notice_content" property="noticeContent" jdbcType="VARCHAR" />
     <result column="notice_url" property="noticeUrl" jdbcType="VARCHAR" />
@@ -27,7 +27,7 @@
     delete from notice
     where sys_notice_id = #{sysNoticeId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zygh.lz.admin.Notice" >
+  <insert id="insert" parameterType="com.zygh.lz.entity.Notice" >
     insert into notice (sys_notice_id, notice_content, notice_url, 
       notice_send, notice_accept, notice_title, 
       notice_time, notice_detail)
@@ -35,7 +35,7 @@
       #{noticeSend,jdbcType=INTEGER}, #{noticeAccept,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=VARCHAR}, 
       #{noticeTime,jdbcType=TIMESTAMP}, #{noticeDetail,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.zygh.lz.admin.Notice" >
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Notice" >
     insert into notice
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sysNoticeId != null" >
@@ -90,7 +90,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Notice" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Notice" >
     update notice
     <set >
       <if test="noticeContent != null" >
@@ -117,7 +117,7 @@
     </set>
     where sys_notice_id = #{sysNoticeId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Notice" >
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Notice" >
     update notice
     set notice_content = #{noticeContent,jdbcType=VARCHAR},
       notice_url = #{noticeUrl,jdbcType=VARCHAR},

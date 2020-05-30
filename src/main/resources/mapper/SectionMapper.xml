@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.SectionMapper" >
-  <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Section" >
+<mapper namespace="com.zygh.lz.dao.SectionMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Section" >
     <id column="sys_section_id" property="sysSectionId" jdbcType="INTEGER" />
     <result column="section_pid" property="sectionPid" jdbcType="INTEGER" />
     <result column="section_name" property="sectionName" jdbcType="VARCHAR" />
@@ -22,7 +22,7 @@
     delete from section
     where sys_section_id = #{sysSectionId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zygh.lz.admin.Section" >
+  <insert id="insert" parameterType="com.zygh.lz.entity.Section" >
     insert into section (sys_section_id, section_pid, section_name, 
       section_position, section_tel, section_person
       )
@@ -30,7 +30,7 @@
       #{sectionPosition,jdbcType=VARCHAR}, #{sectionTel,jdbcType=VARCHAR}, #{sectionPerson,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zygh.lz.admin.Section" >
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Section" >
     insert into section
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sysSectionId != null" >
@@ -73,7 +73,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Section" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Section" >
     update section
     <set >
       <if test="sectionPid != null" >
@@ -94,7 +94,7 @@
     </set>
     where sys_section_id = #{sysSectionId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Section" >
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Section" >
     update section
     set section_pid = #{sectionPid,jdbcType=INTEGER},
       section_name = #{sectionName,jdbcType=VARCHAR},

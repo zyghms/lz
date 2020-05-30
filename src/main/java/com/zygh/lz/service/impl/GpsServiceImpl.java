@@ -1,9 +1,9 @@
 package com.zygh.lz.service.impl;
 
-import com.zygh.lz.admin.Gps;
-import com.zygh.lz.admin.Location;
-import com.zygh.lz.mapper.GpsMapper;
-import com.zygh.lz.mapper.LocationMapper;
+import com.zygh.lz.entity.Gps;
+import com.zygh.lz.entity.Location;
+import com.zygh.lz.dao.GpsMapper;
+import com.zygh.lz.dao.LocationMapper;
 import com.zygh.lz.service.GpsService;
 import com.zygh.lz.util.GCJ2WGSUtils;
 import com.zygh.lz.util.GPSTransformMars;

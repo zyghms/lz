@@ -1,6 +1,6 @@
 package com.zygh.lz.service;
 
-import com.zygh.lz.admin.Infrastructure;
+import com.zygh.lz.entity.Infrastructure;
 import com.zygh.lz.vo.ResultBean;
 
 public interface InfrastructureService {

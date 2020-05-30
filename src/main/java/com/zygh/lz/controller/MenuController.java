@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Menu;
-import com.zygh.lz.service.menuService;
+import com.zygh.lz.entity.Menu;
+import com.zygh.lz.service.MenuService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MenuController {
     @Autowired
-    private menuService menuService;
+    private MenuService menuService;
 
     //根据角色、根据子系统id推送菜单的函数
     @GetMapping("subMenu")

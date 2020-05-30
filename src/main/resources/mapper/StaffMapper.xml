@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.StaffMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Staff">
+<mapper namespace="com.zygh.lz.dao.StaffMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Staff">
         <id column="sys_staff_id" property="sysStaffId" jdbcType="INTEGER"/>
         <result column="staff_name" property="staffName" jdbcType="VARCHAR"/>
         <result column="staff_post" property="staffPost" jdbcType="VARCHAR"/>
@@ -26,7 +26,7 @@
 
         <result column="patrol_record_begintime" property="patrolRecordBegintime" jdbcType="TIMESTAMP"/>
         <result column="battalion" property="battalion" jdbcType="VARCHAR"/>
-        <association property="gps" javaType="com.zygh.lz.admin.Gps">
+        <association property="gps" javaType="com.zygh.lz.entity.Gps">
             <id property="sysGpsId" column="sys_gps_id"/>
             <result property="gpsX" column="gps_x"/>
             <result property="gpsY" column="gps_y"/>
@@ -56,7 +56,7 @@
     delete from staff
     where sys_staff_id = #{sysStaffId,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Staff">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Staff">
     insert into staff (sys_staff_id, staff_name, staff_post,
       staff_tel, sys_gps_id, sys_section_id,
       sys_role_id, staff_sex, staff_photo,
@@ -72,7 +72,7 @@
       #{stafftype,jdbcType=VARCHAR}, #{strength,jdbcType=VARCHAR}, #{changeShifts,jdbcType=VARCHAR},
       #{cellphonenumber,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Staff">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Staff">
         insert into staff
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sysStaffId != null">
@@ -193,7 +193,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Staff">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Staff">
         update staff
         <set>
             <if test="staffName != null">
@@ -253,7 +253,7 @@
         </set>
         where sys_staff_id = #{sysStaffId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Staff">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Staff">
     update staff
     set staff_name = #{staffName,jdbcType=VARCHAR},
       staff_post = #{staffPost,jdbcType=VARCHAR},
@@ -526,7 +526,7 @@
     </select>
 
     <!--根据岗位查询各大队在线民警-->
-    <select id="selectcountBysection" resultType="map" parameterType="com.zygh.lz.admin.Xarea">
+    <select id="selectcountBysection" resultType="map" parameterType="com.zygh.lz.entity.Xarea">
         SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from (
         select s.*,st.section_name,x.detachment
         from patrolrecord p,staff s,xarea x,xrelation xl,section st
@@ -565,7 +565,7 @@
 
 
     <!--根据岗位查询各大队下各中队在线民警-->
-    <select id="selectcountBydetachment" resultType="map" parameterType="com.zygh.lz.admin.Xarea">
+    <select id="selectcountBydetachment" resultType="map" parameterType="com.zygh.lz.entity.Xarea">
         SELECT sb.section_name as sectionName,COUNT(sb.sys_staff_id) as count from (
         select s.*,st.section_name,x.detachment
         from patrolrecord p,staff s,xarea x,xrelation xl,section st
@@ -611,7 +611,7 @@
 
 
     <!--根据岗位查询各中队在线民警详情-->
-    <select id="selectAllBysection" resultMap="BaseResultMap" parameterType="com.zygh.lz.admin.Xarea">
+    <select id="selectAllBysection" resultMap="BaseResultMap" parameterType="com.zygh.lz.entity.Xarea">
         SELECT *
         FROM patrolrecord p,staff s,xarea X,xrelation xl,section st,
         (SELECT * FROM gps g ORDER BY g.gps_time DESC) g

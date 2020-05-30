@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.SubsystemMapper" >
-  <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Subsystem" >
+<mapper namespace="com.zygh.lz.dao.SubsystemMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Subsystem" >
     <id column="sys_subsystem_id" property="sysSubsystemId" jdbcType="INTEGER" />
     <result column="subsystem_name" property="subsystemName" jdbcType="VARCHAR" />
     <result column="icon" property="icon" jdbcType="VARCHAR" />
@@ -23,7 +23,7 @@
     delete from subsystem
     where sys_subsystem_id = #{sysSubsystemId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zygh.lz.admin.Subsystem" >
+  <insert id="insert" parameterType="com.zygh.lz.entity.Subsystem" >
     insert into subsystem (sys_subsystem_id, subsystem_name, icon, 
       sref, sys_project_id, title, 
       subsystem_sort)
@@ -31,7 +31,7 @@
       #{sref,jdbcType=VARCHAR}, #{sysProjectId,jdbcType=INTEGER}, #{title,jdbcType=INTEGER}, 
       #{subsystemSort,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.zygh.lz.admin.Subsystem" >
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Subsystem" >
     insert into subsystem
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sysSubsystemId != null" >
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Subsystem" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Subsystem" >
     update subsystem
     <set >
       <if test="subsystemName != null" >
@@ -104,7 +104,7 @@
     </set>
     where sys_subsystem_id = #{sysSubsystemId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Subsystem" >
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Subsystem" >
     update subsystem
     set subsystem_name = #{subsystemName,jdbcType=VARCHAR},
       icon = #{icon,jdbcType=VARCHAR},

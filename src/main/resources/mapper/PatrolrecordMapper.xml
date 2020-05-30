@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.PatrolrecordMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Patrolrecord">
+<mapper namespace="com.zygh.lz.dao.PatrolrecordMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Patrolrecord">
         <id column="sys_patrol_record_id" property="sysPatrolRecordId" jdbcType="INTEGER"/>
         <result column="sys_staff_id" property="sysStaffId" jdbcType="INTEGER"/>
         <result column="patrol_record_begintime" property="patrolRecordBegintime" jdbcType="TIMESTAMP"/>
@@ -37,7 +37,7 @@
         <result column="section_person" property="sectionPerson" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <resultMap id="BaseResultMap1" type="com.zygh.lz.admin.Patrolrecord">
+    <resultMap id="BaseResultMap1" type="com.zygh.lz.entity.Patrolrecord">
         <id column="sys_patrol_record_id" property="sysPatrolRecordId" jdbcType="INTEGER"/>
         <result column="sys_staff_id" property="sysStaffId" jdbcType="INTEGER"/>
         <result column="patrol_record_begintime" property="patrolRecordBegintime" jdbcType="TIMESTAMP"/>
@@ -64,7 +64,7 @@
     delete from patrolrecord
     where sys_patrol_record_id = #{sysPatrolRecordId,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Patrolrecord">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Patrolrecord">
     insert into patrolrecord (sys_patrol_record_id, sys_staff_id, patrol_record_begintime, 
       patrol_record_endtime, patrol_record_picture, 
       patrol_record_video, patrol_record_gps, patrol_record_detail, 
@@ -74,7 +74,7 @@
       #{patrolRecordVideo,jdbcType=VARCHAR}, #{patrolRecordGps,jdbcType=VARCHAR}, #{patrolRecordDetail,jdbcType=VARCHAR}, 
       #{roadName,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Patrolrecord">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Patrolrecord">
         insert into patrolrecord
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sysPatrolRecordId != null">
@@ -135,7 +135,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Patrolrecord">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Patrolrecord">
         update patrolrecord
         <set>
 
@@ -166,7 +166,7 @@
         </set>
         where sys_patrol_record_id = #{sysPatrolRecordId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Patrolrecord">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Patrolrecord">
     update patrolrecord
     set sys_staff_id = #{sysStaffId,jdbcType=INTEGER},
       patrol_record_begintime = #{patrolRecordBegintime,jdbcType=TIMESTAMP},
@@ -501,7 +501,7 @@
     </select>
 
     <!--修改单独-->
-    <update id="updateByPrimaryKeySelectives" parameterType="com.zygh.lz.admin.Patrolrecord">
+    <update id="updateByPrimaryKeySelectives" parameterType="com.zygh.lz.entity.Patrolrecord">
         update patrolrecord
         <set>
             <if test="patrolRecordEndtime == null">

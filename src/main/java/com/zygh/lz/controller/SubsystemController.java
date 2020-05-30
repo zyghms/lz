@@ -1,6 +1,6 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.service.subsystemService;
+import com.zygh.lz.service.SubSystemService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SubsystemController {
     @Autowired
-    private subsystemService subsystemService;
+    private SubSystemService subsystemService;
 
     //查询所有子系统
     @GetMapping("selectAllSubsystem")

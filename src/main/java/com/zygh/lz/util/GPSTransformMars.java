@@ -1,6 +1,6 @@
 package com.zygh.lz.util;
 
-import com.zygh.lz.mapper.XareaMapper;
+import com.zygh.lz.dao.XareaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;

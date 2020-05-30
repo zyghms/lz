@@ -1,6 +1,6 @@
 package com.zygh.lz.service;
 
-import com.zygh.lz.admin.Xrelation;
+import com.zygh.lz.entity.Xrelation;
 import com.zygh.lz.vo.ResultBean;
 
 public interface XrelationService {

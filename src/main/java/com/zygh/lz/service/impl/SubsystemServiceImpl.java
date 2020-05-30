@@ -1,9 +1,9 @@
 package com.zygh.lz.service.impl;
 
-import com.zygh.lz.admin.Subsystem;
+import com.zygh.lz.entity.Subsystem;
 import com.zygh.lz.constant.SystemCon;
-import com.zygh.lz.mapper.SubsystemMapper;
-import com.zygh.lz.service.subsystemService;
+import com.zygh.lz.dao.SubsystemMapper;
+import com.zygh.lz.service.SubSystemService;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class SubsystemServiceImpl implements subsystemService {
+public class SubsystemServiceImpl implements SubSystemService {
     @Autowired
     private SubsystemMapper subsystemMapper;
 

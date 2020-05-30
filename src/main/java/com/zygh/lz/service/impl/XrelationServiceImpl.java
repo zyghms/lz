@@ -1,7 +1,7 @@
 package com.zygh.lz.service.impl;
 
-import com.zygh.lz.admin.Xrelation;
-import com.zygh.lz.mapper.XrelationMapper;
+import com.zygh.lz.dao.XrelationMapper;
+import com.zygh.lz.entity.Xrelation;
 import com.zygh.lz.service.XrelationService;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class XrelationServiceImpl implements XrelationService {
+
     @Autowired
     private XrelationMapper xrelationMapper;
 

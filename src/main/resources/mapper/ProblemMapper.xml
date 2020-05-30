@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.ProblemMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Problem">
+<mapper namespace="com.zygh.lz.dao.ProblemMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Problem">
         <id column="problem_id" property="problemId" jdbcType="INTEGER"/>
         <result column="problem_num" property="problemNum" jdbcType="VARCHAR"/>
         <result column="problem_type" property="problemType" jdbcType="INTEGER"/>
@@ -37,7 +37,7 @@
     delete from problem
     where problem_id = #{problemId,jdbcType=INTEGER} and problem_check='未审核'
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Problem">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Problem">
     insert into problem (problem_id, problem_num, problem_type, 
       problem_describe, problem_state, problem_picture, 
       problem_video, problem_gps_x, problem_gps_y, 
@@ -51,7 +51,7 @@
       #{sysPatrolRecordId,jdbcType=INTEGER}, #{sysStaffId,jdbcType=INTEGER}, #{roadName,jdbcType=VARCHAR}, 
       #{acceptId,jdbcType=INTEGER})
   </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Problem">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Problem">
         insert into problem
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="problemId != null">
@@ -154,7 +154,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Problem">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Problem">
         update problem
         <set>
             <if test="problemNum != null">
@@ -205,7 +205,7 @@
         </set>
         where problem_id = #{problemId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Problem">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Problem">
     update problem
     set problem_num = #{problemNum,jdbcType=VARCHAR},
       problem_type = #{problemType,jdbcType=INTEGER},
@@ -384,7 +384,7 @@
         ORDER BY problem_date DESC
     </select>
     <!--根据条件模糊查询不同部门的已解决和未解决的问题数-->
-    <select id="selectDimAll" resultType="com.zygh.lz.admin.ProblemDemo">
+    <select id="selectDimAll" resultType="com.zygh.lz.entity.ProblemDemo">
         select count(*) as count ,problem_state as problemResove,section_name as sectionName from problem AS p,staff AS s,section
         where p.`sys_staff_id` =s.`sys_staff_id`
 		AND s.`sys_section_id` =section.`sys_section_id`
@@ -394,7 +394,7 @@
         ORDER BY problem_date DESC
     </select>
     <!--根据条件模糊查询不同部门发现的问题数-->
-    <select id="selectDimAll1" resultType="com.zygh.lz.admin.ProblemDemo">
+    <select id="selectDimAll1" resultType="com.zygh.lz.entity.ProblemDemo">
         select count(*) as count ,problem_state as problemResove,section_name as sectionName from problem AS p,staff AS
         s,section
         where
@@ -407,7 +407,7 @@
         ORDER BY problem_date DESC
     </select>
     <!---->
-    <select id="selectDimAllSy" resultType="com.zygh.lz.admin.ProblemDemo">
+    <select id="selectDimAllSy" resultType="com.zygh.lz.entity.ProblemDemo">
          select count(*) as count ,problem_state as problemResove,section_name as sectionName from problem AS p,staff AS s,section
         where  problem_state=#{problem_resove}
         AND p.`sys_staff_id` =s.`sys_staff_id`

@@ -1,8 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Asset;
-import com.zygh.lz.service.assetService;
-import com.zygh.lz.util.ViLog;
+import com.zygh.lz.entity.Asset;
+import com.zygh.lz.service.AssetService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class AssetController {
     @Autowired
-    private assetService assetService;
+    private AssetService assetService;
 
     //资产新增
     @PostMapping("addAsset")

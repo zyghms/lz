@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Problem;
-import com.zygh.lz.service.problemService;
+import com.zygh.lz.entity.Problem;
+import com.zygh.lz.service.ProblemService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class ProblemController {
     @Autowired
-    private problemService problemService;
+    private ProblemService problemService;
 
     //新增
     @PostMapping("addProblem")

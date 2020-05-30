@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Role;
-import com.zygh.lz.service.roleService;
+import com.zygh.lz.entity.Role;
+import com.zygh.lz.service.RoleService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RoleController {
     @Autowired
-    private roleService roleService;
+    private RoleService roleService;
 
     //查询所有角色
     @GetMapping("selectAllRole")

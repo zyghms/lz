@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Location;
-import com.zygh.lz.service.locationService;
+import com.zygh.lz.entity.Location;
+import com.zygh.lz.service.LocationService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LocationController {
     @Autowired
-    private locationService locationService;
+    private LocationService locationService;
 
     @PostMapping("addLocation")
     public ResultBean addLocation(Location location){

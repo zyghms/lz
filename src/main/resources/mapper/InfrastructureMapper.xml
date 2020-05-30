@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.InfrastructureMapper" >
-  <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Infrastructure" >
+<mapper namespace="com.zygh.lz.dao.InfrastructureMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Infrastructure" >
     <id column="sys_infrastructure_id" property="sysInfrastructureId" jdbcType="INTEGER" />
     <result column="sys_road_id" property="sysRoadId" jdbcType="INTEGER" />
     <result column="infrastructure_name" property="infrastructureName" jdbcType="VARCHAR" />
@@ -25,7 +25,7 @@
     delete from infrastructure
     where sys_infrastructure_id = #{sysInfrastructureId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zygh.lz.admin.Infrastructure" >
+  <insert id="insert" parameterType="com.zygh.lz.entity.Infrastructure" >
     insert into infrastructure (sys_infrastructure_id, sys_road_id, infrastructure_name, 
       infrastructure_type, damage, capital, 
       department, locationDetails)
@@ -33,7 +33,7 @@
       #{infrastructureType,jdbcType=VARCHAR}, #{damage,jdbcType=VARCHAR}, #{capital,jdbcType=VARCHAR}, 
       #{department,jdbcType=VARCHAR}, #{locationdetails,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.zygh.lz.admin.Infrastructure" >
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Infrastructure" >
     insert into infrastructure
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sysInfrastructureId != null" >
@@ -88,7 +88,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Infrastructure" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Infrastructure" >
     update infrastructure
     <set >
       <if test="sysRoadId != null" >
@@ -115,7 +115,7 @@
     </set>
     where sys_infrastructure_id = #{sysInfrastructureId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Infrastructure" >
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Infrastructure" >
     update infrastructure
     set sys_road_id = #{sysRoadId,jdbcType=INTEGER},
       infrastructure_name = #{infrastructureName,jdbcType=VARCHAR},

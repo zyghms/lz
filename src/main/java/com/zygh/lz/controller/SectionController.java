@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Section;
-import com.zygh.lz.service.sectionService;
+import com.zygh.lz.entity.Section;
+import com.zygh.lz.service.SectionService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SectionController {
     @Autowired
-    private sectionService sectionService;
+    private SectionService sectionService;
 
     //新增部门
     @PostMapping("addSection")

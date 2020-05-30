@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.GpsMapper" >
-  <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Gps" >
+<mapper namespace="com.zygh.lz.dao.GpsMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Gps" >
     <id column="sys_gps_id" property="sysGpsId" jdbcType="INTEGER" />
     <result column="gps_x" property="gpsX" jdbcType="VARCHAR" />
     <result column="gps_y" property="gpsY" jdbcType="VARCHAR" />
@@ -23,7 +23,7 @@
     delete from gps
     where sys_gps_id = #{sysGpsId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zygh.lz.admin.Gps" >
+  <insert id="insert" parameterType="com.zygh.lz.entity.Gps" >
     insert into gps (sys_gps_id, gps_x, gps_y, 
       gps_z, gps_time, sys_staff_id, 
       sys_patrol_record_id)
@@ -31,7 +31,7 @@
       #{gpsZ,jdbcType=VARCHAR}, #{gpsTime,jdbcType=VARCHAR}, #{sysStaffId,jdbcType=INTEGER}, 
       #{sysPatrolRecordId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.zygh.lz.admin.Gps" >
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Gps" >
     insert into gps
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sysGpsId != null" >
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Gps" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Gps" >
     update gps
     <set >
       <if test="gpsX != null" >
@@ -104,7 +104,7 @@
     </set>
     where sys_gps_id = #{sysGpsId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Gps" >
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Gps" >
     update gps
     set gps_x = #{gpsX,jdbcType=VARCHAR},
       gps_y = #{gpsY,jdbcType=VARCHAR},

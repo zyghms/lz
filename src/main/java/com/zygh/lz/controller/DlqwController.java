@@ -1,10 +1,10 @@
 package com.zygh.lz.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.zygh.lz.admin.PaperValidationVo;
-import com.zygh.lz.admin.Staff;
+import com.zygh.lz.dao.StaffMapper;
+import com.zygh.lz.entity.PaperValidationVo;
+import com.zygh.lz.entity.Staff;
 import com.zygh.lz.constant.SystemCon;
-import com.zygh.lz.mapper.StaffMapper;
 import com.zygh.lz.util.Operation;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.util.ViLog;

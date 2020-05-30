@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Urban;
-import com.zygh.lz.service.urbanService;
+import com.zygh.lz.entity.Urban;
+import com.zygh.lz.service.UrbanService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UrbanController {
     @Autowired
-    private urbanService urbanService;
+    private UrbanService urbanService;
 
     //查询所有区域
     @GetMapping("selectAllUrban")

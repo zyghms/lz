@@ -1,30 +1,31 @@
 package com.zygh.lz.service.impl;
 
-import com.zygh.lz.admin.*;
+
 import com.zygh.lz.constant.SystemCon;
-import com.zygh.lz.mapper.*;
-import com.zygh.lz.service.xareaService;
+import com.zygh.lz.dao.*;
+import com.zygh.lz.entity.*;
+import com.zygh.lz.service.XareaService;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class XareaServiceImpl implements xareaService {
-    @Autowired
+public class XareaServiceImpl implements XareaService {
+    @Resource
     private XareaMapper xareaMapper;
-    @Autowired
+    @Resource
     private StaffMapper staffMapper;
-    @Autowired
+    @Resource
     private PatrolrecordMapper patrolrecordMapper;
-    @Autowired
+    @Resource
     private GpsMapper gpsMapper;
-    @Autowired
+    @Resource
     private XrelationMapper xrelationMapper;
 
     /**
@@ -88,7 +89,7 @@ public class XareaServiceImpl implements xareaService {
         if (i > 0) {
             Xarea xarea1 = xareaMapper.selectXareaEnd();
             Xrelation xrelation = new Xrelation();
-            xrelation.setStaffId(xarea.getStaffId());
+//            xrelation.setStaffId(xarea.getStaffId());
             xrelation.setXareaId(xarea1.getId());
             return ResultUtil.execOp(xrelationMapper.insertSelective(xrelation), "新增");
         }

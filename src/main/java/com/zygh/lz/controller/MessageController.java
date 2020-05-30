@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.message;
-import com.zygh.lz.service.messageService;
+import com.zygh.lz.entity.Message;
+import com.zygh.lz.service.MessageService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MessageController {
     @Autowired
-    private messageService messageService;
+    private MessageService messageService;
 
     //查询所有消息列表
     @GetMapping("slectAllmessage")
@@ -21,12 +21,12 @@ public class MessageController {
 
     //新增消息
     @PostMapping("addMessage")
-    public ResultBean addMessage(message message){
+    public ResultBean addMessage(Message message){
         return messageService.addMessage(message);
     }
     //修改消息 (逻辑删除)
     @GetMapping("updaMessage")
-    public ResultBean updaMessage(message message){
+    public ResultBean updaMessage(Message message){
         return messageService.updaMessage(message);
     }
     //删除

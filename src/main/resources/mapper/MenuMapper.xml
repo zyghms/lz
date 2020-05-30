@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.MenuMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Menu">
+<mapper namespace="com.zygh.lz.dao.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Menu">
         <id column="sys_menu_id" property="sysMenuId" jdbcType="INTEGER"/>
         <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
         <result column="menu_url" property="menuUrl" jdbcType="VARCHAR"/>
@@ -23,7 +23,7 @@
     delete from menu
     where sys_menu_id = #{sysMenuId,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Menu">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Menu">
     insert into menu (sys_menu_id, parent_id, menu_url, 
       menu_icon, menu_sort, menu_name, 
       sys_subsystem_id)
@@ -31,7 +31,7 @@
       #{menuIcon,jdbcType=VARCHAR}, #{menuSort,jdbcType=INTEGER}, #{menuName,jdbcType=VARCHAR}, 
       #{sysSubsystemId,jdbcType=INTEGER})
   </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Menu">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Menu">
         insert into menu
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sysMenuId != null">
@@ -80,7 +80,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Menu">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Menu">
         update menu
         <set>
             <if test="parentId != null">
@@ -104,7 +104,7 @@
         </set>
         where sys_menu_id = #{sysMenuId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Menu">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Menu">
     update menu
     set parent_id = #{parentId,jdbcType=INTEGER},
       menu_url = #{menuUrl,jdbcType=VARCHAR},

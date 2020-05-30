@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.DutyMapper" >
-  <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Duty" >
+<mapper namespace="com.zygh.lz.dao.DutyMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Duty" >
     <id column="sys_duty_id" property="sysDutyId" jdbcType="INTEGER" />
     <result column="suty_road" property="sutyRoad" jdbcType="VARCHAR" />
     <result column="sys_section_id" property="sysSectionId" jdbcType="INTEGER" />
@@ -27,7 +27,7 @@
     delete from duty
     where sys_duty_id = #{sysDutyId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zygh.lz.admin.Duty" >
+  <insert id="insert" parameterType="com.zygh.lz.entity.Duty" >
     insert into duty (sys_duty_id, suty_road, sys_section_id, 
       sys_road_id, fenguanstaff_id, totalstaff_id, 
       onestaff_id, twostaff_id)
@@ -35,7 +35,7 @@
       #{sysRoadId,jdbcType=INTEGER}, #{fenguanstaffId,jdbcType=INTEGER}, #{totalstaffId,jdbcType=INTEGER}, 
       #{onestaffId,jdbcType=INTEGER}, #{twostaffId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.zygh.lz.admin.Duty" >
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Duty" >
     insert into duty
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sysDutyId != null" >
@@ -90,7 +90,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Duty" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Duty" >
     update duty
     <set >
       <if test="sutyRoad != null" >
@@ -117,7 +117,7 @@
     </set>
     where sys_duty_id = #{sysDutyId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Duty" >
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Duty" >
     update duty
     set suty_road = #{sutyRoad,jdbcType=VARCHAR},
       sys_section_id = #{sysSectionId,jdbcType=INTEGER},

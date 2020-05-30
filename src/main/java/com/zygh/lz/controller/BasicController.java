@@ -1,8 +1,8 @@
 package com.zygh.lz.controller;
 
 import com.google.gson.GsonBuilder;
-import com.zygh.lz.admin.Basic;
-import com.zygh.lz.mapper.BasicMapper;
+import com.zygh.lz.entity.Basic;
+import com.zygh.lz.dao.BasicMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

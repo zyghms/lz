@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Road;
-import com.zygh.lz.service.roadService;
+import com.zygh.lz.entity.Road;
+import com.zygh.lz.service.RoadService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RoadController {
     @Autowired
-    private roadService roadService;
+    private RoadService roadService;
 
     //新增
     @PostMapping("addRoad")

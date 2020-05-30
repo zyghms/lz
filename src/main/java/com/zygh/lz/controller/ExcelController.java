@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.service.patrolrecordService;
-import com.zygh.lz.service.xlevelserviceService;
+import com.zygh.lz.service.PatrolrecordService;
+import com.zygh.lz.service.XlevelserviceService;
 import jxl.Workbook;
 import jxl.format.UnderlineStyle;
 import jxl.write.Border;
@@ -35,9 +35,9 @@ import java.util.UUID;
 public class ExcelController {
 
     @Autowired
-    private patrolrecordService patrolrecordService;
+    private PatrolrecordService patrolrecordService;
     @Autowired
-    private xlevelserviceService xlevelserviceService;
+    private XlevelserviceService xlevelserviceService;
 
 
     @RequestMapping(value = "exportZDExcel")//导出统计报表  all:1全部 0大队  type:1日常 2特勤

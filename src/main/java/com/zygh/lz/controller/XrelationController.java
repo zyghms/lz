@@ -1,6 +1,6 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Xrelation;
+import com.zygh.lz.entity.Xrelation;
 import com.zygh.lz.service.XrelationService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;

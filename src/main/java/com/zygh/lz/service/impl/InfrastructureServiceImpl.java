@@ -1,8 +1,8 @@
 package com.zygh.lz.service.impl;
 
-import com.zygh.lz.admin.Infrastructure;
+import com.zygh.lz.entity.Infrastructure;
 import com.zygh.lz.constant.SystemCon;
-import com.zygh.lz.mapper.InfrastructureMapper;
+import com.zygh.lz.dao.InfrastructureMapper;
 import com.zygh.lz.service.InfrastructureService;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;

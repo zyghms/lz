@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
-@MapperScan(value = "com.zygh.lz.mapper")
+@MapperScan(value = "com.zygh.lz.dao")
 public class LzApplication extends SpringBootServletInitializer{
 
 

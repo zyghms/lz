@@ -1,6 +1,6 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Infrastructure;
+import com.zygh.lz.entity.Infrastructure;
 import com.zygh.lz.service.InfrastructureService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.RoadMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Road">
+<mapper namespace="com.zygh.lz.dao.RoadMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Road">
         <id column="sys_road_id" property="sysRoadId" jdbcType="INTEGER"/>
         <result column="sys_urban_id" property="sysUrbanId" jdbcType="INTEGER"/>
         <result column="road_name" property="roadName" jdbcType="VARCHAR"/>
@@ -26,7 +26,7 @@
     delete from road
     where sys_road_id = #{sysRoadId,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Road">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Road">
     insert into road (sys_road_id, sys_urban_id, road_name, 
       road_begin, road_over, road_type, 
       road_gps, road_gps_begin, road_gps_end
@@ -36,7 +36,7 @@
       #{roadGps,jdbcType=VARCHAR}, #{roadGpsBegin,jdbcType=VARCHAR}, #{roadGpsEnd,jdbcType=VARCHAR}
       )
   </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Road">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Road">
         insert into road
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sysRoadId != null">
@@ -97,7 +97,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Road">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Road">
         update road
         <set>
             <if test="sysUrbanId != null">
@@ -127,7 +127,7 @@
         </set>
         where sys_road_id = #{sysRoadId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Road">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Road">
     update road
     set sys_urban_id = #{sysUrbanId,jdbcType=INTEGER},
       road_name = #{roadName,jdbcType=VARCHAR},

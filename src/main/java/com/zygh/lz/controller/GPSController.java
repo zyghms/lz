@@ -1,18 +1,17 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Gps;
-import com.zygh.lz.admin.Test;
-import com.zygh.lz.admin.Xarea;
-import com.zygh.lz.admin.Xlevelservice;
-import com.zygh.lz.mapper.TestMapper;
-import com.zygh.lz.mapper.XareaMapper;
-import com.zygh.lz.mapper.XlevelserviceMapper;
+import com.zygh.lz.dao.TestMapper;
+import com.zygh.lz.dao.XareaMapper;
+import com.zygh.lz.dao.XlevelserviceMapper;
+import com.zygh.lz.entity.Gps;
+import com.zygh.lz.entity.Test;
+import com.zygh.lz.entity.Xarea;
 import com.zygh.lz.service.GpsService;
+import com.zygh.lz.service.XrelationService;
 import com.zygh.lz.util.GCJ2WGSUtils;
 import com.zygh.lz.util.GPSTransformMars;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,14 +37,12 @@ public class GPSController {
 
     @GetMapping("gps84")
     public void gps() {
-        //List<Test> tests = testMapper.selectTestAll();
         List<Xarea> tests = xareaMapper.selectXareaAll();
         for (int i = 0; i < tests.size(); i++) {
             System.out.println("=====" + tests.get(i).getCentre());
             if (tests.get(i).getCentre() != null && !tests.get(i).getCentre().equals("")) {
                 Xarea xarea = new Xarea();
                 String s = GPSTransformMars.GCj2TOWGS(tests.get(i).getCentre());
-
                 xarea.setId(tests.get(i).getId());
                 xarea.setCentre(s);
                 xareaMapper.updateByPrimaryKeySelective(xarea);

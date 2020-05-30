@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.AssetMapper" >
-  <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Asset" >
+<mapper namespace="com.zygh.lz.dao.AssetMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Asset" >
     <id column="sys_asset_id" property="sysAssetId" jdbcType="INTEGER" />
     <result column="sys_section_id" property="sysSectionId" jdbcType="INTEGER" />
     <result column="sys_staff_id" property="sysStaffId" jdbcType="INTEGER" />
@@ -23,7 +23,7 @@
     delete from asset
     where sys_asset_id = #{sysAssetId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zygh.lz.admin.Asset" >
+  <insert id="insert" parameterType="com.zygh.lz.entity.Asset" >
     insert into asset (sys_asset_id, sys_section_id, sys_staff_id, 
       asset_name, asset_type, asset_gpsx, 
       asset_gpsy)
@@ -31,7 +31,7 @@
       #{assetName,jdbcType=VARCHAR}, #{assetType,jdbcType=VARCHAR}, #{assetGpsx,jdbcType=VARCHAR}, 
       #{assetGpsy,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.zygh.lz.admin.Asset" >
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Asset" >
     insert into asset
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="sysAssetId != null" >
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Asset" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Asset" >
     update asset
     <set >
       <if test="sysSectionId != null" >
@@ -104,7 +104,7 @@
     </set>
     where sys_asset_id = #{sysAssetId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Asset" >
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Asset" >
     update asset
     set sys_section_id = #{sysSectionId,jdbcType=INTEGER},
       sys_staff_id = #{sysStaffId,jdbcType=INTEGER},

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.XareaMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Xarea">
+<mapper namespace="com.zygh.lz.dao.XareaMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Xarea">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="station" property="station" jdbcType="VARCHAR"/>
@@ -16,7 +16,7 @@
         <result column="section_Zid" property="sectionZid" jdbcType="INTEGER"/>
         <result column="section_Did" property="sectionDid" jdbcType="INTEGER"/>
     </resultMap>
-    <resultMap id="ResultMapWithBLOBs" type="com.zygh.lz.admin.Xarea" extends="BaseResultMap">
+    <resultMap id="ResultMapWithBLOBs" type="com.zygh.lz.entity.Xarea" extends="BaseResultMap">
         <result column="gps" property="gps" jdbcType="LONGVARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -38,7 +38,7 @@
     delete from xarea
     where id = #{id,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Xarea">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Xarea">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -53,7 +53,7 @@
         #{centre,jdbcType=VARCHAR}, #{sectionZid,jdbcType=INTEGER}, #{sectionDid,jdbcType=INTEGER},
         #{gps,jdbcType=LONGVARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Xarea">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Xarea">
         <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
             SELECT LAST_INSERT_ID()
         </selectKey>
@@ -141,7 +141,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Xarea">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Xarea">
         update xarea
         <set>
             <if test="name != null">
@@ -186,7 +186,7 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zygh.lz.admin.Xarea">
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zygh.lz.entity.Xarea">
     update xarea
     set name = #{name,jdbcType=VARCHAR},
       station = #{station,jdbcType=VARCHAR},
@@ -203,7 +203,7 @@
       gps = #{gps,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Xarea">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Xarea">
     update xarea
     set name = #{name,jdbcType=VARCHAR},
       station = #{station,jdbcType=VARCHAR},

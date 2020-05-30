@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Xarea;
-import com.zygh.lz.service.xareaService;
+import com.zygh.lz.entity.Xarea;
+import com.zygh.lz.service.XareaService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class XareaController {
     @Autowired
-    private xareaService xareaService;
+    private XareaService xareaService;
 
     //根据大队，中队，岗位，中队领导
     @GetMapping("selectXareabycondition")

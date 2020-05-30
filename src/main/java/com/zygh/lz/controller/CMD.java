@@ -1,14 +1,12 @@
 package com.zygh.lz.controller;
 
 import com.google.gson.GsonBuilder;
-import com.zygh.lz.admin.Video;
-import com.zygh.lz.mapper.VideoMapper;
+import com.zygh.lz.entity.Video;
+import com.zygh.lz.dao.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.List;
 

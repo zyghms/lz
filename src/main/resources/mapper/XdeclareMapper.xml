@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.XdeclareMapper" >
-  <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Xdeclare" >
+<mapper namespace="com.zygh.lz.dao.XdeclareMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Xdeclare" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="appear" property="appear" jdbcType="VARCHAR" />
     <result column="accepter" property="accepter" jdbcType="VARCHAR" />
@@ -25,7 +25,7 @@
     delete from xdeclare
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zygh.lz.admin.Xdeclare" >
+  <insert id="insert" parameterType="com.zygh.lz.entity.Xdeclare" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -36,7 +36,7 @@
       #{establishtime,jdbcType=TIMESTAMP}, #{starttime,jdbcType=TIMESTAMP}, #{stoptime,jdbcType=TIMESTAMP}, 
       #{state,jdbcType=VARCHAR}, #{conmnet,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.zygh.lz.admin.Xdeclare" >
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Xdeclare" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -94,7 +94,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Xdeclare" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Xdeclare" >
     update xdeclare
     <set >
       <if test="appear != null" >
@@ -124,7 +124,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Xdeclare" >
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Xdeclare" >
     update xdeclare
     set appear = #{appear,jdbcType=VARCHAR},
       accepter = #{accepter,jdbcType=VARCHAR},

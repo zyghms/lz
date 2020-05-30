@@ -1,7 +1,7 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.admin.Xarea;
-import com.zygh.lz.service.staffService;
+import com.zygh.lz.entity.Xarea;
+import com.zygh.lz.service.StaffService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class StaffController {
     @Autowired
-    private staffService staffService;
+    private StaffService staffService;
 
 
     //默认人

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zygh.lz.mapper.BasicMapper">
-    <resultMap id="BaseResultMap" type="com.zygh.lz.admin.Basic">
+<mapper namespace="com.zygh.lz.dao.BasicMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Basic">
         <id column="sys_basic_id" property="sysBasicId" jdbcType="INTEGER"/>
         <result column="basic_category" property="basicCategory" jdbcType="VARCHAR"/>
         <result column="basic_attribute" property="basicAttribute" jdbcType="VARCHAR"/>
@@ -24,7 +24,7 @@
         <result column="sys_duty_id" property="sysDutyId" jdbcType="INTEGER"/>
         <result column="basic_account" property="basicAccount" jdbcType="VARCHAR"/>
         <result column="basic_password" property="basicPassword" jdbcType="VARCHAR"/>
-        <association property="road" javaType="com.zygh.lz.admin.Road">
+        <association property="road" javaType="com.zygh.lz.entity.Road">
             <id column="sys_road_id" property="sysRoadId" jdbcType="INTEGER"/>
             <result column="sys_urban_id" property="sysUrbanId" jdbcType="INTEGER"/>
             <result column="road_name" property="roadName" jdbcType="VARCHAR"/>
@@ -35,7 +35,7 @@
             <result column="urban_name" property="urbanName" jdbcType="VARCHAR"/>
             <result column="section_name" property="sectionName" jdbcType="VARCHAR"/>
         </association>
-        <association property="duty" javaType="com.zygh.lz.admin.Duty">
+        <association property="duty" javaType="com.zygh.lz.entity.Duty">
             <id column="sys_duty_id" property="sysDutyId" jdbcType="INTEGER"/>
             <result column="suty_road" property="sutyRoad" jdbcType="VARCHAR"/>
             <result column="sys_section_id" property="sysSectionId" jdbcType="INTEGER"/>
@@ -47,7 +47,7 @@
             <result column="section_name" property="sectionName" jdbcType="VARCHAR"/>
             <result column="road_name" property="roadName" jdbcType="VARCHAR"/>
         </association>
-        <association property="staff" javaType="com.zygh.lz.admin.Staff">
+        <association property="staff" javaType="com.zygh.lz.entity.Staff">
             <id column="sys_staff_id" property="sysStaffId" jdbcType="INTEGER"/>
             <result column="staff_name" property="staffName" jdbcType="VARCHAR"/>
             <result column="staff_post" property="staffPost" jdbcType="VARCHAR"/>
@@ -70,7 +70,7 @@
             <result column="section_tel" property="sectionTel" jdbcType="VARCHAR"/>
             <result column="section_person" property="sectionPerson" jdbcType="VARCHAR"/>
         </association>
-        <association property="section" javaType="com.zygh.lz.admin.Section">
+        <association property="section" javaType="com.zygh.lz.entity.Section">
             <id column="sys_section_id" property="sysSectionId" jdbcType="INTEGER"/>
             <result column="section_pid" property="sectionPid" jdbcType="INTEGER"/>
             <result column="section_name" property="sectionName" jdbcType="VARCHAR"/>
@@ -99,7 +99,7 @@
     delete from basic
     where sys_basic_id = #{sysBasicId,jdbcType=INTEGER}
   </delete>
-    <insert id="insert" parameterType="com.zygh.lz.admin.Basic">
+    <insert id="insert" parameterType="com.zygh.lz.entity.Basic">
     insert into basic (sys_basic_id, basic_category, basic_attribute, 
       basic_ip, basic_model, basic_brandname, 
       basic_environment, basic_number, basic_date, 
@@ -117,7 +117,7 @@
       #{basicEnable,jdbcType=VARCHAR}, #{sysDutyId,jdbcType=INTEGER}, #{basicAccount,jdbcType=VARCHAR}, 
       #{basicPassword,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="com.zygh.lz.admin.Basic">
+    <insert id="insertSelective" parameterType="com.zygh.lz.entity.Basic">
         insert into basic
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sysBasicId != null">
@@ -256,7 +256,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.admin.Basic">
+    <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Basic">
         update basic
         <set>
             <if test="basicCategory != null">
@@ -325,7 +325,7 @@
         </set>
         where sys_basic_id = #{sysBasicId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.admin.Basic">
+    <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Basic">
     update basic
     set basic_category = #{basicCategory,jdbcType=VARCHAR},
       basic_attribute = #{basicAttribute,jdbcType=VARCHAR},
