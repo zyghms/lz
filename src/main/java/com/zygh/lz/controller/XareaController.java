@@ -40,8 +40,8 @@ public class XareaController {
 
     //根据名字模糊查询
     @GetMapping("selectXareaByName")
-    public ResultBean selectXareaByName(String name,String battalion,String detachment) {
-        return xareaService.selectXareaByName(name,battalion,detachment);
+    public ResultBean selectXareaByName(String name, String battalion, String detachment) {
+        return xareaService.selectXareaByName(name, battalion, detachment);
     }
 
     //查询所有区域
@@ -70,6 +70,7 @@ public class XareaController {
 
     /**
      * 日间固定岗/高峰岗
+     *
      * @param station
      * @return
      */
@@ -115,6 +116,7 @@ public class XareaController {
     public ResultBean selectInformant() {
         return xareaService.selectInformant();
     }
+
     //夜间夜巡
     @GetMapping("selectNightTour")
     public ResultBean selectNightTour() {
@@ -157,6 +159,16 @@ public class XareaController {
         return xareaService.selectAllByDemonstration(station);
     }
 
-
+    /**
+     *
+     * @param id            区域id
+     * @param sectionDid    大队id
+     * @param grid          岗位
+     * @return
+     */
+    @GetMapping("findDetailsByInfo")
+    public ResultBean findDetailsByInfo(Integer id, Integer sectionDid, String grid) {
+        return xareaService.findDetailsByInfo(id, sectionDid, grid);
+    }
 
 }
