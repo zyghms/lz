@@ -1,9 +1,11 @@
 package com.zygh.lz.service.impl;
 
+import com.zygh.lz.dao.XareaMapper;
 import com.zygh.lz.entity.Section;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.dao.SectionMapper;
 import com.zygh.lz.dao.StaffMapper;
+import com.zygh.lz.entity.Xarea;
 import com.zygh.lz.service.SectionService;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;
@@ -20,6 +22,8 @@ public class SectionServiceImpl implements SectionService {
     private SectionMapper sectionMapper;
     @Autowired
     private StaffMapper staffMapper;
+    @Autowired
+    private XareaMapper xareaMapper;
 
     /**
      * 新增人员
@@ -173,5 +177,38 @@ public class SectionServiceImpl implements SectionService {
             return null;
         }
         return childList;
+    }
+
+    //部门层级列表
+    @Override
+    public ResultBean findSectionByTier() {
+        List<Section> sections = sectionMapper.selectAllSection();
+        //父级菜单集合
+        List<Section> sectionList = new ArrayList<Section>();
+        //子集菜单集合
+        List<Section> selectBySublevel = new ArrayList<Section>();
+        //三级菜单集合
+        List<Section> levelMenu =new ArrayList<Section>();
+        //父级菜单
+        for (int i = 0; i < sections.size(); i++) {
+            if(sections.get(i).getSectionPid()==0){
+                sectionList.add(sections.get(i));
+            }
+        }
+        //子级大队菜单
+        Iterator iterList = sectionList.iterator();
+        while (iterList.hasNext()) {
+            Section treemenu = (Section) iterList.next();
+            selectBySublevel = sectionMapper.findSelectBySublevel(treemenu.getSysSectionId());
+            treemenu.setSectionList(selectBySublevel);
+        }
+        //三级菜单集合
+        Iterator<Section> iterator = selectBySublevel.iterator();
+        while (iterator.hasNext()){
+            Section next = iterator.next();
+            levelMenu = xareaMapper.findLevelMenu(next.getSysSectionId());
+            next.setSectionList(levelMenu);
+        }
+        return ResultUtil.setOK("success",sectionList);
     }
 }

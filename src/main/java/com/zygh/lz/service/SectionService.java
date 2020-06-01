@@ -22,4 +22,6 @@ public interface SectionService {
     ResultBean selectBySectionId(Integer sectionId,String staffHierarchy);
     //根据大队id查询大队下面的中队
     ResultBean selectDetachmentByid(Integer id);
+    //勤务部门层级列表
+    ResultBean findSectionByTier();
 }

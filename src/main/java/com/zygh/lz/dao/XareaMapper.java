@@ -1,5 +1,6 @@
 package com.zygh.lz.dao;
 
+import com.zygh.lz.entity.Section;
 import com.zygh.lz.entity.Staff;
 import com.zygh.lz.entity.Xarea;
 import org.apache.ibatis.annotations.Param;
@@ -247,4 +248,15 @@ public interface XareaMapper {
     List<Xarea> selectTaskSetInfo();
     //任务信息
     List<Xarea> selectTaskInfo();
+
+    //三级菜单任务信息
+    List<Section> findLevelMenu(Integer sectionid);
+    //网格下任务信息
+    List<Section> findGridMenu(@Param("sectionid") Integer sectionid,
+                               @Param("gridding") String gridding);
+
+    //根据id,大队，岗位查询区域详情
+    List<Xarea> findDetailsByInfo(@Param("id") Integer id,
+                                  @Param("sectionDid") Integer sectionDid,
+                                  @Param("grid") String grid);
 }

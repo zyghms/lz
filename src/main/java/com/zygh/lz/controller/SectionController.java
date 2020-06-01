@@ -63,4 +63,10 @@ public class SectionController {
     public ResultBean selectDetachmentByid(Integer id){
         return sectionService.selectDetachmentByid(id);
     }
+
+    //部门层级列表
+    @GetMapping("findSectionByTier")
+    public ResultBean findSectionByTier(){
+        return sectionService.findSectionByTier();
+    }
 }

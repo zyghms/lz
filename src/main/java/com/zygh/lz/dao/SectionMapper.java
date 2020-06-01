@@ -1,6 +1,7 @@
 package com.zygh.lz.dao;
 
 import com.zygh.lz.entity.Section;
+import com.zygh.lz.vo.ResultBean;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -42,4 +43,6 @@ public interface SectionMapper {
 
     //根据大队id查询大队下面的中队
     List<Section> selectDetachmentByid(Integer id);
+
+    List<Section> findSelectBySublevel(Integer id);
 }

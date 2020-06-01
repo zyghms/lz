@@ -162,4 +162,8 @@
   <select id="selectDetachmentByid" resultType="map">
     SELECT sys_section_id,section_name FROM section WHERE section_pid=#{id}
   </select>
+  <select id="findSelectBySublevel" resultMap="BaseResultMap">
+    SELECT s.* FROM section s,xarea x WHERE s.sys_section_id=x.section_Did
+    AND section_pid =#{id} GROUP BY s.sys_section_id
+  </select>
 </mapper>
