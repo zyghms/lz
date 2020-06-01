@@ -104,16 +104,16 @@ public class XareaServiceImpl implements XareaService {
     @Override
     public ResultBean deleteXarea(Integer id) {
         int i = xareaMapper.deleteByPrimaryKey(id);
-        if(i>0){
+        if (i > 0) {
             xrelationMapper.deleteByPrimaryKey(id);
             return ResultUtil.execOp(i, "删除");
         }
-        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+        return ResultUtil.setError(SystemCon.RERROR1, "error", null);
     }
 
     @Override
-    public ResultBean selectXareaByName(String Name,String battalion,String detachment) {
-        List<Xarea> xareas = xareaMapper.selectXareaByName(Name,battalion,detachment);
+    public ResultBean selectXareaByName(String Name, String battalion, String detachment) {
+        List<Xarea> xareas = xareaMapper.selectXareaByName(Name, battalion, detachment);
         if (xareas.size() >= 0) {
             return ResultUtil.setOK("success", xareas);
         }
@@ -1045,6 +1045,34 @@ public class XareaServiceImpl implements XareaService {
     @Override
     public ResultBean selectTaskInfo() {
         return ResultUtil.setOK("success", xareaMapper.selectTaskInfo());
+    }
+
+    @Override
+    public ResultBean findDetailsByInfo(Integer id, Integer sectionDid, String grid) {
+        List<Xarea> detailsByInfo = new ArrayList<Xarea>();
+        String substring = grid.substring(grid.indexOf('-'));
+        if (grid != null) {
+            if (grid.contains("网格")) {
+                detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
+                for (int i = 0; i < detailsByInfo.size(); i++) {
+                    detailsByInfo.get(i).setStation(substring);
+                }
+            } else if (grid.contains("铁骑")) {
+                detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
+                for (int i = 0; i < detailsByInfo.size(); i++) {
+                    detailsByInfo.get(i).setStation(substring);
+                }
+            } else if (grid.contains("夜巡")) {
+                detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
+                for (int i = 0; i < detailsByInfo.size(); i++) {
+                    detailsByInfo.get(i).setStation(substring);
+                }
+            } else {
+                detailsByInfo = xareaMapper.findDetailsByInfo(id, null, null);
+            }
+        }
+
+        return ResultUtil.setOK("success",detailsByInfo);
     }
 
 

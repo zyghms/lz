@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class xlevelserviceController {
+public class XlevelserviceController {
     @Autowired
     private XlevelserviceService xlevelserviceService;
 

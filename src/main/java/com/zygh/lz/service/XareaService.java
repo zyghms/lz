@@ -3,6 +3,8 @@ package com.zygh.lz.service;
 import com.zygh.lz.entity.Xarea;
 import com.zygh.lz.vo.ResultBean;
 
+import java.util.List;
+
 public interface XareaService {
     //根据大队，中队，岗位，中队领导
     ResultBean selectXareabycondition(String battalion, String detachment, String station, String leader, String grid, String type);
@@ -92,5 +94,6 @@ public interface XareaService {
     ResultBean selectTaskSetInfo();
     //任务信息
     ResultBean selectTaskInfo();
-
+    //根据id,大队，岗位查询区域详情
+    ResultBean findDetailsByInfo(Integer id, Integer sectionDid, String grid);
 }

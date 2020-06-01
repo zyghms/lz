@@ -1362,7 +1362,17 @@
     </select>
     <!--根据id,大队，岗位查询区域详情-->
     <select id="findDetailsByInfo" resultType="map">
-      SELECT id,station,name FROM xarea WHERE gridding = #{grid} AND
-      section_Did = #{sectionDid} AND id=#{sectionDid}
+        SELECT id,station,name FROM xarea
+        <where>
+            <if test="grid!=null and grid!='' ">
+                and gridding = #{grid}
+            </if>
+            <if test="sectionDid!=null and sectionDid!='' ">
+                AND section_Did = #{sectionDid}
+            </if>
+            <if test="sectionDid!=null and sectionDid!='' ">
+                AND id=#{sectionDid}
+            </if>
+        </where>
     </select>
 </mapper>
