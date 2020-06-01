@@ -1,5 +1,6 @@
 package com.zygh.lz.dao;
 
+import com.zygh.lz.entity.Regional;
 import com.zygh.lz.entity.Section;
 import com.zygh.lz.entity.Staff;
 import com.zygh.lz.entity.Xarea;
@@ -256,7 +257,7 @@ public interface XareaMapper {
                                @Param("gridding") String gridding);
 
     //根据id,大队，岗位查询区域详情
-    List<Xarea> findDetailsByInfo(@Param("id") Integer id,
-                                  @Param("sectionDid") Integer sectionDid,
-                                  @Param("grid") String grid);
+    List<Regional> findDetailsByInfo(@Param("id") Integer id,
+                                     @Param("sectionDid") Integer sectionDid,
+                                     @Param("grid") String grid);
 }

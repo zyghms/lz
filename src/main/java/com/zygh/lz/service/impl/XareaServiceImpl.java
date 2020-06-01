@@ -1047,11 +1047,18 @@ public class XareaServiceImpl implements XareaService {
         return ResultUtil.setOK("success", xareaMapper.selectTaskInfo());
     }
 
+    /**
+     * 根据id,大队，岗位查询区域详情
+     * @param id
+     * @param sectionDid
+     * @param grid
+     * @return
+     */
     @Override
     public ResultBean findDetailsByInfo(Integer id, Integer sectionDid, String grid) {
-        List<Xarea> detailsByInfo = new ArrayList<Xarea>();
-        String substring = grid.substring(grid.indexOf('-'));
+        List<Regional> detailsByInfo = new ArrayList<Regional>();
         if (grid != null) {
+            String substring = grid.substring(0,grid.indexOf('-'));
             if (grid.contains("网格")) {
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {
@@ -1062,6 +1069,7 @@ public class XareaServiceImpl implements XareaService {
                 for (int i = 0; i < detailsByInfo.size(); i++) {
                     detailsByInfo.get(i).setStation(substring);
                 }
+                return ResultUtil.setOK("success",detailsByInfo);
             } else if (grid.contains("夜巡")) {
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {
@@ -1074,6 +1082,7 @@ public class XareaServiceImpl implements XareaService {
 
         return ResultUtil.setOK("success",detailsByInfo);
     }
+
 
 
 }
