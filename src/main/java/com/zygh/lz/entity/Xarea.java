@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
+import  java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -46,6 +47,12 @@ public class Xarea implements Serializable{
     public Integer sectionZid;
 
     public Integer sectionDid;
+
+    public Integer  status; //类型 1-日常勤务 2-特殊勤务
+
+    public Date StartTime;  //开始时间 (若为日常勤务，则表示勤务开始的时间。若为特殊勤务，则为勤务开始的时间)
+
+    public  Date EndTime; //结束时间  (若为日常勤务，则表示勤务结束的时间。若为特殊勤务，则为勤务结束的时间)
 
 
 }

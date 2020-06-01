@@ -15,13 +15,16 @@
         <result column="centre" property="centre" jdbcType="VARCHAR"/>
         <result column="section_Zid" property="sectionZid" jdbcType="INTEGER"/>
         <result column="section_Did" property="sectionDid" jdbcType="INTEGER"/>
+        <result column="status" property="centre" jdbcType="INTEGER"/>
+        <result column="startTime" property="centre" jdbcType="TIMESTAMP"/>
+        <result column="endTime" property="centre" jdbcType="TIMESTAMP"/>
     </resultMap>
     <resultMap id="ResultMapWithBLOBs" type="com.zygh.lz.entity.Xarea" extends="BaseResultMap">
         <result column="gps" property="gps" jdbcType="LONGVARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, name, station, type, battalion, detachment, gridding, rank, leader, conment, 
-    centre, section_Zid, section_Did
+    centre, section_Zid, section_Did,status,startTime,endTime
   </sql>
     <sql id="Blob_Column_List">
     gps
