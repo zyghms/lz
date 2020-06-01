@@ -15,8 +15,8 @@
         <result column="centre" property="centre" jdbcType="VARCHAR"/>
         <result column="section_Zid" property="sectionZid" jdbcType="INTEGER"/>
         <result column="section_Did" property="sectionDid" jdbcType="INTEGER"/>
-        <result column="startTime" property="centre" jdbcType="TIMESTAMP"/>
-        <result column="endTime" property="centre" jdbcType="TIMESTAMP"/>
+        <result column="startTime" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="endTime" property="startTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <resultMap id="ResultMapWithBLOBs" type="com.zygh.lz.entity.Xarea" extends="BaseResultMap">
         <result column="gps" property="gps" jdbcType="LONGVARCHAR"/>
