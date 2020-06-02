@@ -1,9 +1,6 @@
 package com.zygh.lz.dao;
 
-import com.zygh.lz.entity.Regional;
-import com.zygh.lz.entity.Section;
-import com.zygh.lz.entity.Staff;
-import com.zygh.lz.entity.Xarea;
+import com.zygh.lz.entity.*;
 import org.apache.ibatis.annotations.Param;
 import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -260,4 +257,7 @@ public interface XareaMapper {
     List<Regional> findDetailsByInfo(@Param("id") Integer id,
                                      @Param("sectionDid") Integer sectionDid,
                                      @Param("grid") String grid);
+
+    //根据区域id查询人员详情
+    List<Dailyservice> findStaffInfo(Integer id);
 }

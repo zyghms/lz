@@ -1377,4 +1377,9 @@
             </if>
         </where>
     </select>
+    <!--根据区域id查询人员详情-->
+    <select id="findStaffInfo" resultType="com.zygh.lz.entity.Dailyservice">
+          SELECT f.sys_staff_id as id,f.staff_num as staffnum,f.staff_name as staffname,f.cellphonenumber as phone FROM xarea x,staff f,xrelation xt
+          WHERE x.id=xt.xarea_id AND f.sys_staff_id=xt.staff_id AND x.id=#{id}
+    </select>
 </mapper>
