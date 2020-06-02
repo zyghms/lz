@@ -142,6 +142,9 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
         List<Xlevelservice> selectBySublevel = new ArrayList<Xlevelservice>();
 
         List<Xlevelservice> levelMenu = new ArrayList<Xlevelservice>();
+
+        List<Xlevelservice> testList = new ArrayList<Xlevelservice>();
+
         List<Section> sections = sectionMapper.selectAllSection();
         for (int i = 0; i < sections.size(); i++) {
             if(sections.get(i).getSectionPid()==0){
@@ -153,13 +156,20 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
                 xlevel.setLocation(sections.get(0).getSectionTel());
                 xlevel.setHierarchy(sections.get(0).getSectionPerson());
                 sectionList.add(xlevel);
-                listAll.addAll(sectionList);
             }
         }
         //子级大队菜单
-        selectBySublevel =  xlevelserviceMapper.selectSpecialService();
-        listAll.addAll(selectBySublevel);
-        Xlevelservice xlevels=new  Xlevelservice();
+        Iterator iterList = sectionList.iterator();
+        while (iterList.hasNext()) {
+            Xlevelservice treemenu = (Xlevelservice) iterList.next();
+            selectBySublevel =  xlevelserviceMapper.selectSpecialService();
+            treemenu.setSectionList(selectBySublevel);
+        }
+        //子级大队菜单
+//        selectBySublevel =  xlevelserviceMapper.selectSpecialService();
+//        listAll.addAll(selectBySublevel);
+//        testList.addAll(listAll);
+//        Xlevelservice xlevels=new  Xlevelservice();
         //三级菜单集合
 //        for (int i=0; i<selectBySublevel.size(); i++) {
 //            levelMenu=xlevelserviceMapper.selectSpecialServices(selectBySublevel.get(i).getState());
@@ -169,7 +179,7 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
 //            listAll.addAll(levelMenu);
         //三级菜单集合
 
-        return ResultUtil.setOK("success",listAll);
+        return ResultUtil.setOK("success",sectionList);
 
     }
 
