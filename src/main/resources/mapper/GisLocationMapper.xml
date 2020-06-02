@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zygh.lz.dao.GisLocationMapper">
+    <resultMap id="BaseResultMap" type="com.zygh.lz.entity.GisLocation">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="number" property="number" jdbcType="VARCHAR"/>
+        <result column="center" property="center" jdbcType="VARCHAR"/>
+        <result column="area" property="area" jdbcType="CLOB"/>
+        <result column="marker" property="marker" jdbcType="VARCHAR"/>
+        <result column="polygon" property="polygon" jdbcType="VARCHAR"/>
+        <result column="color" property="color" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, name, number, center, area, marker,polygon, color,remark
+  </sql>
+    <select id="selectGisLocation">
+     select id,name,number,center,area,marker,polygon,color,remark
+        from gislocation
+    </select>
+
+</mapper>
