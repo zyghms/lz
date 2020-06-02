@@ -149,35 +149,42 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
         for (int i = 0; i < sections.size(); i++) {
             if(sections.get(i).getSectionPid()==0){
                 Xlevelservice xlevel = new Xlevelservice();
-                xlevel.setId(sections.get(0).getSysSectionId());
-                xlevel.setNumber(sections.get(0).getSectionPid());
-                xlevel.setCallsign(sections.get(0).getSectionName());
-                xlevel.setPlace(sections.get(0).getSectionPosition());
-                xlevel.setLocation(sections.get(0).getSectionTel());
-                xlevel.setHierarchy(sections.get(0).getSectionPerson());
+                xlevel.setId(sections.get(i).getSysSectionId());
+                xlevel.setNumber(sections.get(i).getSectionPid());
+                xlevel.setCallsign(sections.get(i).getSectionName());
+                xlevel.setPlace(sections.get(i).getSectionPosition());
+                xlevel.setLocation(sections.get(i).getSectionTel());
+                xlevel.setHierarchy(sections.get(i).getSectionPerson());
                 sectionList.add(xlevel);
             }
         }
-        //子级大队菜单
+
+        //子级大队菜单 后期需要修改下
         Iterator iterList = sectionList.iterator();
         while (iterList.hasNext()) {
             Xlevelservice treemenu = (Xlevelservice) iterList.next();
-            selectBySublevel =  xlevelserviceMapper.selectSpecialService();
+            Xlevelservice xlevels = new Xlevelservice();
+            xlevels.setId(1);
+            xlevels.setNumber(2);
+            xlevels.setCallsign("等级勤务");
+            selectBySublevel.add(xlevels);
             treemenu.setSectionList(selectBySublevel);
         }
+        //三级菜单集合
+        Iterator<Xlevelservice> iterator = selectBySublevel.iterator();
+        while (iterator.hasNext()){
+            Xlevelservice next = iterator.next();
+            levelMenu =  xlevelserviceMapper.selectSpecialService();
+            next.setSectionList(levelMenu);
+        }
+
         //子级大队菜单
-//        selectBySublevel =  xlevelserviceMapper.selectSpecialService();
-//        listAll.addAll(selectBySublevel);
-//        testList.addAll(listAll);
-//        Xlevelservice xlevels=new  Xlevelservice();
-        //三级菜单集合
-//        for (int i=0; i<selectBySublevel.size(); i++) {
-//            levelMenu=xlevelserviceMapper.selectSpecialServices(selectBySublevel.get(i).getState());
-//            listAll.addAll(levelMenu);
+//        Iterator iterList = sectionList.iterator();
+//        while (iterList.hasNext()) {
+//            Xlevelservice treemenu = (Xlevelservice) iterList.next();
+//            selectBySublevel =  xlevelserviceMapper.selectSpecialService();
+//            treemenu.setSectionList(selectBySublevel);
 //        }
-//            levelMenu =xlevelserviceMapper.selectSpecialServices(iterator.next().getState());;
-//            listAll.addAll(levelMenu);
-        //三级菜单集合
 
         return ResultUtil.setOK("success",sectionList);
 
