@@ -1,4 +1,5 @@
 package com.zygh.lz.service.impl;
+import	java.security.KeyStore.Entry.Attribute;
 
 import com.zygh.lz.entity.*;
 import com.zygh.lz.constant.SystemCon;
@@ -756,6 +757,17 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public ResultBean selectStaffByInfo() {
         return ResultUtil.setOK("success", staffMapper.selectStaffByInfo());
+    }
+
+    @Override
+    public ResultBean selectPersonDetail(String str) {
+         String  strs[]=str.split(",");
+         List<Staff> list=new ArrayList<Staff> ();
+         for (int i=0; i<strs.length;i++){
+            Staff s= staffMapper.selectByPrimaryKey(Integer.valueOf(strs[i]));
+            list.add(s);
+         }
+        return ResultUtil.setOK("success", list);
     }
 
 }

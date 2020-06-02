@@ -1,5 +1,6 @@
 package com.zygh.lz.dao;
 import com.zygh.lz.entity.Xlevelservice;
+import com.zygh.lz.vo.ResultBean;
 import org.apache.ibatis.annotations.Param;
 import org.omg.PortableInterceptor.INACTIVE;
 
@@ -46,6 +47,13 @@ public interface XlevelserviceMapper {
     //按等级按大队展示详情
     List<Xlevelservice> selectXleverdJnum(@Param("hierarchy") Integer hierarchy,
                                           @Param("sectionName") String sectionName);
+    //查询特殊勤务左侧列表
+    List<Xlevelservice> selectSpecialService();
+
+    //查询特殊勤务左侧列表
+    List<Xlevelservice> selectSpecialServices(@Param("state") Integer state);
+
+    int delSpecialService(@Param("id") Integer id);
 
 
 }

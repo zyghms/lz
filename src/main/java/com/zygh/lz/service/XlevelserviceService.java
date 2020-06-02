@@ -1,5 +1,6 @@
 package com.zygh.lz.service;
 
+import com.zygh.lz.entity.Xlevelservice;
 import com.zygh.lz.vo.ResultBean;
 
 public interface XlevelserviceService {
@@ -13,4 +14,14 @@ public interface XlevelserviceService {
     ResultBean selectxleveBydj(Integer hierarchy,String sectionName);
 
     ResultBean selectXlevedJ(Integer hierarchy);
+
+    //查询特殊勤务左侧列表
+    ResultBean selectSpecialService();
+
+    ResultBean delSpecialService(Integer id);
+
+    ResultBean addSpecialService(Xlevelservice xlevelservice);
+
+    ResultBean updateSpecialService(Xlevelservice xlevelservice);
 }
+

@@ -126,4 +126,11 @@ public class StaffController {
     public ResultBean selectAllBysection(Xarea xarea) {
         return staffService.selectAllBysection(xarea);
     }
+    //根据传入的id 查询人员详情
+    @GetMapping("selectPersonDetail")
+    public ResultBean selectPersonDetail(String  str ) {
+        System.out.println(str);
+        return staffService.selectPersonDetail(str);
+    }
+
 }

@@ -12,10 +12,13 @@
         <result column="location" property="location" jdbcType="VARCHAR"/>
         <result column="hierarchy" property="hierarchy" jdbcType="VARCHAR"/>
         <result column="conment" property="conment" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="zt" property="zt" jdbcType="INTEGER"/>
+
     </resultMap>
     <sql id="Base_Column_List">
     id, callsign, place, suboffice_id, number, section_id, ondutytime, location, hierarchy, 
-    conment
+    conment,state,zt
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
@@ -33,11 +36,12 @@
         </selectKey>
         insert into xlevelservice (callsign, place, suboffice_id,
         number, section_id, ondutytime,
-        location, hierarchy, conment
+        location, hierarchy, conment,state,zt
         )
         values (#{callsign,jdbcType=VARCHAR}, #{place,jdbcType=VARCHAR}, #{subofficeId,jdbcType=INTEGER},
         #{number,jdbcType=INTEGER}, #{sectionId,jdbcType=INTEGER}, #{ondutytime,jdbcType=VARCHAR},
-        #{location,jdbcType=VARCHAR}, #{hierarchy,jdbcType=VARCHAR}, #{conment,jdbcType=VARCHAR}
+        #{location,jdbcType=VARCHAR}, #{hierarchy,jdbcType=VARCHAR}, #{conment,jdbcType=VARCHAR},
+        #{state,jdbcType=INTEGER},#{zt,jdbcType=INTEGER}
         )
     </insert>
     <insert id="insertSelective" parameterType="com.zygh.lz.entity.Xlevelservice">
@@ -147,7 +151,9 @@
       ondutytime = #{ondutytime,jdbcType=VARCHAR},
       location = #{location,jdbcType=VARCHAR},
       hierarchy = #{hierarchy,jdbcType=VARCHAR},
-      conment = #{conment,jdbcType=VARCHAR}
+      conment = #{conment,jdbcType=VARCHAR},
+      state = #{state,jdbcType=INTEGER},
+      zt = #{zt,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
     <!--全部应到-->
@@ -248,4 +254,18 @@
             AND st.section_name=#{sectionName}
         </if>
     </select>
+
+    <select id="selectSpecialService" resultType="map">
+    select
+    id,callsign,place,suboffice_id,number numbers,section_id,ondutytime,location,hierarchy,conment,state,zt
+    from xlevelservice where zt=1
+
+    </select>
+    <select id="selectSpecialServices" resultType="map">
+        SELECT *  from	 xlevelservice where state=#{state} and zt=1
+    </select>
+    <update id="delSpecialService">
+        update xlevelservice set zt=2 where id=#{id}
+    </update>
+
 </mapper>

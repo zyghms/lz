@@ -1,5 +1,8 @@
 package com.zygh.lz.service.impl;
 
+import com.zygh.lz.dao.SectionMapper;
+import com.zygh.lz.dao.XareaMapper;
+import com.zygh.lz.entity.Section;
 import com.zygh.lz.entity.Xlevelservice;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.dao.XlevelserviceMapper;
@@ -9,15 +12,18 @@ import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class XlevelserviceServiceImpl implements XlevelserviceService {
     @Autowired
     private XlevelserviceMapper xlevelserviceMapper;
+    @Autowired
+    private SectionMapper sectionMapper;
+
+    @Autowired
+    private XareaMapper xareaMapper;
+
 
     /**
      * 查询全部等级勤务
@@ -125,6 +131,67 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
             return ResultUtil.setOK("success",xlevelservices);
         }
         return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+    }
+
+    @Override
+    public ResultBean selectSpecialService() {
+        List<Xlevelservice> listAll=new ArrayList<> ();
+        //父级菜单集合
+        List<Xlevelservice> sectionList = new ArrayList<Xlevelservice>();
+        //三级菜单集合
+        List<Xlevelservice> selectBySublevel = new ArrayList<Xlevelservice>();
+
+        List<Xlevelservice> levelMenu = new ArrayList<Xlevelservice>();
+        List<Section> sections = sectionMapper.selectAllSection();
+        for (int i = 0; i < sections.size(); i++) {
+            if(sections.get(i).getSectionPid()==0){
+                Xlevelservice xlevel = new Xlevelservice();
+                xlevel.setId(sections.get(0).getSysSectionId());
+                xlevel.setNumber(sections.get(0).getSectionPid());
+                xlevel.setCallsign(sections.get(0).getSectionName());
+                xlevel.setPlace(sections.get(0).getSectionPosition());
+                xlevel.setLocation(sections.get(0).getSectionTel());
+                xlevel.setHierarchy(sections.get(0).getSectionPerson());
+                sectionList.add(xlevel);
+                listAll.addAll(sectionList);
+            }
+        }
+        //子级大队菜单
+        selectBySublevel =  xlevelserviceMapper.selectSpecialService();
+        listAll.addAll(selectBySublevel);
+        Xlevelservice xlevels=new  Xlevelservice();
+        //三级菜单集合
+//        for (int i=0; i<selectBySublevel.size(); i++) {
+//            levelMenu=xlevelserviceMapper.selectSpecialServices(selectBySublevel.get(i).getState());
+//            listAll.addAll(levelMenu);
+//        }
+//            levelMenu =xlevelserviceMapper.selectSpecialServices(iterator.next().getState());;
+//            listAll.addAll(levelMenu);
+        //三级菜单集合
+
+        return ResultUtil.setOK("success",listAll);
+
+    }
+
+
+    @Override
+    public ResultBean delSpecialService(Integer id) {
+        return ResultUtil.execOp(xlevelserviceMapper.delSpecialService(id),"删除");
+
+
+    }
+
+    @Override
+    public ResultBean addSpecialService(Xlevelservice xlevelservice) {
+        return ResultUtil.execOp(xlevelserviceMapper.insert(xlevelservice),"新增");
+
+    }
+
+    @Override
+    public ResultBean updateSpecialService(Xlevelservice  xlevelservice) {
+        return ResultUtil.execOp(xlevelserviceMapper.updateByPrimaryKeySelective(xlevelservice),"修改");
+
+
     }
 
 }
