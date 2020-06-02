@@ -1,4 +1,5 @@
 package com.zygh.lz.service.impl;
+import	java.security.KeyStore.Entry.Attribute;
 
 import com.zygh.lz.dao.SectionMapper;
 import com.zygh.lz.dao.XareaMapper;
@@ -18,6 +19,7 @@ import java.util.*;
 public class XlevelserviceServiceImpl implements XlevelserviceService {
     @Autowired
     private XlevelserviceMapper xlevelserviceMapper;
+
     @Autowired
     private SectionMapper sectionMapper;
 
