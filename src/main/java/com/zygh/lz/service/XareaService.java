@@ -1,5 +1,6 @@
 package com.zygh.lz.service;
 
+import com.zygh.lz.entity.Dailyservice;
 import com.zygh.lz.entity.Xarea;
 import com.zygh.lz.vo.ResultBean;
 
@@ -96,4 +97,7 @@ public interface XareaService {
     ResultBean selectTaskInfo();
     //根据id,大队，岗位查询区域详情
     ResultBean findDetailsByInfo(Integer id, Integer sectionDid, String grid);
+
+    //根据区域id查询人员详情
+    ResultBean findStaffInfo(Integer id);
 }

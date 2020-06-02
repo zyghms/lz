@@ -1083,6 +1083,19 @@ public class XareaServiceImpl implements XareaService {
         return ResultUtil.setOK("success",detailsByInfo);
     }
 
+    /**
+     * 根据区域id查询人员详情
+     * @param id
+     * @return
+     */
+    @Override
+    public ResultBean findStaffInfo(Integer id) {
+        List<Dailyservice> staffInfo = xareaMapper.findStaffInfo(id);
+        if(staffInfo.size()>=0){
+            return ResultUtil.setOK("success",staffInfo);
+        }
+        return ResultUtil.setError(SystemCon.RERROR1,"error",null);
+    }
 
 
 }

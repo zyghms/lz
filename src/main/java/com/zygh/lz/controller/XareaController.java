@@ -171,4 +171,14 @@ public class XareaController {
         return xareaService.findDetailsByInfo(id, sectionDid, grid);
     }
 
+    /**
+     * 根据区域id查询人员详情
+     * @param id
+     * @return
+     */
+    @GetMapping("findStaffInfo")
+    public ResultBean findStaffInfo(Integer id){
+        return xareaService.findStaffInfo(id);
+    }
+
 }
