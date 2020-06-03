@@ -2,8 +2,10 @@ package com.zygh.lz.service.impl;
 import	java.security.KeyStore.Entry.Attribute;
 
 import com.zygh.lz.dao.SectionMapper;
+import com.zygh.lz.dao.SptypeMapper;
 import com.zygh.lz.dao.XareaMapper;
 import com.zygh.lz.entity.Section;
+import com.zygh.lz.entity.Sptype;
 import com.zygh.lz.entity.Xlevelservice;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.dao.XlevelserviceMapper;
@@ -26,6 +28,8 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
     @Autowired
     private XareaMapper xareaMapper;
 
+    @Autowired
+    private SptypeMapper sptypeMapper;
 
     /**
      * 查询全部等级勤务
@@ -162,24 +166,37 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
         }
 
         //子级大队菜单 后期需要修改下
+        //需要查询下sptype表查询所有的特殊勤务类型
+        List<Sptype> sptypeList=null;
         Iterator iterList = sectionList.iterator();
         while (iterList.hasNext()) {
             Xlevelservice treemenu = (Xlevelservice) iterList.next();
-            Xlevelservice xlevels = new Xlevelservice();
-            xlevels.setId(1);
-            xlevels.setNumber(2);
-            xlevels.setCallsign("等级勤务");
-            selectBySublevel.add(xlevels);
-            treemenu.setSectionList(selectBySublevel);
-        }
-        //三级菜单集合
-        Iterator<Xlevelservice> iterator = selectBySublevel.iterator();
-        while (iterator.hasNext()){
-            Xlevelservice next = iterator.next();
-            levelMenu =  xlevelserviceMapper.selectSpecialService();
-            next.setSectionList(levelMenu);
-        }
+//            Xlevelservice xlevels = new Xlevelservice();
+//            xlevels.setId(1);
+//            xlevels.setNumber(2);
+//            xlevels.setCallsign("等级勤务");
+//            selectBySublevel.add(xlevels);
+//            treemenu.setSectionList(selectBySublevel);
+            sptypeList = sptypeMapper.selectAllType();
+            for (int j = 0; j < sptypeList.size(); j++) {
+                Xlevelservice xlevels = new Xlevelservice();
+                xlevels.setCallsign(sptypeList.get(j).getSsname());
+                xlevels.setId(sptypeList.get(j).getId());
+                xlevels.setNumber(sptypeList.get(j).getLx());
+                xlevels.setState(sptypeList.get(j).getYxzt());
+                selectBySublevel.add(xlevels);
+                treemenu.setSectionList(selectBySublevel);
 
+            }
+        }
+//
+        //三级菜单集合 根据勤务类型查询所有勤务
+        Iterator<Xlevelservice> iterator = selectBySublevel.iterator();
+        Xlevelservice next = iterator.next();  //目前只有等级寝取只能查询一次
+        while (iterator.hasNext()){
+            levelMenu =  xlevelserviceMapper.selectSpecialService(sptypeList.get(0).getLx());
+            next.setSectionList(levelMenu);
+          }
         //子级大队菜单
 //        Iterator iterList = sectionList.iterator();
 //        while (iterList.hasNext()) {
@@ -202,7 +219,7 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
 
     @Override
     public ResultBean addSpecialService(Xlevelservice xlevelservice) {
-        return ResultUtil.execOp(xlevelserviceMapper.insert(xlevelservice),"新增");
+        return ResultUtil.execOp(xlevelserviceMapper.insertSelective(xlevelservice),"新增");
 
     }
 
