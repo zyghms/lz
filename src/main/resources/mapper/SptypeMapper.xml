@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zygh.lz.dao.SptypeMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Sptype" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="ssname" property="ssname" jdbcType="VARCHAR" />
+    <result column="lx" property="lx" jdbcType="INTEGER" />
+    <result column="cjsj" property="cjsj" jdbcType="TIMESTAMP" />
+    <result column="zhxgsj" property="zhxgsj" jdbcType="TIMESTAMP" />
+    <result column="yxzt" property="yxzt" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, ssname, lx, cjsj, zhxgsj, yxzt
+  </sql>
+
+ <select id="selectAllType" resultMap="BaseResultMap">
+   select id,ssname,lx,cjsj,zhxgsj,yxzt
+   from  sptype
+ </select>
+</mapper>
