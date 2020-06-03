@@ -260,7 +260,7 @@
       s.id,s.callsign,s.place,s.suboffice_id,s.number, s.section_id,s.ondutytime,
       s.location,s.hierarchy,s.conment,s.state,s.zt
     from xlevelservice s, sptype p
-    where s.state=p.lx
+    where s.state=p.lx and zt=1
     </select>
     <select id="selectSpecialServices" resultType="map">
         SELECT *  from	 xlevelservice where state=#{state} and zt=1
