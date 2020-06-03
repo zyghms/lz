@@ -17,5 +17,6 @@
  <select id="selectAllType" resultMap="BaseResultMap">
    select id,ssname,lx,cjsj,zhxgsj,yxzt
    from  sptype
+   where yxzt=1
  </select>
 </mapper>

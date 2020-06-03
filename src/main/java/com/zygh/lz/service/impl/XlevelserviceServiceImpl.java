@@ -190,10 +190,10 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
             }
         }
 //
-        //三级菜单集合 根据勤务类型查询所有勤务
+        // 可以查询出来所有类型 但是三级菜单集合 根据勤务类型查询所有勤务
         Iterator<Xlevelservice> iterator = selectBySublevel.iterator();
-        Xlevelservice next = iterator.next();  //目前只有等级寝取只能查询一次
         while (iterator.hasNext()){
+            Xlevelservice next = iterator.next();
             levelMenu =  xlevelserviceMapper.selectSpecialService(sptypeList.get(0).getLx());
             next.setSectionList(levelMenu);
           }
