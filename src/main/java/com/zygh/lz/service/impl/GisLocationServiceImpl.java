@@ -19,10 +19,10 @@ public class GisLocationServiceImpl implements GisLocationService {
 
     @Override
     public ResultBean selectGisLocation() {
-//        List<GisLocation> gisLocationList = gisLocationMapper.selectGisLocation();
-//        if(gisLocationList.size() > 0){
-//            return ResultUtil.setOK("success",gisLocationList);
-//        }
+        List<GisLocation> gisLocationList = gisLocationMapper.selectGisLocation();
+        if(gisLocationList.size() > 0){
+            return ResultUtil.setOK("success",gisLocationList);
+        }
         return ResultUtil.setError(SystemCon.RERROR1,"error",null);
 
     }

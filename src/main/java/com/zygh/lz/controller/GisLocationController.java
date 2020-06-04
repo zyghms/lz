@@ -25,7 +25,7 @@ public class GisLocationController {
      * User:luanhuajuan
      * Date:2020-05-29 9:11
      */
-    @GetMapping(value = "/selectGisLocation")
+    @GetMapping(value = "selectGisLocation")
     public ResultBean selectGisLocation(){
         return gisLocationService.selectGisLocation();
 
