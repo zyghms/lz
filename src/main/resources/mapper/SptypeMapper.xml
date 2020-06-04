@@ -19,4 +19,55 @@
    from  sptype
    where yxzt=1
  </select>
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Sptype">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sptype
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ssname != null">
+        ssname,
+      </if>
+      <if test="lx != null">
+        lx,
+      </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+      <if test="zhxgsj != null">
+        zhxgsj,
+      </if>
+      <if test="yxzt != null">
+        yxzt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ssname != null">
+        #{ssname,jdbcType=VARCHAR},
+      </if>
+      <if test="lx != null">
+        #{lx,jdbcType=INTEGER},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zhxgsj != null">
+        #{zhxgsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="yxzt != null">
+        #{yxzt,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Sptype">
+    update sptype
+    set ssname = #{ssname,jdbcType=VARCHAR},
+    lx = #{lx,jdbcType=INTEGER},
+    cjsj = #{cjsj,jdbcType=TIMESTAMP},
+    zhxgsj = #{zhxgsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="delSptype">
+    update sptype set yxzt=0 where id=#{id,jdbcType=INTEGER}
+  </update>
 </mapper>
