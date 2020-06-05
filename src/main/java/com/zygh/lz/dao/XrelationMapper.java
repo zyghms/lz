@@ -14,4 +14,6 @@ public interface XrelationMapper {
     int updateByPrimaryKeySelective(Xrelation record);
 
     int updateByPrimaryKey(Xrelation record);
+
+    Xrelation findXrealationByid(Integer staffId,Integer xareaId);
 }

@@ -1,5 +1,8 @@
 package com.zygh.lz.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -9,7 +12,7 @@ import java.util.Map;
  */
 public class GraphUtils {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Map[] map=new Map[]{};
       //  113.726268,34.734365,113.726787,34.76125,113.711616,34.773958,113.709723,34.776454,
         // 113.708655,34.778845,113.706652,34.79298,113.705708,34.798997,113.705,34.801438,
@@ -93,7 +96,7 @@ public class GraphUtils {
         System.out.println( "y1:" + isPtInPoly(y1.getX() , y1.getY() , ps));
         System.out.println( "y2:" + isPtInPoly(y2.getX() , y2.getY() , ps));
         System.out.println( "y4:" + isPtInPoly(y4.getX() , y4.getY() , ps));
-    }
+    }*/
     public static boolean isPtInPoly (double ALon , double ALat , Point[] ps) {
         int iSum, iCount, iIndex;
         double dLon1 = 0, dLon2 = 0, dLat1 = 0, dLat2 = 0, dLon;
@@ -130,5 +133,16 @@ public class GraphUtils {
             return true;
         }
         return false;
+    }
+
+    public static void main(String[] args) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");// 格式化时间
+        Date parse = sdfs.parse("2020-05-16 08:00:00.002");
+        //Date parse1 = sdfs.parse(cfparticulars.getKssj());
+        String format1 = format.format(parse);
+        //String format2 = format.format(cfparticulars.getKssj());
+        System.out.println("时间：" + format1);
+        //System.out.println("时间：" + format2);
     }
 }

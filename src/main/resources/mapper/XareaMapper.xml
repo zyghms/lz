@@ -1339,23 +1339,23 @@
     </select>
     <!--三级菜单任务信息-->
     <select id="findLevelMenu" resultType="map">
-        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName FROM xarea WHERE station='固定岗' AND section_Did=#{sectionid}
+        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName,section_Did as sectionPid FROM xarea WHERE station='固定岗' AND section_Did=#{sectionid}
         UNION ALL
-        SELECT id as sysSectionId,CONCAT_WS('-',gridding,name) as sectionName FROM xarea WHERE  conment ='2' AND gridding LIKE '%铁骑%' AND  section_Did=#{sectionid}    GROUP BY gridding
+        SELECT id as sysSectionId,CONCAT_WS('-',gridding,name) as sectionName,section_Did as sectionPid FROM xarea WHERE  conment ='2' AND gridding LIKE '%铁骑%' AND  section_Did=#{sectionid}    GROUP BY gridding
         UNION ALL
-        SELECT id as sysSectionId,CONCAT_WS('-',gridding,name) as sectionName from	 xarea WHERE conment='3'  AND gridding LIKE '%夜巡%'  and station='区域' and section_Did=#{sectionid} GROUP BY gridding
+        SELECT id as sysSectionId,CONCAT_WS('-',gridding,name) as sectionName,section_Did as sectionPid from	 xarea WHERE conment='3'  AND gridding LIKE '%夜巡%'  and station='区域' and section_Did=#{sectionid} GROUP BY gridding
         UNION ALL
-        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName FROM xarea WHERE station='高峰岗' AND section_Did=#{sectionid}
+        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName,section_Did as sectionPid FROM xarea WHERE station='高峰岗' AND section_Did=#{sectionid}
         UNION ALL
-        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName FROM xarea WHERE station='机动岗' AND section_Did=#{sectionid}
+        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName,section_Did as sectionPid FROM xarea WHERE station='机动岗' AND section_Did=#{sectionid}
         UNION ALL
-        SELECT id as sysSectionId,CONCAT_WS('-',gridding,name) as sectionName FROM xarea WHERE gridding LIKE '%网格%' AND section_Did=#{sectionid}  GROUP BY gridding
+        SELECT id as sysSectionId,CONCAT_WS('-',gridding,name) as sectionName,section_Did as sectionPid FROM xarea WHERE gridding LIKE '%网格%' AND section_Did=#{sectionid}  GROUP BY gridding
         UNION ALL
-        SELECT id as sysSectionId,CONCAT_WS('-',gridding,name) as sectionName FROM xarea WHERE conment = 4 AND section_Did = #{sectionid}
+        SELECT id as sysSectionId,CONCAT_WS('-',gridding,name) as sectionName,section_Did as sectionPid FROM xarea WHERE conment = 4 AND section_Did = #{sectionid}
         UNION ALL
-        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName FROM xarea WHERE station='高速岗' AND section_Did=#{sectionid}
+        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName,section_Did as sectionPid FROM xarea WHERE station='高速岗' AND section_Did=#{sectionid}
         UNION ALL
-        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName FROM xarea WHERE station='快速岗' AND section_Did=#{sectionid}
+        SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName,section_Did as sectionPid FROM xarea WHERE station='快速岗' AND section_Did=#{sectionid}
     </select>
     <!--网格下任务信息-->
     <select id="findGridMenu" resultType="map">
@@ -1364,7 +1364,7 @@
     </select>
     <!--根据id,大队，岗位查询区域详情-->
     <select id="findDetailsByInfo" resultType="com.zygh.lz.entity.Regional">
-        SELECT id,station,name FROM xarea
+        SELECT id,station,name,CONCAT_WS('+',startTime,endTime) as time FROM xarea
         <where>
             <if test="grid!=null and grid!='' ">
                 and gridding = #{grid}

@@ -9,7 +9,7 @@ public interface XrelationService {
     //修改
     ResultBean updateXrelation(Xrelation xrelation);
     //删除
-    ResultBean  deleteXrelatonByid(Integer id);
+    ResultBean  deleteXrelatonByid(Integer staffId,Integer xareaId);
 
 
 }

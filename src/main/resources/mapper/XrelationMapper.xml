@@ -90,4 +90,7 @@
       pcty = #{pcty,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="findXrealationByid" resultMap="BaseResultMap">
+    SELECT * FROM xrelation WHERE staff_id=#{staffId} AND xarea_id=#{xareaId}
+  </select>
 </mapper>

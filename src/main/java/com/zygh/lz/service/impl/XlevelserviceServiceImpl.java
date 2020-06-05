@@ -193,7 +193,7 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
 
     @Override
     public ResultBean addSpecialService(Xlevelservice xlevelservice) {
-        return ResultUtil.execOp(xlevelserviceMapper.insert(xlevelservice),"新增");
+        return ResultUtil.execOp(xlevelserviceMapper.insertSelective(xlevelservice),"新增");
 
     }
 

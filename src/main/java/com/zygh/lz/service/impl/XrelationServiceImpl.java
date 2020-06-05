@@ -21,11 +21,14 @@ public class XrelationServiceImpl implements XrelationService {
 
     @Override
     public ResultBean updateXrelation(Xrelation xrelation) {
+        Xrelation xrealationByid = xrelationMapper.findXrealationByid(xrelation.getStaffId(), xrelation.getXareaId());
+        xrelation.setId(xrealationByid.getId());
         return ResultUtil.execOp(xrelationMapper.updateByPrimaryKeySelective(xrelation),"修改");
     }
 
     @Override
-    public ResultBean deleteXrelatonByid(Integer id) {
-        return ResultUtil.execOp(xrelationMapper.deleteByPrimaryKey(id),"删除");
+    public ResultBean deleteXrelatonByid(Integer staffId,Integer xareaId) {
+        Xrelation xrealationByid = xrelationMapper.findXrealationByid(staffId, xareaId);
+        return ResultUtil.execOp(xrelationMapper.deleteByPrimaryKey(xrealationByid.getId()),"删除");
     }
 }

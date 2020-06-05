@@ -140,7 +140,7 @@
       Is_delete = #{isDelete,jdbcType=INTEGER}
     where sys_message_id = #{sysMessageId,jdbcType=INTEGER}
   </update>
-    <select id="slectAllmessage" resultMap="BaseResultMap">
+    <select id="slectAllmessage" resultType="map">
         SELECT m.*,(SELECT staff_name FROM staff WHERE sys_staff_id=m.launch_id) as launchName FROM message m
         <where>
             <if test="messageState != null">

@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notice implements Serializable{
+public class Notice implements Serializable {
     private Integer sysNoticeId;
 
     private String noticeContent;
