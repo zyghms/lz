@@ -28,11 +28,11 @@
     where sys_notice_id = #{sysNoticeId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.zygh.lz.entity.Notice" >
-    insert into notice (sys_notice_id, notice_content, notice_url, 
+    insert into notice (notice_content, notice_url,
       notice_send, notice_accept, notice_title, 
       notice_time, notice_detail)
-    values (#{sysNoticeId,jdbcType=INTEGER}, #{noticeContent,jdbcType=VARCHAR}, #{noticeUrl,jdbcType=VARCHAR}, 
-      #{noticeSend,jdbcType=INTEGER}, #{noticeAccept,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=VARCHAR}, 
+    values (#{noticeContent,jdbcType=VARCHAR}, #{noticeUrl,jdbcType=VARCHAR},
+      #{noticeSend,jdbcType=INTEGER}, #{noticeAccept,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=VARCHAR},
       #{noticeTime,jdbcType=TIMESTAMP}, #{noticeDetail,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.zygh.lz.entity.Notice" >
