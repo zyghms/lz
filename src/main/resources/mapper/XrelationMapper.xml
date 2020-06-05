@@ -90,4 +90,7 @@
       pcty = #{pcty,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <delete id="deleteById">
+    delete  from   xrelation where staff_id = #{staffId} and xarea_id = #{xareaId}
+  </delete>
 </mapper>
