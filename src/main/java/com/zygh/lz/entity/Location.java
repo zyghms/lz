@@ -3,6 +3,7 @@ package com.zygh.lz.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,7 +19,8 @@ public class Location implements Serializable{
     private String gpsX;
 
     private String gpsY;
-
+    
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
 
 }

@@ -3,6 +3,7 @@ package com.zygh.lz.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,8 +24,10 @@ public class Sptype implements Serializable {
 
     private Integer lx;  //对应等级勤务的state字段
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date cjsj;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date zhxgsj;
 
     private Integer yxzt;

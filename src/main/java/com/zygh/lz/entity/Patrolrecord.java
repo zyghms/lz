@@ -3,6 +3,7 @@ package com.zygh.lz.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,8 +17,10 @@ public class Patrolrecord implements Serializable {
 
     private Integer sysStaffId;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date patrolRecordBegintime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date patrolRecordEndtime;
 
     private String patrolRecordPicture;
