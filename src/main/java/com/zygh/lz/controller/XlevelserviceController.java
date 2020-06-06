@@ -77,7 +77,7 @@ public class XlevelserviceController {
     }
 
     //修改特殊勤务
-    @GetMapping(" updateSpecialService")
+    @GetMapping("updateSpecialService")
     public ResultBean updateSpecialService(Xlevelservice xlevelservice){
         return xlevelserviceService.updateSpecialService(xlevelservice);
     }

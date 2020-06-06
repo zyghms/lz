@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zygh.lz.dao.SptypeMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Sptype" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="ssname" property="ssname" jdbcType="VARCHAR" />
+    <result column="lx" property="lx" jdbcType="INTEGER" />
+    <result column="cjsj" property="cjsj" jdbcType="TIMESTAMP" />
+    <result column="zhxgsj" property="zhxgsj" jdbcType="TIMESTAMP" />
+    <result column="yxzt" property="yxzt" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, ssname, lx, cjsj, zhxgsj, yxzt
+  </sql>
+
+ <select id="selectAllType" resultMap="BaseResultMap">
+   select id,ssname,lx,cjsj,zhxgsj,yxzt
+   from  sptype
+   where yxzt=1
+ </select>
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Sptype">
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sptype
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ssname != null">
+        ssname,
+      </if>
+      <if test="lx != null">
+        lx,
+      </if>
+      <if test="cjsj != null">
+        cjsj,
+      </if>
+      <if test="zhxgsj != null">
+        zhxgsj,
+      </if>
+      <if test="yxzt != null">
+        yxzt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ssname != null">
+        #{ssname,jdbcType=VARCHAR},
+      </if>
+      <if test="lx != null">
+        #{lx,jdbcType=INTEGER},
+      </if>
+      <if test="cjsj != null">
+        #{cjsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="zhxgsj != null">
+        #{zhxgsj,jdbcType=TIMESTAMP},
+      </if>
+      <if test="yxzt != null">
+        #{yxzt,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Sptype">
+    update sptype
+    set ssname = #{ssname,jdbcType=VARCHAR},
+    lx = #{lx,jdbcType=INTEGER},
+    cjsj = #{cjsj,jdbcType=TIMESTAMP},
+    zhxgsj = #{zhxgsj,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="delSptype">
+    update sptype set yxzt=0 where id=#{id,jdbcType=INTEGER}
+  </update>
+</mapper>

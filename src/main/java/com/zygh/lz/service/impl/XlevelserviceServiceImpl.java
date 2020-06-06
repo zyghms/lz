@@ -1,8 +1,11 @@
 package com.zygh.lz.service.impl;
+import	java.security.KeyStore.Entry.Attribute;
 
 import com.zygh.lz.dao.SectionMapper;
+import com.zygh.lz.dao.SptypeMapper;
 import com.zygh.lz.dao.XareaMapper;
 import com.zygh.lz.entity.Section;
+import com.zygh.lz.entity.Sptype;
 import com.zygh.lz.entity.Xlevelservice;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.dao.XlevelserviceMapper;
@@ -18,12 +21,15 @@ import java.util.*;
 public class XlevelserviceServiceImpl implements XlevelserviceService {
     @Autowired
     private XlevelserviceMapper xlevelserviceMapper;
+
     @Autowired
     private SectionMapper sectionMapper;
 
     @Autowired
     private XareaMapper xareaMapper;
 
+    @Autowired
+    private SptypeMapper sptypeMapper;
 
     /**
      * 查询全部等级勤务
@@ -149,35 +155,55 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
         for (int i = 0; i < sections.size(); i++) {
             if(sections.get(i).getSectionPid()==0){
                 Xlevelservice xlevel = new Xlevelservice();
-                xlevel.setId(sections.get(0).getSysSectionId());
-                xlevel.setNumber(sections.get(0).getSectionPid());
-                xlevel.setCallsign(sections.get(0).getSectionName());
-                xlevel.setPlace(sections.get(0).getSectionPosition());
-                xlevel.setLocation(sections.get(0).getSectionTel());
-                xlevel.setHierarchy(sections.get(0).getSectionPerson());
+                xlevel.setId(sections.get(i).getSysSectionId());
+                xlevel.setNumber(sections.get(i).getSectionPid());
+                xlevel.setCallsign(sections.get(i).getSectionName());
+                xlevel.setPlace(sections.get(i).getSectionPosition());
+                xlevel.setLocation(sections.get(i).getSectionTel());
+                xlevel.setHierarchy(sections.get(i).getSectionPerson());
                 sectionList.add(xlevel);
             }
         }
-        //子级大队菜单
+
+        //子级大队菜单 后期需要修改下
+        //需要查询下sptype表查询所有的特殊勤务类型
+        List<Sptype> sptypeList=null;
         Iterator iterList = sectionList.iterator();
         while (iterList.hasNext()) {
             Xlevelservice treemenu = (Xlevelservice) iterList.next();
-            selectBySublevel =  xlevelserviceMapper.selectSpecialService();
-            treemenu.setSectionList(selectBySublevel);
+//            Xlevelservice xlevels = new Xlevelservice();
+//            xlevels.setId(1);
+//            xlevels.setNumber(2);
+//            xlevels.setCallsign("等级勤务");
+//            selectBySublevel.add(xlevels);
+//            treemenu.setSectionList(selectBySublevel);
+            sptypeList = sptypeMapper.selectAllType();
+            for (int j = 0; j < sptypeList.size(); j++) {
+                Xlevelservice xlevels = new Xlevelservice();
+                xlevels.setCallsign(sptypeList.get(j).getSsname());
+                xlevels.setId(sptypeList.get(j).getId());
+                xlevels.setNumber(sptypeList.get(j).getLx());
+                xlevels.setState(sptypeList.get(j).getYxzt());
+                selectBySublevel.add(xlevels);
+                treemenu.setSectionList(selectBySublevel);
+
+            }
         }
+//
+        // 可以查询出来所有类型 但是三级菜单集合 根据勤务类型查询所有勤务
+        Iterator<Xlevelservice> iterator = selectBySublevel.iterator();
+        while (iterator.hasNext()){
+            Xlevelservice next = iterator.next();
+            levelMenu =  xlevelserviceMapper.selectSpecialService(sptypeList.get(0).getLx());
+            next.setSectionList(levelMenu);
+          }
         //子级大队菜单
-//        selectBySublevel =  xlevelserviceMapper.selectSpecialService();
-//        listAll.addAll(selectBySublevel);
-//        testList.addAll(listAll);
-//        Xlevelservice xlevels=new  Xlevelservice();
-        //三级菜单集合
-//        for (int i=0; i<selectBySublevel.size(); i++) {
-//            levelMenu=xlevelserviceMapper.selectSpecialServices(selectBySublevel.get(i).getState());
-//            listAll.addAll(levelMenu);
+//        Iterator iterList = sectionList.iterator();
+//        while (iterList.hasNext()) {
+//            Xlevelservice treemenu = (Xlevelservice) iterList.next();
+//            selectBySublevel =  xlevelserviceMapper.selectSpecialService();
+//            treemenu.setSectionList(selectBySublevel);
 //        }
-//            levelMenu =xlevelserviceMapper.selectSpecialServices(iterator.next().getState());;
-//            listAll.addAll(levelMenu);
-        //三级菜单集合
 
         return ResultUtil.setOK("success",sectionList);
 
@@ -199,7 +225,7 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
 
     @Override
     public ResultBean updateSpecialService(Xlevelservice  xlevelservice) {
-        return ResultUtil.execOp(xlevelserviceMapper.updateByPrimaryKeySelective(xlevelservice),"修改");
+        return ResultUtil.execOp(xlevelserviceMapper.updateByPrimaryKey(xlevelservice),"修改");
 
 
     }

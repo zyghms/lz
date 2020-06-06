@@ -93,4 +93,7 @@
   <select id="findXrealationByid" resultMap="BaseResultMap">
     SELECT * FROM xrelation WHERE staff_id=#{staffId} AND xarea_id=#{xareaId}
   </select>
+  <delete id="deleteById">
+    delete  from   xrelation where staff_id = #{staffId} and xarea_id = #{xareaId}
+  </delete>
 </mapper>

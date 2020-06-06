@@ -48,7 +48,7 @@ public interface XlevelserviceMapper {
     List<Xlevelservice> selectXleverdJnum(@Param("hierarchy") Integer hierarchy,
                                           @Param("sectionName") String sectionName);
     //查询特殊勤务左侧列表
-    List<Xlevelservice> selectSpecialService();
+    List<Xlevelservice> selectSpecialService(@Param("lx") Integer lx);
 
     //查询特殊勤务左侧列表
     List<Xlevelservice> selectSpecialServices(@Param("state") Integer state);

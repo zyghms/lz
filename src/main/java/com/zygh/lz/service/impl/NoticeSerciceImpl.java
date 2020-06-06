@@ -34,7 +34,7 @@ public class NoticeSerciceImpl implements NoticeService {
     @Override
     public ResultBean addNotice(Notice notice) {
         notice.setNoticeTime(new Date());
-        return ResultUtil.execOp(noticeMapper.insertSelective(notice),"新增");
+        return ResultUtil.execOp(noticeMapper.insert(notice),"新增");
     }
 
     /**

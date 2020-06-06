@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class GisLocation {
     private int id;   //地图坐标id
     private String name; //所属区域名称
-//    prviate String number;   //地图缩放级别
+    private String grade; //所属区域名称
     private String center;    //地图中心坐标
     private String  area; //地图的位置坐标
     private String marker; //默认空值  前端页面需要

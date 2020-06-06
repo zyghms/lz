@@ -4,33 +4,33 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
-
+/**
+ * Description:
+ * User:luanhuajuan
+ * Date:2020-06-02 17:36
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Xdeclare implements Serializable {
+public class Sptype implements Serializable {
     private Integer id;
 
-    private String appear;
+    private String ssname;
 
-    private String accepter;
-
-    private String document;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date establishtime;
+    private Integer lx;  //对应等级勤务的state字段
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date starttime;
+    private Date cjsj;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date stoptime;
+    private Date zhxgsj;
 
-    private String state;
+    private Integer yxzt;
 
-    private String conmnet;
+
 }

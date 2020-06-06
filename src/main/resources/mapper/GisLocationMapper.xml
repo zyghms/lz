@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.zygh.lz.entity.GisLocation">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="number" property="number" jdbcType="VARCHAR"/>
+        <result column="grade" property="grade" jdbcType="VARCHAR"/>
         <result column="center" property="center" jdbcType="VARCHAR"/>
         <result column="area" property="area" jdbcType="CLOB"/>
         <result column="marker" property="marker" jdbcType="VARCHAR"/>
@@ -14,10 +14,10 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    id, name, number, center, area, marker,polygon, color,remark
+    id, name, grade, center, area, marker,polygon, color,remark
   </sql>
-    <select id="selectGisLocation">
-     select id,name,number,center,area,marker,polygon,color,remark
+    <select id="selectGisLocation" resultMap="BaseResultMap">
+     select id,name,grade,center,area,marker,polygon,color,remark
         from gislocation
     </select>
 

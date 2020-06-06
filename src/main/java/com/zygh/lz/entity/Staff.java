@@ -3,6 +3,7 @@ package com.zygh.lz.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -69,6 +70,7 @@ public class Staff  implements Serializable{
     private String battalion;
 
     //上岗时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date patrolRecordBegintime;
 
     private Integer sectionpid;
