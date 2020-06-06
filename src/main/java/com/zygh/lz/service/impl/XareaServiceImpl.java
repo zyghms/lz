@@ -1057,26 +1057,15 @@ public class XareaServiceImpl implements XareaService {
     @Override
     public ResultBean findDetailsByInfo(Integer id, Integer sectionDid, String grid) {
         List<Regional> detailsByInfo = new ArrayList<Regional>();
-        if (grid != null) {
-            String substring = grid.substring(0,grid.indexOf('-'));
-            if (grid.contains("网格")) {
-                detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
-                for (int i = 0; i < detailsByInfo.size(); i++) {
-                    detailsByInfo.get(i).setStation(substring);
-                }
-            } else if (grid.contains("铁骑")) {
-                detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
-                for (int i = 0; i < detailsByInfo.size(); i++) {
-                    detailsByInfo.get(i).setStation(substring);
-                }
-                return ResultUtil.setOK("success",detailsByInfo);
-            } else if (grid.contains("夜巡")) {
+        if (!grid.isEmpty()) {
+            if (grid.contains("岗")) {
+                String substring = grid.substring(0,grid.indexOf('-'));
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {
                     detailsByInfo.get(i).setStation(substring);
                 }
             } else {
-                detailsByInfo = xareaMapper.findDetailsByInfo(id, null, null);
+                detailsByInfo = xareaMapper.findDetailsByInfo(id, sectionDid, grid);
             }
         }
 
