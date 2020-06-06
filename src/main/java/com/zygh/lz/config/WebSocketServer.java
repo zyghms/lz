@@ -2,8 +2,11 @@ package com.zygh.lz.config;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zygh.lz.controller.CommonFunForHttp;
+import com.zygh.lz.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -14,43 +17,52 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
+/*
  * @author Siona
  * @date 2020/4/8 17:43
- **/
+ */
+
 @Slf4j
 @ServerEndpoint("/ws/{userId}")
 @Component
 public class WebSocketServer {
 
+    @Autowired
+    CommonFunForHttp commonFunForHttp;
+
     /**
      * 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的
      */
+
     private static int onlineCount = 0;
 
     /**
      * concurrent 包的线程安全Set，用来存放每个客户端对应的 myWebSocket对象
-     * 根据userId来获取对应的 WebSocket
+     *  根据userId来获取对应的 WebSocket
      */
+
     private static ConcurrentHashMap<String, WebSocketServer> webSocketMap = new ConcurrentHashMap<>();
 
     /**
      * 与某个客户端的连接会话，需要通过它来给客户端发送数据
      */
+
     private Session session;
 
     /**
      * 接收 sid
      */
-    private String userId = "";
+
+     private String userId = "";
 
 
-    /**
-     * 连接建立成功调用的方法
-     *
+     /**
+     *连接建立成功调用的方法
      * @param session
      * @param userId
      */
+
+
     @OnOpen
     public void onOpen(Session session, @PathParam("userId") String userId) {
         this.session = session;
@@ -63,7 +75,9 @@ public class WebSocketServer {
         log.info("有新窗口开始监听:" + userId + ",当前在线人数为" + getOnlineCount());
 
         try {
+
             sendMessage(JSON.toJSONString("连接成功"));
+            //sendMessage(JSON.toJSONString(commonFunForHttp.findRealTime(staff.getStaffNum())));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("websocket IO异常！！！！");
@@ -76,6 +90,10 @@ public class WebSocketServer {
      * 关闭连接
      */
 
+
+
+
+
     @OnClose
     public void onClose() {
         if (webSocketMap.get(this.userId) != null) {
@@ -85,28 +103,38 @@ public class WebSocketServer {
         }
     }
 
+
     /**
      * 收到客户端消息后调用的方法
      *
      * @param message 客户端发送过来的消息
      * @param session
      */
+
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("收到来自窗口" + userId + "的信息：" + message);
 
         if (StringUtils.isNotBlank(message)) {
             try {
-                // 解析发送的报文
+                /*// 解析发送的报文
                 JSONObject jsonObject = JSON.parseObject(message);
                 // 追加发送人（防窜改）
                 jsonObject.put("fromUserId", this.userId);
                 String toUserId = jsonObject.getString("toUserId");
                 // 传送给对应 toUserId 用户的 WebSocket
                 if (StringUtils.isNotBlank(toUserId) && webSocketMap.containsKey(toUserId)) {
+                    System.out.println("sss");
                     webSocketMap.get(toUserId).sendMessage(jsonObject.toJSONString());
                 } else {
                     log.info("请求的userId：" + toUserId + "不在该服务器上"); // 否则不在这个服务器上，发送到 MySQL 或者 Redis
+                }*/
+                System.out.println("message:"+message);
+                String realTime = StringUtil.findRealTime(message);
+                if(realTime!=null){
+                    webSocketMap.get(this.userId).sendMessage(realTime);
+                }else{
+                    log.info("请求无返回结果!");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -116,9 +144,12 @@ public class WebSocketServer {
     }
 
     /**
+     *
      * @param session
      * @param error
      */
+
+
     @OnError
     public void onError(Session session, Throwable error) {
         log.error("用户错误：" + this.userId + "，原因：" + error.getMessage());
@@ -127,21 +158,22 @@ public class WebSocketServer {
 
     /**
      * 实现服务器主动推送
-     *
      * @param message
      * @throws IOException
      */
+
     public void sendMessage(String message) throws IOException {
         this.session.getBasicRemote().sendText(message);
     }
 
     /**
      * 群发自定义消息
-     *
      * @param message
      * @param userId
      * @throws IOException
      */
+
+
     public static void sendInfo(String message, @PathParam("userId") String userId) throws IOException {
 
         // 遍历集合，可设置为推送给指定sid，为 null 时发送给所有人

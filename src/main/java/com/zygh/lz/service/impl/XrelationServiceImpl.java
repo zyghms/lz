@@ -15,9 +15,6 @@ public class XrelationServiceImpl implements XrelationService {
     @Autowired
     private XrelationMapper xrelationMapper;
 
-//    @Autowired
-//    private StaffMapper staffMapper;
-
     @Override
     public ResultBean insertXrelation(Xrelation xrelation) {
         return ResultUtil.execOp(xrelationMapper.insertSelective(xrelation),"新增");
@@ -25,6 +22,8 @@ public class XrelationServiceImpl implements XrelationService {
 
     @Override
     public ResultBean updateXrelation(Xrelation xrelation) {
+        Xrelation xrealationByid = xrelationMapper.findXrealationByid(xrelation.getStaffId(), xrelation.getXareaId());
+        xrelation.setId(xrealationByid.getId());
         return ResultUtil.execOp(xrelationMapper.updateByPrimaryKeySelective(xrelation),"修改");
     }
 

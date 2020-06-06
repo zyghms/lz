@@ -1,12 +1,8 @@
 package com.zygh.lz.util;
 
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
+import com.google.gson.annotations.JsonAdapter;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -19,6 +15,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class HttpClientUtil {
 
@@ -46,6 +48,7 @@ public class HttpClientUtil {
             URI uri = builder.build();
             // 创建http GET请求
             HttpGet httpGet = new HttpGet(uri);
+            httpGet.addHeader("Content-type", "application/json");
             // 执行请求
             response = httpclient.execute(httpGet);
             // 判断返回状态是否为200
@@ -100,6 +103,8 @@ public class HttpClientUtil {
                 }
                 // 模拟表单
                 UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);
+                entity.setContentEncoding("UTF-8");
+                entity.setContentType("application/json");
                 httpPost.setEntity(entity);
             }
             // 执行http请求

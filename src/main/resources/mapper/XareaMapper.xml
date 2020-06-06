@@ -1351,11 +1351,11 @@
         xarea WHERE gridding = #{gridding} AND section_Did = #{sectionid}
     </select>
     <!--根据id,大队，岗位查询区域详情-->
-    <select id="findDetailsByInfo" resultType="com.zygh.lz.entity.Xarea">
+    <select id="findDetailsByInfo" resultType="com.zygh.lz.entity.Regional">
         SELECT id,station,name FROM xarea
         <where>
             <if test="grid!=null and grid!='' ">
-                 gridding = #{grid}
+                and gridding = #{grid}
             </if>
             <if test="sectionDid!=null and sectionDid!='' ">
                 AND section_Did = #{sectionDid}

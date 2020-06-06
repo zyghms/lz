@@ -24,7 +24,7 @@ public class XrelationController {
     }
     //删除
     @GetMapping("deleteXrelatonByid")
-    public ResultBean  deleteXrelatonByid(Integer staffId,Integer xareaId ){
+    public ResultBean  deleteXrelatonByid(Integer staffId,Integer xareaId){
         return xrelationService.deleteXrelatonByid(staffId,xareaId);
     }
 }
