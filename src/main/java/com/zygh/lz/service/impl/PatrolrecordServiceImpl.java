@@ -1430,7 +1430,12 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
                         ddMap.put("ddName", ddName);
                         ddMap.put("ddYDnum", ddYDSum);
                         ddMap.put("fjYDsum", fjddYDSum);
-                        ddMap.put("ddSDnum", ddSDSum);
+                        if (ddSDSum == 0) {
+                            ddMap.put("ddSDnum", 0);
+                        }else{
+                            ddMap.put("ddSDnum", ddSDSum);
+                        }
+//                        ddMap.put("ddSDnum", ddSDSum);
                         ddMap.put("fjSDSum", fjddSDSum);
                         if ((ddYDSum) == 0) {
                             ddMap.put("gfZXL", 0);
@@ -1536,7 +1541,12 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
                     ddMap.put("ddName", battalion);
                     ddMap.put("ddYDnum", ddYDSum);
                     ddMap.put("fjYDsum", fjddYDSum);
-                    ddMap.put("ddSDnum", ddSDSum);
+                    if (ddSDSum == 0) {
+                        ddMap.put("ddSDnum", 0);
+                    }else{
+                        ddMap.put("ddSDnum", ddSDSum);
+                    }
+//                    ddMap.put("ddSDnum", ddSDSum);
                     ddMap.put("fjSDSum", fjddSDSum);
                     if ((ddYDSum) == 0) {
                         ddMap.put("gfZXL", 0);
@@ -1639,6 +1649,12 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
 
                         ddMap.put("ddName", ddName);
                         ddMap.put("ddYDnum", ddYDSum);
+                        if (ddSDSum == 0) {
+                            ddMap.put("ddSDnum", 0);
+                        }else{
+                            ddMap.put("ddSDnum", ddSDSum);
+                        }
+//                        ddMap.put("ddSDnum", ddSDSum);
                         ddMap.put("ddYDnum", ddYDSum);
                         ddMap.put("fjYDsum", fjddYDSum);
                         ddMap.put("fjSDSum", fjddSDSum);
@@ -1738,7 +1754,12 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
                     ddMap.put("ddName", battalion);
                     ddMap.put("ddYDnum", ddYDSum);
                     ddMap.put("fjYDSum", fjddYDSum);
-                    ddMap.put("ddSDnum", ddSDSum);
+                    if (ddSDSum == 0) {
+                        ddMap.put("ddSDnum", 0);
+                    }else{
+                        ddMap.put("ddSDnum", ddSDSum);
+                    }
+//                    ddMap.put("ddSDnum", ddSDSum);
                     ddMap.put("fjSDSum", fjddSDSum);
                     if ((ddYDSum) == 0) {
                         ddMap.put("gfZXL", 0);
@@ -1813,7 +1834,12 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
                     ddMap.put("ddName", ddName);
                     ddMap.put("ddYDnum", ddYDSum);
                     ddMap.put("fjYDSum", fjddYDSum);
-                    ddMap.put("ddSDnum", ddSDSum);
+                    if (ddSDSum == 0) {
+                        ddMap.put("ddSDnum", 0);
+                    }else{
+                        ddMap.put("ddSDnum", ddSDSum);
+                    }
+//                    ddMap.put("ddSDnum", ddSDSum);
                     ddMap.put("fjSDSum", fjddSDSum);
                     if ((ddYDSum) == 0) {
                         ddMap.put("gfZXL", 0);
@@ -1881,7 +1907,12 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
                 ddMap.put("ddName", battalion);
                 ddMap.put("ddYDnum", ddYDSum);
                 ddMap.put("fjYDSum", fjddYDSum);
-                ddMap.put("ddSDnum", ddSDSum);
+                if (ddSDSum == 0) {
+                    ddMap.put("ddSDnum", 0);
+                }else{
+                    ddMap.put("ddSDnum", ddSDSum);
+                }
+//                ddMap.put("ddSDnum", ddSDSum);
                 ddMap.put("fjSDSum", fjddSDSum);
                 if ((ddYDSum) == 0) {
                     ddMap.put("gfZXL", 0);
