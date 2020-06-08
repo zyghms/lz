@@ -127,9 +127,9 @@ public class XlevelserviceController {
             List <Xlevelservice> xlevelserviceList=null;
 
 //            if (StringUtils.isEmpty(battalion)){  //任务类型
-//                sptypeList=sptypeService.selectSptypeInfo(battalion);
 //            }
-            xlevelserviceList =xlevelserviceService.selectXlevelservice(type);
+            sptypeList=sptypeService.selectSptypeInfo(type);
+            xlevelserviceList =xlevelserviceService.selectXlevelservice(sptypeList.get(0).getLx());
 
 //            if (type == 1){   //查询特殊勤务任务组信息
 //                if (StringUtils.isEmpty(battalion)){
@@ -200,7 +200,7 @@ public class XlevelserviceController {
                     Label count3 = new Label(3, h, xlevelserviceList.get(i).getOndutytime()+"",getHeaderCellStyle(11));
                     ws.addCell(count3);
                     //执勤人数
-                    Label count4 = new Label(3, h, xlevelserviceList.get(i).getOndutytime()+"",getHeaderCellStyle(11));
+                    Label count4 = new Label(3, h, xlevelserviceList.get(i).getNumber()+"",getHeaderCellStyle(11));
                     ws.addCell(count4);
                 }
 
