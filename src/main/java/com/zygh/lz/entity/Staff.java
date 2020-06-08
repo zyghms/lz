@@ -1,5 +1,6 @@
 package com.zygh.lz.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -70,7 +71,8 @@ public class Staff  implements Serializable{
     private String battalion;
 
     //上岗时间
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date patrolRecordBegintime;
 
     private Integer sectionpid;
