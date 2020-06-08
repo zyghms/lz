@@ -1,7 +1,9 @@
 package com.zygh.lz.controller;
 
+import com.zygh.lz.entity.Sptype;
 import com.zygh.lz.entity.Xlevelservice;
 import com.zygh.lz.service.PatrolrecordService;
+import com.zygh.lz.service.SptypeService;
 import com.zygh.lz.service.XlevelserviceService;
 import com.zygh.lz.vo.ResultBean;
 import jxl.Workbook;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +36,8 @@ public class XlevelserviceController {
     private PatrolrecordService patrolrecordService;
     @Autowired
     private XlevelserviceService  xlevelserviceService;
+    @Autowired
+    private SptypeService sptypeService;
 
 
 
@@ -84,7 +90,7 @@ public class XlevelserviceController {
 
     @RequestMapping(value = "exportPersonServiceExcel")  //导出勤务报表
     @ResponseBody
-    public void exportPersonServiceExcel(HttpServletResponse response, String battalion, Integer type, String level) throws Exception {
+    public void exportPersonServiceExcel(HttpServletResponse response,Integer type) throws Exception {
 
         //  String realPath = request.getRealPath("/Excel/");
         String property = System.getProperty("user.dir")+"\\Excel\\";
@@ -94,7 +100,11 @@ public class XlevelserviceController {
             file1.mkdirs();
         }
 
-        String fileName = UUID.randomUUID().toString()+"导出特殊勤务表.xls";
+        String fileName = UUID.randomUUID().toString()+"特殊勤务.xls";
+//        Date currentTime = new Date();
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String dateString = formatter.format(currentTime);
+//        String fileName =dateString+"特殊勤务表.xls";
 
         File file = new File(property+fileName);
 
@@ -113,30 +123,32 @@ public class XlevelserviceController {
             ws.setColumnView(0, 20);
 
             List<HashMap> ddDaySumList = null;
+            List<Sptype> sptypeList = null;
+            List <Xlevelservice> xlevelserviceList=null;
 
-            if (type == 1){
-                if (StringUtils.isEmpty(battalion)){
-                    ddDaySumList = patrolrecordService.countZD(battalion);
-                    battalion = "";
-                }else {
-                    ddDaySumList = (List<HashMap>) patrolrecordService.countZD(battalion).get(0).get("zdCount");
-                }
-            }else if (type == 2){
-                if (StringUtils.isEmpty(level)){
-                    ddDaySumList = (List<HashMap>) xlevelserviceService.selectorderlydjyd(battalion).getData();
-                    battalion = "";
-                }else {
-                    int lv = Integer.parseInt(level);
-                    List<HashMap> sumList = (List<HashMap>) xlevelserviceService.selectorderlydjyd(battalion).getData();
-                    ddDaySumList = (List<HashMap>) sumList.get(lv - 1).get("zdCount");
-                    battalion = level+"级岗";
-                }
-            }
+//            if (StringUtils.isEmpty(battalion)){  //任务类型
+//                sptypeList=sptypeService.selectSptypeInfo(battalion);
+//            }
+            xlevelserviceList =xlevelserviceService.selectXlevelservice(type);
 
+//            if (type == 1){   //查询特殊勤务任务组信息
+//                if (StringUtils.isEmpty(battalion)){
+//                    ddDaySumList = patrolrecordService.countZD(battalion);
+//                    battalion = "";
+//                }else {
+//
+//                    ddDaySumList = (List<HashMap>) XlevelserviceService.countZD(battalion).get(0).get("zdCount");
+//                }
+//            }else if (type == 2){   //根据特殊勤务类型查询特殊勤务的信息
+//                if (StringUtils.isEmpty(level)){
+//                    ddDaySumList = (List<HashMap>) xlevelserviceService.selectorderlydjyd(battalion).getData();
+//                    battalion = "";
+//                }
+//            }
 
             //start 合并单元格（左上列，左上行，右下列，右下行）
-            ws.mergeCells(0, 0, 3, 0);
-            Label sheetTitle = new Label(0, 0, battalion+"特殊勤务",getHeaderCellStyle(12));
+            ws.mergeCells(0, 0, 0, 0);
+            Label sheetTitle = new Label(0, 0,"特殊勤务",getHeaderCellStyle(12));
             ws.addCell(sheetTitle);
 
             //（列，行）
@@ -152,44 +164,44 @@ public class XlevelserviceController {
             ws.addCell(sheetTitle4);
 
             //列，行
-            Label sheetTitle5 = new Label(3, 1, "警力明细",getHeaderCellStyle(10));
+            Label sheetTitle5 = new Label(3, 1, "警力人数",getHeaderCellStyle(10));
             ws.addCell(sheetTitle5);
 
-            int c = 2;
-            for (int i = 0;i<ddDaySumList.size();i++) {
+            int c = 0 ;
+            for (int i = 0;i<xlevelserviceList.size();i++) {
                 int h = i + 2;
                 c++;
 
-                if (!StringUtils.isEmpty(battalion)){
-                    String zdname = ddDaySumList.get(i).get("name")+"";
-
-                    if (StringUtils.isEmpty(zdname)){
-//                        zdname = "大队领导";
-                        zdname = "大队领导";
+                if (type>=0){
+                    String zdname = null;
+                    int  state = xlevelserviceList.get(i).getState();
+                    if(state == 0){
+                        zdname="等级勤务";
+                    }else if(state == 1){
+                        zdname="重要警卫任务";
+                    }else if( state == 2){
+                        zdname="应急管理任务";
+                    }else if (state == 3){
+                        zdname="专项警卫任务" ;
+                    }else if( state == 4){
+                        zdname="大型活动";
+                    }else {
+                        zdname="其他";
                     }
                     Label name = new Label(0, h, zdname,getHeaderCellStyle(10));
                     ws.addCell(name);
                     //勤务名称
-                    Label count1 = new Label(1, h, ddDaySumList.get(i).get("YDnum")+"",getHeaderCellStyle(11));
+                    Label count1 = new Label(1, h, xlevelserviceList.get(i).getCallsign()+"",getHeaderCellStyle(11));
                     ws.addCell(count1);
                     //勤务管辖区域
-                    Label count2 = new Label(2, h, ddDaySumList.get(i).get("ondutytime")+"",getHeaderCellStyle(11));
+                    Label count2 = new Label(2, h, xlevelserviceList.get(i).getPlace()+"",getHeaderCellStyle(11));
                     ws.addCell(count2);
                     //执勤时间
-                    Label count3 = new Label(3, h, ddDaySumList.get(i).get("gfZXL")+"",getHeaderCellStyle(11));
+                    Label count3 = new Label(3, h, xlevelserviceList.get(i).getOndutytime()+"",getHeaderCellStyle(11));
                     ws.addCell(count3);
-                }else {
-                    Label name = new Label(0, h, (String) ddDaySumList.get(i).get("ddName"),getHeaderCellStyle(10));
-                    ws.addCell(name);
-                    //人员名称
-                    Label count1 = new Label(1, h, ddDaySumList.get(i).get("ddYDnum")+"",getHeaderCellStyle(11));
-                    ws.addCell(count1);
-                    //分配所在区域
-                    Label count2 = new Label(2, h, ddDaySumList.get(i).get("ddSDnum")+"",getHeaderCellStyle(11));
-                    ws.addCell(count2);
-                    //
-                    Label count3 = new Label(3, h, ddDaySumList.get(i).get("gfZXL")+"",getHeaderCellStyle(11));
-                    ws.addCell(count3);
+                    //执勤人数
+                    Label count4 = new Label(3, h, xlevelserviceList.get(i).getOndutytime()+"",getHeaderCellStyle(11));
+                    ws.addCell(count4);
                 }
 
             }
@@ -247,8 +259,6 @@ public class XlevelserviceController {
             throw  e;
 
         }
-
-
     }
     /**
      * 表头单元格样式的设定 单元格为黑色
