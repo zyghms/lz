@@ -70,4 +70,10 @@
   <update id="delSptype">
     update sptype set yxzt=0 where id=#{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectSptypeInfo" resultMap="BaseResultMap">
+    select id,ssname,lx,cjsj,zhxgsj,yxzt
+    from sptype
+    where yxzt=1 and  id=#{id,jdbcType=INTEGER}
+  </select>
 </mapper>
