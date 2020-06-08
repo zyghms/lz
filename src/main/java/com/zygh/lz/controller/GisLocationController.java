@@ -1,13 +1,11 @@
 package com.zygh.lz.controller;
 
-import com.zygh.lz.entity.GisLocation;
 import com.zygh.lz.service.GisLocationService;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * Description:

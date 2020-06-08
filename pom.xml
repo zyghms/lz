@@ -173,13 +173,14 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.3.6</version>
+            <version>4.6.5</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.12</version>
         </dependency>
+
         <!--websocket服务端jar包依赖-->
         <!--<dependency>
             　　<groupId>javax.websocket</groupId>

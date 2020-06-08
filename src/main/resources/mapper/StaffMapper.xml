@@ -670,4 +670,9 @@
         SELECT f.sys_staff_id,staff_name,staff_post,staff_tel,f.stafftype,st.sys_section_id,st.section_name
         FROM staff f,section st WHERE f.sys_section_id=st.sys_section_id GROUP BY f.sys_staff_id
     </select>
+    <!--根据大队查询本大队的人员信息并带出区域-->
+    <select id="findStaffInfo" resultMap="BaseResultMap">
+        SELECT s.staff_name,staff_num,section_name FROM staff s,section c WHERE s.sys_section_id=c.sys_section_id
+        and c.section_pid=201 AND stafftype='民警' AND staff_num is not NULL GROUP BY s.sys_staff_id
+    </select>
 </mapper>

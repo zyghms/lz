@@ -17,7 +17,6 @@ public class ProblemController {
 
     //新增
     @PostMapping("addProblem")
-
     public ResultBean addProblem(Problem problem){
         return problemService.addProblem(problem);
     }

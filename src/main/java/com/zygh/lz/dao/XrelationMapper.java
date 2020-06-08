@@ -16,7 +16,8 @@ public interface XrelationMapper {
 
     int updateByPrimaryKey(Xrelation record);
 
+    int deleteById(@Param("staffId")  Integer staffId, @Param("xareaId")  Integer xareaId);
+
     Xrelation findXrealationByid(Integer staffId,Integer xareaId);
 
-    int deleteById(@Param("staffId")  Integer staffId, @Param("xareaId")  Integer xareaId);
 }

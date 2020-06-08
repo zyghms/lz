@@ -1064,7 +1064,7 @@ public class XareaServiceImpl implements XareaService {
                 for (int i = 0; i < detailsByInfo.size(); i++) {
                     detailsByInfo.get(i).setStation(substring);
                 }
-            } else if (grid.contains("铁骑")) {
+            /*} else if (grid.contains("铁骑")) {
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {
                     detailsByInfo.get(i).setStation(substring);
@@ -1074,7 +1074,7 @@ public class XareaServiceImpl implements XareaService {
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {
                     detailsByInfo.get(i).setStation(substring);
-                }
+                }*/
             } else {
                 detailsByInfo = xareaMapper.findDetailsByInfo(id, null, null);
             }

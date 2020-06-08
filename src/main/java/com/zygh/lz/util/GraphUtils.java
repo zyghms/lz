@@ -1,8 +1,13 @@
 package com.zygh.lz.util;
 
+import com.zygh.lz.dao.StaffMapper;
+import com.zygh.lz.entity.Staff;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,6 +17,8 @@ import java.util.Map;
  */
 public class GraphUtils {
 
+    @Autowired
+    private StaffMapper staffMapper;
     /*public static void main(String[] args) {
         Map[] map=new Map[]{};
       //  113.726268,34.734365,113.726787,34.76125,113.711616,34.773958,113.709723,34.776454,
@@ -135,14 +142,26 @@ public class GraphUtils {
         return false;
     }
 
+    /*public static String[] reny(){
+        //List<Staff> staffInfo = staffMapper.findStaffInfo();
+        String[] staffnum=new String[staffInfo.size()];
+        for (int i = 0; i < staffInfo.size(); i++) {
+            String staffNum = staffInfo.get(i).getStaffNum();
+            staffnum[i]=staffNum;
+        }
+        return staffnum;
+    }*/
+
     public static void main(String[] args) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+       /* SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");// 格式化时间
         Date parse = sdfs.parse("2020-05-16 08:00:00.002");
         //Date parse1 = sdfs.parse(cfparticulars.getKssj());
         String format1 = format.format(parse);
         //String format2 = format.format(cfparticulars.getKssj());
         System.out.println("时间：" + format1);
-        //System.out.println("时间：" + format2);
+        //System.out.println("时间：" + format2);*/
+       /* String[] reny = GraphUtils.reny();
+        System.out.println(reny);*/
     }
 }

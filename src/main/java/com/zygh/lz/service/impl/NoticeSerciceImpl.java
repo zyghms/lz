@@ -1,12 +1,11 @@
 package com.zygh.lz.service.impl;
 
-import com.zygh.lz.entity.Notice;
-import com.zygh.lz.entity.Section;
-import com.zygh.lz.entity.Staff;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.dao.NoticeMapper;
 import com.zygh.lz.dao.SectionMapper;
 import com.zygh.lz.dao.StaffMapper;
+import com.zygh.lz.entity.Notice;
+import com.zygh.lz.entity.Section;
 import com.zygh.lz.service.NoticeService;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;
@@ -82,7 +81,6 @@ public class NoticeSerciceImpl implements NoticeService {
                 }
 
             }
-            //notices.get(k).setNoticeSectionName(sectionname);
 
         }
 
@@ -104,21 +102,16 @@ public class NoticeSerciceImpl implements NoticeService {
             //接受大队
             String sectionid = notice.get(i).getNoticeAccept();
             if (sectionid != null) {
-                System.out.println("大队："+sectionid);
                 String[] secs = sectionid.split(",");
                 for (int j = 0; j < secs.length; j++) {
                     int subsysid = Integer.valueOf(secs[j]);
                     Section section = sectionMapper.selectByPrimaryKey(subsysid);
-                    System.out.println("===="+section.toString());
                     sectionname = sectionname + section.getSectionName() + " ";
                 }
             }
             notice.get(i).setNoticeSectionName(sectionname);
 
         }
-       // System.out.println("个数："+notice.size());
-        /*LinkedHashMap<String, Object> json = new LinkedHashMap<>();
-        json.put("content", notice);*/
         if(notice.size()>0||notice.size()==0){
             return ResultUtil.setOK("success",notice);
         }
