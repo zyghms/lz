@@ -39,8 +39,8 @@ public class SptypeServiceImpl implements SptypeService {
 
     }
     @Override
-    public List<Sptype> selectSptypeInfo(String  battalion) {
-        return sptypeMapper.selectSptypeInfo(battalion);
+    public List<Sptype> selectSptypeInfo(Integer type) {
+        return sptypeMapper.selectSptypeInfo(type);
 
     }
 

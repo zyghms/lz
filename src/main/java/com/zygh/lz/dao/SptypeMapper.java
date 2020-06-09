@@ -23,5 +23,5 @@ public interface SptypeMapper {
     //根据id任务组类型
     int  delSptype(Integer id);
 
-    List<Sptype> selectSptypeInfo(String battalion);
+    List<Sptype> selectSptypeInfo(Integer type);
 }

@@ -17,6 +17,6 @@ public interface SptypeService {
     //根据id任务组类型
     ResultBean delSptype(Integer id);
     //根据id任务组类型
-    List<Sptype> selectSptypeInfo(String battalion);
+    List<Sptype> selectSptypeInfo(Integer type);
 
 }
