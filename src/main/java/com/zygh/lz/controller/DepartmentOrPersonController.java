@@ -101,7 +101,7 @@ public class DepartmentOrPersonController {
                 JSONArray jsonArrays = JSONArray.fromObject(jsonObject.get("list"));
                 callDats.setData(jsonArrays.toString());
             }
-            callDats.setName("部门信息");
+            callDats.setName("人员信息");
             callDats.setResult(result);
             callDats.setCjsj(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
             callDataMapper.insert(callDats);
