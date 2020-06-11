@@ -159,6 +159,11 @@ public interface StaffMapper {
      * @return
      */
     List<Staff> selectStaffByInfo();
+
+    List<Staff> selectAllSection();
+
+    int updateInfo(Staff staff);
+
     //根据大队查询本大队的人员信息并带出区域
     List<Staff> findStaffInfo();
 }

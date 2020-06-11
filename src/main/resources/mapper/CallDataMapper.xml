@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zygh.lz.dao.CallDataMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.CallData" >
+    <id column="sys_asset_id" property="sysAssetId" jdbcType="INTEGER" />
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="data" property="data" jdbcType="VARCHAR" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+    <result column="cjsj" property="cjsj" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, data, result, cjsj,remark
+  </sql>
+
+  <insert id="insert" parameterType="com.zygh.lz.entity.CallData" >
+    insert into calldata (name, data, result, cjsj, remark)
+    values (#{name,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR},#{sysSectionId,jdbcType=INTEGER},
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <select id="selectInfo" resultMap="BaseResultMap">
+    select  id, name, data, result, cjsj,remark
+    from calldata
+    where TO_DAYS(cjsj)=TO_DAYS(NOW())
+    <if test="names != null" >
+      and name=#{names}
+    </if>
+    order by cjsj desc
+    limit 2;
+  </select>
+</mapper>
