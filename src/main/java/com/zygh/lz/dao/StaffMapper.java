@@ -159,4 +159,9 @@ public interface StaffMapper {
      * @return
      */
     List<Staff> selectStaffByInfo();
+
+    List<Staff> selectAllSection();
+
+    int updateInfo(Staff staff);
+
 }

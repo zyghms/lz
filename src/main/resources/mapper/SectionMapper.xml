@@ -166,4 +166,12 @@
     SELECT s.* FROM section s,xarea x WHERE s.sys_section_id=x.section_Did
     AND section_pid =#{id} GROUP BY s.sys_section_id
   </select>
+  <update id="updateInfo" parameterType="com.zygh.lz.entity.Section">
+    update section
+    set section_pid = #{sectionPid,jdbcType=INTEGER},
+      section_position = #{sectionPosition,jdbcType=VARCHAR},
+      section_tel = #{sectionTel,jdbcType=VARCHAR},
+      section_person = #{sectionPerson,jdbcType=VARCHAR}
+    where section_name = #{sectionName,jdbcType=INTEGER}
+  </update>
 </mapper>

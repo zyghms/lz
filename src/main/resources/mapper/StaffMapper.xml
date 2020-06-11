@@ -670,4 +670,30 @@
         SELECT f.sys_staff_id,staff_name,staff_post,staff_tel,f.stafftype,st.sys_section_id,st.section_name
         FROM staff f,section st WHERE f.sys_section_id=st.sys_section_id GROUP BY f.sys_staff_id
     </select>
+    <select id="selectAllSection" resultMap="BaseResultMap">
+        select * from staff
+    </select>
+    <update id="updateInfo" parameterType="com.zygh.lz.entity.Staff">
+      update staff
+      set staff_name = #{staffName,jdbcType=VARCHAR},
+      staff_post = #{staffPost,jdbcType=VARCHAR},
+      staff_tel = #{staffTel,jdbcType=VARCHAR},
+      sys_gps_id = #{sysGpsId,jdbcType=INTEGER},
+      sys_section_id = #{sysSectionId,jdbcType=INTEGER},
+      sys_role_id = #{sysRoleId,jdbcType=INTEGER},
+      staff_sex = #{staffSex,jdbcType=VARCHAR},
+      staff_photo = #{staffPhoto,jdbcType=VARCHAR},
+      staff_password = #{staffPassword,jdbcType=VARCHAR},
+      staff_hierarchy = #{staffHierarchy,jdbcType=VARCHAR},
+      stafff_pid = #{stafffPid,jdbcType=INTEGER},
+      staff_num = #{staffNum,jdbcType=VARCHAR},
+      staff_idcard = #{staffIdcard,jdbcType=VARCHAR},
+      staff_online = #{staffOnline,jdbcType=VARCHAR},
+      stafftype = #{stafftype,jdbcType=VARCHAR},
+      strength = #{strength,jdbcType=VARCHAR},
+      change_shifts = #{changeShifts,jdbcType=VARCHAR},
+      cellphonenumber = #{cellphonenumber,jdbcType=VARCHAR}
+    where staff_num = #{staffNum,jdbcType=INTEGER}
+    </update>
+
 </mapper>

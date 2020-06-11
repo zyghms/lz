@@ -19,4 +19,14 @@
     values (#{name,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, #{result,jdbcType=VARCHAR},#{sysSectionId,jdbcType=INTEGER},
       #{remark,jdbcType=VARCHAR})
   </insert>
+  <select id="selectInfo" resultMap="BaseResultMap">
+    select  id, name, data, result, cjsj,remark
+    from calldata
+    where TO_DAYS(cjsj)=TO_DAYS(NOW())
+    <if test="names != null" >
+      and name=#{names}
+    </if>
+    order by cjsj desc
+    limit 2;
+  </select>
 </mapper>
