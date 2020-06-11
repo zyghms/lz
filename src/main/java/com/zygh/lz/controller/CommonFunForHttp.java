@@ -4,12 +4,10 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.zygh.lz.dao.CfkjdjMapper;
 import com.zygh.lz.dao.SectionMapper;
-import com.zygh.lz.dao.StaffMapper;
-import com.zygh.lz.dao.XareaMapper;
-import com.zygh.lz.entity.Cfparticulars;
-import com.zygh.lz.entity.ChangFeng;
-import com.zygh.lz.entity.Section;
+import com.zygh.lz.entity.*;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
@@ -31,17 +30,96 @@ public class CommonFunForHttp {
     @Autowired
     private SectionMapper sectionMapper;
     @Autowired
-    private StaffMapper staffMapper;
-    @Autowired
-    private XareaMapper xareaMapper;
+    private CfkjdjMapper cfkjdjMapper;
 
-    //获取是否签到签退信息
+    /**
+     * 获取是否签到签退信息
+     *
+     * @param staffnum
+     * @return
+     */
     @GetMapping("findRealTime")
-    public ResultBean findRealTime(String staffnum) {
+    public ResultBean findRealTime(String staffnum) throws IOException {
+        Staff staff=new Staff();
+        staff.setStaffNum(staffnum);
+        System.out.println("《《《《《《《长峰科技签到接口");
         // 最简单的HTTP请求，可以自动通过header等信息判断编码，不区分HTTP和HTTPS
         String result1 = HttpUtil.get("http://62.64.22.153:10002/biz_police_duty/api/findQwRwxxOnDutyByUserId/" + staffnum);
+
+        if (result1 == null) {
+            System.out.println("》》》》》》》该警员没有暂时没有签到！！！！！");
+            return ResultUtil.setOK("success", null);
+        }
+        //WebSocketServer.sendInfo(result1,"1");
+        System.out.println("result1:<<<<<<<<" + result1);
+        //获取签到人的信息
+        //Map<String, Object> qdMap = (Map<String, Object>) JSON.parse(result1);
+        JSONArray qdMap = JSONArray.parseArray(result1);
+        String rwid = null;
+        Cfkjdj cfkjdj = new Cfkjdj();
+        for (int i = 0; i < qdMap.size(); i++) {     //遍历json数组内容
+            com.alibaba.fastjson.JSONObject object = qdMap.getJSONObject(i);
+            System.out.println(object.getString("qdid"));
+            rwid = (String) object.get("rwid");
+            System.out.println("《《《《《《《《《=======" + rwid);
+            cfkjdj.setQdid((String) object.get("qdid"));
+            cfkjdj.setQdlat(String.valueOf(object.get("qdlat")));
+            cfkjdj.setQdlng(String.valueOf(object.get("qdlng")));
+            cfkjdj.setQdsj((String) object.get("qdsj"));
+            cfkjdj.setUserid((String) object.get("userid"));
+            cfkjdj.setUsername((String) object.get("username"));
+            cfkjdj.setZblist(String.valueOf(object.get("zblist")));
+            cfkjdj.setZhxgsj((String) object.get("zhxgsj"));
+            cfkjdj.setZw((String) object.get("zw"));
+            cfkjdj.setZzjgdm((String) object.get("zzjgdm"));
+            cfkjdj.setZxzt(String.valueOf(object.get("zxzt")));
+        }
+
+        System.out.println("qdmap" + qdMap);
+
+        //查询根据任务id查询任务
+        System.out.println("任务id" + rwid);
+        String result2 = HttpUtil.get("http://62.64.22.153:10002/biz_police_duty/api/findRwxxByRwid?rwid=" + rwid);
+        System.out.println(">>>>>>result2" + result2);
+        Map<String, Object> map = (Map<String, Object>) JSON.parse(result2);
+        Map<String, Object> objectrw = (Map<String, Object>) JSON.parse((map.get("data").toString()));
+        String jssj = objectrw.get("jssj").toString();
+        cfkjdj.setJssj(jssj);
+        String kssj = objectrw.get("kssj").toString();
+        cfkjdj.setKssj(kssj);
+        System.out.println("开始时间：" + kssj);
+        System.out.println("结束时间：" + jssj);
+        cfkjdj.setRwid((String) objectrw.get("rwid"));
+        cfkjdj.setRwmc((String) objectrw.get("rwmc"));
+        cfkjdj.setRwms((String) objectrw.get("rwms"));
+        cfkjdj.setRwzid((String) objectrw.get("rwzid"));
+        cfkjdj.setRwzmc((String) objectrw.get("rwzmc"));
+        cfkjdj.setRwzms((String) objectrw.get("rwzms"));
+
+
+        //存储到数据库任务岗位，警号，任命签到时间，签到经纬度
+        int i = cfkjdjMapper.insertSelective(cfkjdj);
+        if (i > 0) {
+            System.out.println("《《《《《签到信息存储成功！！！");
+        }
         return ResultUtil.setOK("success", result1);
     }
+
+   /* public static void main(String[] args) {
+        String a = "{\"msg\":\"success\",\"code\":0,\"data\":{\"jssj\":\"2020-06-08 11:30:45\",\"kssj\":\"2020-06-08 11:30:54\",\"rwid\":\"b08a5755f9154b96b5fd5e25d36d4cc5\",\"rwmc\":\"固定岗-金水路与文化路测1\",\"rwms\":\"测试数据68#[\\\"车\\\",\\\"警务通\\\",\\\"摩托车\\\"]\",\"rwzid\":\"af02e4ed2ece44dba9be8703ce28cffb\",\"rwzmc\":\"高架大队\",\"rwzms\":\"测试数据68\"}}";
+        //com.alibaba.fastjson.JSONObject
+       *//* Object parse = com.alibaba.fastjson.JSONObject.parse(a);
+
+        JSONArray  jsonArray  = JSONArray.parseArray(a);
+        for (int i = 0; i < jsonArray.size(); i++) {     //遍历json数组内容
+            com.alibaba.fastjson.JSONObject object = jsonArray.getJSONObject(i);
+            System.out.println(object.getString("qdid"));
+        }*//*
+        Map<String, Object> map = (Map<String, Object>) JSON.parse(a);
+        Map<String, Object> policeMap = (Map<String, Object>) JSON.parse((map.get("data").toString()));
+        System.out.println(policeMap);
+
+    }*/
 
     /**
      * 创建顶层任务接口
@@ -61,6 +139,7 @@ public class CommonFunForHttp {
         param.put("px", "1");
         param.put("rwzmc", changFeng.getRwzmc());
         param.put("rwzms", changFeng.getRwzms());
+        //String s = HttpUtil.post(url, param);
         String paramString = JSON.toJSONString(param);
         String result = HttpRequest.post(url)
                 .header("Content-Type", "application/json")
@@ -119,7 +198,7 @@ public class CommonFunForHttp {
      * "rwms": "测试创建任务C"，                          任务明细
      * "rwzid": "8ea331e0e5df4d92a7a0e54aa3454659",     所属任务组id
      * "sgsj": "08:00:00",                              上岗时间  格式[HH:mm:ss]
-     * "typeZB": [5,...],                               此任务携带装备类型 传如装备类型对应代码 [警务通-1；车-2；摩托车-3；4G执法记录仪-4；PDT-5；单兵-6；布控球-7；无人机-8；直升机-9；船载-10；出租车-11]
+     * "typeZB": [5,...],                               警员佩戴的装备
      * "userIds": ["106839","263716"],                  关联的警员String类型的数据传送
      * "xgsj": "08:00:00",                              下岗时间  格式[HH:mm:ss]
      * "ydrs": 1                                        应道人数
@@ -155,36 +234,5 @@ public class CommonFunForHttp {
         System.out.println("创建或修改任务实例:" + result);
         return ResultUtil.setOK("success", result);
     }
-
-    public void jiekou(){
-        //查出大队的任务组名称
-        List<Section> levelMenu = xareaMapper.findLevelMenu(25);
-        for (int i = 0; i < levelMenu.size(); i++) {
-            JSONObject json = new JSONObject();
-            String url = "http://62.64.22.153:10002/biz_police_duty/api/saveOrUpdateDuty";
-            json.put("cjr", "管理员");
-            json.put("cjrdw", "410100000000");
-            json.put("rwid", "");
-            json.put("jssj", "2020-06-06 17:01:00");
-            json.put("kssj", "2020-06-06 17:01:00");
-            json.put("rwmc", levelMenu.get(i).getSectionName());
-            json.put("rwms", "详情");
-            json.put("rwzid", "");
-            json.put("sgsj", "08:00:00");
-            json.put("typeZB", "");
-            json.put("userIds", "");
-            json.put("xgsj", "");
-            json.put("ydrs", "");
-            System.out.println("第"+i+"参数：>>>>>>>>>>>>>>>>" + json);
-            String result = HttpRequest.post(url)
-                    .header("Content-Type", "application/json")
-                    .header("X-Bmob-Application-Id", "2f0419a31f9casdfdsf431f6cd297fdd3e28fds4af")
-                    .header("X-Bmob-REST-API-Key", "1e03efdas82178723afdsafsda4be0f305def6708cc6")
-                    .body(json)
-                    .execute().body();
-            System.out.println("第"+i+"次创建或修改任务实例:" + result);
-        }
-    }
-
 
 }

@@ -152,16 +152,16 @@ public class GraphUtils {
         return staffnum;
     }*/
 
-    public static void main(String[] args) throws ParseException {
-       /* SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+/*    public static void main(String[] args) throws ParseException {
+       *//* SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");// 格式化时间
         Date parse = sdfs.parse("2020-05-16 08:00:00.002");
         //Date parse1 = sdfs.parse(cfparticulars.getKssj());
         String format1 = format.format(parse);
         //String format2 = format.format(cfparticulars.getKssj());
         System.out.println("时间：" + format1);
-        //System.out.println("时间：" + format2);*/
-       /* String[] reny = GraphUtils.reny();
-        System.out.println(reny);*/
-    }
+        //System.out.println("时间：" + format2);*//*
+       *//* String[] reny = GraphUtils.reny();
+        System.out.println(reny);*//*
+    }*/
 }

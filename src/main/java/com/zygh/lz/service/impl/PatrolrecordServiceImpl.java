@@ -1,8 +1,8 @@
 package com.zygh.lz.service.impl;
 
-import com.zygh.lz.entity.*;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.dao.*;
+import com.zygh.lz.entity.*;
 import com.zygh.lz.service.PatrolrecordService;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;
@@ -34,6 +34,8 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
     private XlevelserviceMapper xlevelserviceMapper;
     @Autowired
     private SectionMapper sectionMapper;
+    @Autowired
+    private CfkjdjMapper cfkjdjMapper;
 
     /**
      * 新增巡查记录
@@ -858,20 +860,30 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
         int gfZnum = xareaMapper.countggZSum("高峰岗", battalion, null);
         int wgZnum = xareaMapper.countWgZSum(battalion, null).size();
         int zdZnum = xareaMapper.countZdZSum(battalion, null);//重点岗
-        int qtZnum = xareaMapper.countQtZSum(battalion, "", null);//其他岗
+        //int qtZnum = xareaMapper.countQtZSum(battalion, "", null);//其他岗
         int gsZnum = xareaMapper.countGsOrKsZ("高速岗", battalion, null).size();
         int ksZnum = xareaMapper.countGsOrKsZ("快速岗", battalion, null).size();
         int TQZnum = xareaMapper.countTQZ(battalion).size();
 
 
-        int gdSD = patrolrecordMapper.countGdorGfSDsum("固定岗", battalion).size();
+        /*int gdSD = patrolrecordMapper.countGdorGfSDsum("固定岗", battalion).size();
         int gfSD = patrolrecordMapper.countGdorGfSDsum("高峰岗", battalion).size();
         int tqSD = patrolrecordMapper.countTqSDsum(battalion).size();
         int wgSD = patrolrecordMapper.countWgSDsum(battalion).size();
         int zdSD = patrolrecordMapper.countZdSDsum(battalion).size();//重点
         int qtSD = patrolrecordMapper.countQtSDsum(battalion).size();
         int gsSD = patrolrecordMapper.countGsorKsSDsum("高速岗", battalion, null).size();
-        int ksSD = patrolrecordMapper.countGsorKsSDsum("快速岗", battalion, null).size();
+        int ksSD = patrolrecordMapper.countGsorKsSDsum("快速岗", battalion, null).size();*/
+
+        int gdSD = cfkjdjMapper.findByrwmc("固定岗", battalion);
+        int gfSD = cfkjdjMapper.findByrwmc("高峰岗", battalion);
+        int tqSD = cfkjdjMapper.findByrwmc("铁骑",battalion);
+        int wgSD = cfkjdjMapper.findByrwmc("网格",battalion);
+        int zdSD = cfkjdjMapper.findByrwmc("重点机关岗",battalion);//重点
+        //int qtSD = patrolrecordMapper.countQtSDsum(battalion).size();
+        int gsSD = cfkjdjMapper.findByrwmc("高速岗",battalion);
+        int ksSD = cfkjdjMapper.findByrwmc("快速岗",battalion);
+        int yxSD = cfkjdjMapper.findByrwmc("夜巡",battalion);
 
 
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -929,10 +941,10 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
                 zdMap.put("Znum", zdZnum);
                 zdMap.put("SDnum", zdSD);
 
-                qtMap.put("name", "其他");
+                /*qtMap.put("name", "其他");
                 qtMap.put("YDnum", qtYDsum);
                 qtMap.put("Znum", qtZnum);
-                qtMap.put("SDnum", qtSD);
+                qtMap.put("SDnum", qtSD);*/
 
                 gsMap.put("name", "高速");
                 gsMap.put("YDnum", gsYDsum);
@@ -998,11 +1010,11 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
                 zdMap.put("Znum", zdZnum);
                 zdMap.put("SDnum", zdSD);
 
-                qtMap.put("name", "其他");
+               /* qtMap.put("name", "其他");
                 qtMap.put("YDnum", qtYDsum);
                 qtMap.put("Znum", qtZnum);
                 qtMap.put("SDnum", qtSD);
-
+*/
                 gsMap.put("name", "高速");
                 gsMap.put("YDnum", gsYDsum);
                 gsMap.put("Znum", gsZnum);
@@ -1066,10 +1078,10 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
                 zdMap.put("Znum", zdZnum);
                 zdMap.put("SDnum", zdSD);
 
-                qtMap.put("name", "其他");
+                /*qtMap.put("name", "其他");
                 qtMap.put("YDnum", qtYDsum);
                 qtMap.put("Znum", qtZnum);
-                qtMap.put("SDnum", qtSD);
+                qtMap.put("SDnum", qtSD);*/
 
                 gsMap.put("name", "高速");
                 gsMap.put("YDnum", gsYDsum);
@@ -1134,10 +1146,10 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
             zdMap.put("Znum", zdZnum);
             zdMap.put("SDnum", 0);
 
-            qtMap.put("name", "其他");
+            /*qtMap.put("name", "其他");
             qtMap.put("YDnum", 0);
             qtMap.put("Znum", qtZnum);
-            qtMap.put("SDnum", 0);
+            qtMap.put("SDnum", 0);*/
 
             gsMap.put("name", "高速");
             gsMap.put("YDnum", 0);
@@ -1161,7 +1173,7 @@ public class PatrolrecordServiceImpl implements PatrolrecordService {
             YXMap.put("name", "夜巡");
             YXMap.put("YDnum", yxYDsum);
             YXMap.put("Znum", 38);
-            YXMap.put("SDnum", 0);
+            YXMap.put("SDnum", yxSD);
 
 
             typeSumList.add(gdMap);

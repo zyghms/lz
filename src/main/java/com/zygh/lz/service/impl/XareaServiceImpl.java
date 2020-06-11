@@ -1058,7 +1058,11 @@ public class XareaServiceImpl implements XareaService {
     public ResultBean findDetailsByInfo(Integer id, Integer sectionDid, String grid) {
         List<Regional> detailsByInfo = new ArrayList<Regional>();
         if (grid != null) {
-            String substring = grid.substring(0,grid.indexOf('-'));
+            String substring=grid;
+            if(grid.contains("-")){
+                substring= grid.substring(0,grid.indexOf('-'));
+            }
+
             if (grid.contains("网格")) {
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {

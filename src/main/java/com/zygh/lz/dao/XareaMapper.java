@@ -260,4 +260,7 @@ public interface XareaMapper {
 
     //根据区域id查询人员详情
     List<Dailyservice> findStaffInfo(Integer id);
+
+    //对接长峰科技接口
+    List<Section> findLevelMenucf(Integer sectionid);
 }
