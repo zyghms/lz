@@ -18,9 +18,13 @@ public class ProblemController {
 
     //新增
     @PostMapping("addProblem")
+<<<<<<< HEAD
     @ViLog(logType = "2",module = "问题模块>问题新增")
     public ResultBean addProblem(Problem problem, HttpServletRequest request){
         //request.setAttribute("result", problemService.addProblem(problem));
+=======
+    public ResultBean addProblem(Problem problem){
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
         return problemService.addProblem(problem);
     }
     //修改

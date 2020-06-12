@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +30,13 @@ public class xlevelserviceController {
     @Autowired
     private XlevelserviceService xlevelserviceService;
     @Autowired
+<<<<<<< HEAD:src/main/java/com/zygh/lz/controller/xlevelserviceController.java
     private PatrolrecordService patrolrecordService;
+=======
+    private XlevelserviceService  xlevelserviceService;
+    @Autowired
+    private SptypeService sptypeService;
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4:src/main/java/com/zygh/lz/controller/XlevelserviceController.java
 
     @Autowired
     private SptypeService sptypeService;
@@ -91,7 +99,10 @@ public class xlevelserviceController {
 
     @RequestMapping(value = "exportPersonServiceExcel")  //导出勤务报表
     @ResponseBody
+<<<<<<< HEAD:src/main/java/com/zygh/lz/controller/xlevelserviceController.java
     @ViLog(logType = "6", module = "特殊勤务》导出勤务报表")
+=======
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4:src/main/java/com/zygh/lz/controller/XlevelserviceController.java
     public void exportPersonServiceExcel(HttpServletResponse response,Integer type) throws Exception {
 
         //  String realPath = request.getRealPath("/Excel/");

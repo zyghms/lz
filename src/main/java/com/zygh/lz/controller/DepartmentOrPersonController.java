@@ -1,8 +1,22 @@
 package com.zygh.lz.controller;
+<<<<<<< HEAD
 
 import cn.hutool.http.HttpUtil;
 import com.zygh.lz.dao.CallDataMapper;
 import com.zygh.lz.entity.CallData;
+=======
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import cn.hutool.http.HttpUtil;
+import com.alibaba.druid.sql.visitor.functions.If;
+import com.alibaba.fastjson.JSON;
+import com.zygh.lz.dao.CallDataMapper;
+import com.zygh.lz.dao.SectionMapper;
+import com.zygh.lz.dao.StaffMapper;
+import com.zygh.lz.entity.CallData;
+import com.zygh.lz.entity.Section;
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +27,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+=======
+import javax.annotation.Resource;
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 
 
 /**
@@ -27,7 +45,11 @@ public class DepartmentOrPersonController {
     private static String urls = "http://62.64.11.7:9010/";
 
     @Autowired
+<<<<<<< HEAD
     private   static CallDataMapper callDataMapper;
+=======
+    private   static  CallDataMapper callDataMapper;
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 
 
     @PostMapping("getDepartmentinfosyn")

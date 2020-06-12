@@ -1,7 +1,10 @@
 package com.zygh.lz.dao;
 
 import com.zygh.lz.entity.Cfkjdj;
+<<<<<<< HEAD
 import com.zygh.lz.entity.Staff;
+=======
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -30,8 +33,11 @@ public interface CfkjdjMapper {
     //按岗位统计实到人数
     Integer findByrwmc(@Param("rwmc") String rwmc, @Param("rwzmc") String rwzmc);
 
+<<<<<<< HEAD
     List<String> selectAllStaffInfo();
 
     //判断当天数据库是否存在该警员的签到信息
     List<String> selectqdBystaff(@Param("staffnum") String staffnum ,@Param("zxzt") String zxzt);
+=======
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 }

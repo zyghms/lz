@@ -57,5 +57,10 @@ public interface XlevelserviceMapper {
 
     List<Xlevelservice> selectXlevelservice(Integer  type);
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 
 }

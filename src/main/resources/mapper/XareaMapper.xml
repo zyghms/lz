@@ -1349,7 +1349,11 @@
     </select>
     <!--三级菜单任务信息-->
     <select id="findLevelMenu" resultType="map">
+<<<<<<< HEAD
          SELECT id as sysSectionId,gridding as sectionName ,section_Did as sectionPid,section_Zid sectionZid FROM xarea
+=======
+       SELECT id as sysSectionId,gridding as sectionName ,section_Did as sectionPid,section_Zid sectionZid FROM xarea
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
        WHERE  gridding is not NULL and type in('线','面') and section_Did=#{sectionid}
         union
       SELECT id as sysSectionId,CONCAT_WS('-',station,name) as sectionName,section_Did as sectionPid,section_Zid sectionZid FROM xarea

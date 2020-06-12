@@ -1,12 +1,11 @@
 package com.zygh.lz.service.impl;
 
-import com.zygh.lz.entity.Notice;
-import com.zygh.lz.entity.Section;
-import com.zygh.lz.entity.Staff;
 import com.zygh.lz.constant.SystemCon;
 import com.zygh.lz.dao.NoticeMapper;
 import com.zygh.lz.dao.SectionMapper;
 import com.zygh.lz.dao.StaffMapper;
+import com.zygh.lz.entity.Notice;
+import com.zygh.lz.entity.Section;
 import com.zygh.lz.service.NoticeService;
 import com.zygh.lz.util.ResultUtil;
 import com.zygh.lz.vo.ResultBean;

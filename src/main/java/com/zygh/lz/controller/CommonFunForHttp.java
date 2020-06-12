@@ -6,7 +6,10 @@ import cn.hutool.json.JSONObject;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.zygh.lz.dao.CfkjdjMapper;
+<<<<<<< HEAD
 import com.zygh.lz.dao.CfrwinfoMapper;
+=======
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 import com.zygh.lz.dao.SectionMapper;
 import com.zygh.lz.entity.*;
 import com.zygh.lz.util.ResultUtil;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,8 +35,11 @@ public class CommonFunForHttp {
     private SectionMapper sectionMapper;
     @Autowired
     private CfkjdjMapper cfkjdjMapper;
+<<<<<<< HEAD
     @Autowired
     private CfrwinfoMapper cfrwinfoMapper;
+=======
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 
     /**
      * 获取是否签到签退信息
@@ -165,15 +172,24 @@ public class CommonFunForHttp {
     @PostMapping("createTask")
     public ResultBean createTask(ChangFeng changFeng) {
         String result = null;
+<<<<<<< HEAD
         //List<Section> selectBySublevel = sectionMapper.findSelectBySublevel(74);
        // for (int i = 0; i < selectBySublevel.size(); i++) {
+=======
+        List<Section> selectBySublevel = sectionMapper.findSelectBySublevel(74);
+        for (int i = 0; i < selectBySublevel.size(); i++) {
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
             Map<String, Object> param = new HashMap<>();
             String url = "http://62.64.22.153:10002/biz_police_duty/api/createQwRwfzb";
             param.put("cjrdw", "410100000000");
             param.put("pid", changFeng.getPid());
             param.put("px", "1");
+<<<<<<< HEAD
             //param.put("rwzmc", selectBySublevel.get(i).getSectionName());
             param.put("rwzmc", changFeng.getRwzmc());
+=======
+            param.put("rwzmc", selectBySublevel.get(i).getSectionName());
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
             param.put("rwzms", changFeng.getRwzms());
             String paramString = JSON.toJSONString(param);
             result = HttpRequest.post(url)
@@ -183,7 +199,11 @@ public class CommonFunForHttp {
                     .body(paramString)
                     .execute().body();
             System.out.println("创建任务分组分组实例:" + result);
+<<<<<<< HEAD
       //  }
+=======
+        }
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
         return ResultUtil.setOK("success", result);
     }
 
@@ -235,6 +255,7 @@ public class CommonFunForHttp {
                 .body(json)
                 .execute().body();
         System.out.println("创建或修改任务实例:" + result);
+<<<<<<< HEAD
         //新建任务存储数据库
         Cfrwinfo cfrwinfo = new Cfrwinfo();
         cfrwinfo.setJssj(cfparticulars.getJssj());
@@ -244,6 +265,8 @@ public class CommonFunForHttp {
         cfrwinfo.setRwzid(cfparticulars.getRwzid());
         cfrwinfoMapper.insertSelective(cfrwinfo);
         System.out.println(">>>>>添加任务成功！！");
+=======
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
         return ResultUtil.setOK("success", result);
     }
 

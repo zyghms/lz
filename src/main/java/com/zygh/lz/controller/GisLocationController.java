@@ -1,6 +1,7 @@
 package com.zygh.lz.controller;
 
 import com.zygh.lz.service.GisLocationService;
+import com.zygh.lz.util.Point;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class GisLocationController {
     private GisLocationService gisLocationService;
 
     /**
-     * Description:
+     * Description:查询地图坐标信息
      * User:luanhuajuan
      * Date:2020-05-29 9:11
      */
@@ -30,8 +31,23 @@ public class GisLocationController {
     }
 
     @GetMapping(value="getGisLocation")
+<<<<<<< HEAD
     public ResultBean getGisLocation(String str){
         ResultBean gisLocationList= gisLocationService.selectGisLocation();
+=======
+    public ResultBean getGisLocation(String str ){
+         String strs[]=str.split(",");
+         List <Point> pointList=new ArrayList<Point>();
+         for (int i=0;i<strs.length;i++){
+             if(i%2 == 0){
+                 pointList.get(i).setX(Double.parseDouble(strs[i]));
+             }
+             if(i %2 !=0){
+                 pointList.get(i).setY(Double.parseDouble(strs[i]));
+             }
+        }
+        ResultBean  gisLocationList= gisLocationService.selectGisLocation();
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
         return null;
 
     }

@@ -3,6 +3,10 @@ package com.zygh.lz.service;
 import com.zygh.lz.entity.Sptype;
 import com.zygh.lz.vo.ResultBean;
 
+<<<<<<< HEAD
+=======
+import java.util.HashMap;
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 import java.util.List;
 
 public interface SptypeService {

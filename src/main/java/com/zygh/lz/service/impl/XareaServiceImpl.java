@@ -1062,6 +1062,10 @@ public class XareaServiceImpl implements XareaService {
             if(grid.contains("-")){
                 substring= grid.substring(0,grid.indexOf('-'));
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
             if (grid.contains("网格")) {
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {

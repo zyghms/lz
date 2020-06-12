@@ -1,5 +1,10 @@
 package com.zygh.lz.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import com.zygh.lz.dao.StaffMapper;
+import com.zygh.lz.entity.Staff;
 import com.zygh.lz.entity.Xarea;
 import com.zygh.lz.service.XareaService;
 import com.zygh.lz.util.ViLog;
@@ -10,11 +15,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RequestMapping("/Xarea")
 @RestController
 public class XareaController {
     @Autowired
     private XareaService xareaService;
+    @Autowired
+    private StaffMapper staffMapper;
 
     //根据大队，中队，岗位，中队领导
     @GetMapping("selectXareabycondition")

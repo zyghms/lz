@@ -226,7 +226,11 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
     @Override
     public ResultBean updateSpecialService(Xlevelservice  xlevelservice) {
         return ResultUtil.execOp(xlevelserviceMapper.updateByPrimaryKey(xlevelservice),"修改");
+    }
 
+    @Override
+    public List<Xlevelservice> selectXlevelservice(Integer  type) {
+        return xlevelserviceMapper.selectXlevelservice(type);
 
     }
     @Override
@@ -234,5 +238,7 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
         return xlevelserviceMapper.selectXlevelservice(type);
 
     }
+
+
 
 }

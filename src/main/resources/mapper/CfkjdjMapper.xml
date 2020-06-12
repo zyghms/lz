@@ -247,7 +247,11 @@
      SELECT staff_num FROM staff WHERE staff_num is not NULL and staff_num != '' and
      staff_num not in (select userid from cfkjdj where to_days(qdsj) = to_days(now()) ) GROUP BY staff_num
   </select>
+<<<<<<< HEAD
   <!--上线未签退-->
+=======
+  <!--上线未签到-->
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
   <select id="findCfkjdjbywqt" resultType="java.lang.String">
      SELECT userid FROM cfkjdj WHERE zxzt=1 AND to_days(qdsj) = to_days(now()) GROUP BY userid
   </select>
@@ -257,6 +261,7 @@
   </select>
 
   <select id="findByrwmc" resultType="java.lang.Integer">
+<<<<<<< HEAD
     select count(*) from cfkjdj k ,cfrwinfo c where k.rwid=c.rwid and k.rwmc LIKE CONCAT('%',#{rwmc},'%') and to_days(k.qdsj) = to_days(now()) and k.zxzt=1
     <if test="rwzmc != null and rwzmc != '' ">
       and k.rwzmc = #{rwzmc}
@@ -271,6 +276,11 @@
     select userid from cfkjdj where  to_days(qdsj) = to_days(now()) and userid = #{staffnum}
     <if test="zxzt != null and zxzt != '' ">
       and zxzt = #{zxzt}
+=======
+    select count(*) from cfkjdj where rwmc like '%${rwmc}%' and to_days(qdsj) = to_days(now())
+    <if test="rwzmc != null and rwzmc != '' ">
+      and rwzmc = #{rwzmc}
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
     </if>
   </select>
 </mapper>

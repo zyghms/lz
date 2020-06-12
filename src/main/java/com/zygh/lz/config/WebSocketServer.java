@@ -1,5 +1,8 @@
 package com.zygh.lz.config;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;

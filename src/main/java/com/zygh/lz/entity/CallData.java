@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+<<<<<<< HEAD
+=======
+import java.util.Date;
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
 
 @Data
 @AllArgsConstructor

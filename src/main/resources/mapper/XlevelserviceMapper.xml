@@ -219,8 +219,12 @@
         GROUP BY x.section_id) sb
     </select>
     <select id="selectxleveBydj" resultType="map">
+<<<<<<< HEAD
         SELECT * from xlevelservice where  zt=1
         <where>
+=======
+        SELECT * from xlevelservice  where  zt=1
+>>>>>>> 92fe566a105ed3087d448b805094612d7cd1daf4
             <if test="hierarchy!=null and hierarchy!='' ">
                and  hierarchy =#{hierarchy}
             </if>
@@ -228,7 +232,6 @@
                 AND section_id=(SELECT sys_section_id from section
                 WHERE section_name=#{sectionName})
             </if>
-        </where>
     </select>
     <select id="selectXleveAll" resultMap="BaseResultMap">
         SELECT * from	 xlevelservice

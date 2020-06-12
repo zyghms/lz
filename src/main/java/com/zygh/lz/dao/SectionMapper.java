@@ -45,4 +45,6 @@ public interface SectionMapper {
     List<Section> selectDetachmentByid(Integer id);
 
     List<Section> findSelectBySublevel(Integer id);
+
+    int updateInfo(Section section);
 }
