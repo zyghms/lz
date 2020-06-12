@@ -1058,13 +1058,16 @@ public class XareaServiceImpl implements XareaService {
     public ResultBean findDetailsByInfo(Integer id, Integer sectionDid, String grid) {
         List<Regional> detailsByInfo = new ArrayList<Regional>();
         if (grid != null) {
-            String substring = grid.substring(0,grid.indexOf('-'));
+            String substring=grid;
+            if(grid.contains("-")){
+                substring= grid.substring(0,grid.indexOf('-'));
+            }
             if (grid.contains("网格")) {
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {
                     detailsByInfo.get(i).setStation(substring);
                 }
-            } else if (grid.contains("铁骑")) {
+            /*} else if (grid.contains("铁骑")) {
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {
                     detailsByInfo.get(i).setStation(substring);
@@ -1074,7 +1077,7 @@ public class XareaServiceImpl implements XareaService {
                 detailsByInfo = xareaMapper.findDetailsByInfo(null, sectionDid, substring);
                 for (int i = 0; i < detailsByInfo.size(); i++) {
                     detailsByInfo.get(i).setStation(substring);
-                }
+                }*/
             } else {
                 detailsByInfo = xareaMapper.findDetailsByInfo(id, null, null);
             }

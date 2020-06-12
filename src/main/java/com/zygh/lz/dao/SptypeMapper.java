@@ -1,7 +1,6 @@
 package com.zygh.lz.dao;
 
 import com.zygh.lz.entity.Sptype;
-import com.zygh.lz.vo.ResultBean;
 
 import java.util.List;
 
@@ -22,4 +21,6 @@ public interface SptypeMapper {
 
     //根据id任务组类型
     int  delSptype(Integer id);
+
+    List<Sptype> selectSptypeInfo(Integer type);
 }

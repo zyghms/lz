@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdmameraWithBLOBs extends Admamera  implements Serializable{
+public class AdmameraWithBLOBs extends Admamera implements Serializable{
     private String ossurl;
 
     private String shortVideoCode;

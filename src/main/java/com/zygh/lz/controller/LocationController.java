@@ -2,11 +2,14 @@ package com.zygh.lz.controller;
 
 import com.zygh.lz.entity.Location;
 import com.zygh.lz.service.LocationService;
+import com.zygh.lz.util.ViLog;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class LocationController {
@@ -24,13 +27,15 @@ public class LocationController {
     }
 
     @GetMapping("selectLocation")
-    public ResultBean selectLocation(Integer staffId){
+    @ViLog(logType = "1",module = "实时跟新警员坐标>查询")
+    public ResultBean selectLocation(Integer staffId, HttpServletRequest request) {
         return locationService.selectLocation(staffId);
     }
 
     //实时获取警员坐标
     @GetMapping("selectLocationByNowday")
-    public ResultBean selectLocationByNowday(){
+    @ViLog(logType = "1",module = "实时跟新警员坐标>实时获取警员坐标")
+    public ResultBean selectLocationByNowday(HttpServletRequest request){
         return locationService.selectLocationByNowday();
     }
 }

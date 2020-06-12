@@ -60,7 +60,6 @@ public class SendLogUtils {
             param.put("time", String.valueOf(new Date().getTime()));// 日志记录时间,时间戳,格式如1519978042000   不能为空
 
 
-//            System.out.println("hello!!!!!");
             String tokenUrl = "http://62.64.11.15:8080/smcs/api/public/login";// 获取token路径
             String username = "admin";// 获取token登录名
             String password = "111111";// 获取token登录密码
@@ -77,7 +76,6 @@ public class SendLogUtils {
             HttpResponse tokenResponse = hc.execute(tokenPost);
             String tokenJson = EntityUtils.toString(tokenResponse.getEntity());
             if (tokenJson != null && tokenJson != "") {
-//                System.out.println(EntityUtils.toString(tokenResponse.getEntity()));// {"code":"1","message":"成功","result":"d480198c33d940129210a268f7aa499d"}
                 JSONObject json = new JSONObject(tokenJson);
                 if (json.has("result")) { // 判断是否存在返回结果
                     String returnToken = json.get("result").toString();

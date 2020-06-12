@@ -1,7 +1,6 @@
 package com.zygh.lz.util;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -9,25 +8,22 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+//import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.*;
 
-/**
- * 系统日志：切面处理类
- */
+/** 系统日志：切面处理类 */
 @Aspect
 @Component
 public class SysLogAspect/* implements Filter*/ {
@@ -42,7 +38,6 @@ public class SysLogAspect/* implements Filter*/ {
     @Pointcut("@annotation(com.zygh.lz.util.ViLog)")
     public void logPoinCut() {
     }
-
 
     //切面 配置通知
     @AfterReturning("logPoinCut()")         //AfterReturning
@@ -72,7 +67,7 @@ public class SysLogAspect/* implements Filter*/ {
         }
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        //HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+
         String httpMethod = request.getMethod();
         /*//操作的url
         String requestURI = request.getRequestURI();
@@ -81,12 +76,14 @@ public class SysLogAspect/* implements Filter*/ {
         // 客户端ip
         String ip = request.getRemoteAddr();
         operation.setTerminalIp(ip);
-        if (request.getAttribute("policeNum") == null || request.getAttribute("policeNum").equals("")) {
+        if(request.getAttribute("policeNum") == null || request.getAttribute("policeNum").equals("")){
             // 操作人警员号
-            //String policeNum = SecurityContextHolder.getContext().getAuthentication().getName();
-
-            operation.setPoliceId("警员号为空");
-        } else {
+           /* HttpSession session = request.getSession(true);
+            String policeNum = session.getAttribute("policeNum").toString();
+            System.out.println("=================="+policeNum);
+            operation.setPoliceId(policeNum);*/
+            System.out.println("警员号为空！！！！");
+        }else{
             operation.setPoliceId((String) request.getAttribute("policeNum"));
         }
 
@@ -97,100 +94,107 @@ public class SysLogAspect/* implements Filter*/ {
         //请求参数信息
         String paramter = "";
         //get的参数
-        if (httpMethod.equalsIgnoreCase("GET")) {
-            Object[] args = joinPoint.getArgs();
-            Object[] arguments = new Object[args.length];
-            for (int i = 0; i < args.length; i++) {
-                if (args[i] instanceof ServletRequest || args[i] instanceof ServletResponse || args[i] instanceof MultipartFile) {
-                    //ServletRequest不能序列化，从入参里排除，否则报异常：java.lang.IllegalStateException: It is illegal to call this method if the current request is not in asynchronous mode (i.e. isAsyncStarted() returns false)
-                    //ServletResponse不能序列化 从入参里排除，否则报异常：java.lang.IllegalStateException: getOutputStream() has already been called for this response
-                    continue;
+        if(httpMethod.equalsIgnoreCase("GET")){
+            String param = "";
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            Set<String> keys = parameterMap.keySet();
+            if(!keys.isEmpty()) {
+                for (String key : keys) {
+                    if(parameterMap.get(key) != null && parameterMap.get(key).length > 0){
+                        param += key + ":" + parameterMap.get(key)[0] + ",";
+                    }else{
+                        param += key + ": '',";
+                    }
                 }
-
-                arguments[i] = args[i];
+            }else {
+                param = "";
             }
 
-            if (arguments != null) {
-                try {
-                    paramter = JSONObject.toJSONString(arguments);
-                } catch (Exception e) {
-                    paramter = arguments.toString();
-                }
-            }
-            operation.setFormatParam(paramter);
+            operation.setFormatParam(param);
             //其他方法的参数
-        } else {
+        }else {
             String param = "";
             try {
                 request.setCharacterEncoding("UTF-8");
-                if (request.getMethod().equalsIgnoreCase("post")) {
-                    BufferedReader streamReader = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
+                if(request.getMethod().equalsIgnoreCase("post")){
+                    //BufferedReader streamReader = new BufferedReader( new InputStreamReader(request.getInputStream(), "UTF-8"));
+                    ServletInputStream inputStream = request.getInputStream();
                     StringBuilder responseStrBuilder = new StringBuilder();
-                    String inputStr;
-                    while ((inputStr = streamReader.readLine()) != null)
-                        responseStrBuilder.append(inputStr);
-
-                    JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
-                    param = jsonObject.toJSONString();
+                    int bytesRead = -1;
+                    byte[] bytes = new byte[1024*5];
+                    while((bytesRead = inputStream.read(bytes)) > 0){
+                        responseStrBuilder.append(new String(bytes,0,bytesRead,"UTF-8"));
+                    }
+                    inputStream.close();
+                    if(responseStrBuilder.toString() != null && !responseStrBuilder.toString().equals("")) {
+                        param = responseStrBuilder.toString();
+                    }else{
+                        Map<String, String[]> parameterMap = request.getParameterMap();
+                        Set<String> keys = parameterMap.keySet();
+                        if(!keys.isEmpty()) {
+                            for (String key : keys) {
+                                if(parameterMap.get(key) != null && parameterMap.get(key).length > 0){
+                                    param += key + ":" + parameterMap.get(key)[0] + ",";
+                                }else{
+                                    param += key + ": '',";
+                                }
+                            }
+                        }else {
+                            param = "";
+                        }
+                    }
                 }
             } catch (IOException e) {
-                log.error("error：" + e);
+                log.error("error："+e);
             }
             operation.setFormatParam(param);
         }
 
         //响应数据
-        String result = JSON.toJSONString(request.getAttribute("result")) ;
-        System.out.println("result:"+result);
+        String result = JSON.toJSONString( request.getAttribute("result"));
         operation.setResponse(result);
 
         operation.setResponseType("1");
         try {
-            Map<String, String> map = (Map<String, String>) JSON.parse(result);
-            if (String.valueOf(map.get("code")).equals("1") || String.valueOf(map.get("code")).equals("200")) {
+            Map<String,String> map = (Map<String, String>) JSON.parse(result);
+            if(String.valueOf(map.get("code")).equals("1") || String.valueOf(map.get("code")).equals("200")){
                 operation.setResult("成功");
                 operation.setErrorCode("");
                 operation.setErrorLog("");
-            } else {
+            }else{
                 operation.setResult("失败");
-                operation.setErrorCode(map.get("code") + "");
+                operation.setErrorCode((map.get("code")+""));
                 operation.setErrorLog(map.get("msg"));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             operation.setResult("成功");
             operation.setErrorCode("");
             operation.setErrorLog("");
         }
 
-        System.out.println("result:" + operation);
+        System.out.println("result:"+operation);
+        final ExecutorService exec = Executors.newFixedThreadPool(1);
+        Callable<String> call = new Callable<String>() {
+            public String call() throws Exception {
+                //开始执行耗时操作
+                Thread.sleep(1000 * 5);
+                return "线程执行完成.";
+            }
+        };
         try {
+            Future<String> future = exec.submit(call);
+            String obj = future.get(1000 * 1, TimeUnit.MILLISECONDS); //任务处理超时时间设为 1 秒
+            System.out.println("任务成功返回:" + obj);
             SendLogUtils.sendLog(operation);
             System.out.println("================发送日志成功================");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (TimeoutException ex) {
+            System.out.println("处理超时啦....");
+            //ex.printStackTrace();
+        }catch (Exception e) {
+            //e.printStackTrace();
             //发送日志失败
             System.out.println("------发送日志失败--------");
         }
-//        String contentType = response.getContentType();
-
-        /*ResponseWrapper servletResponse = new ResponseWrapper(response);
-        System.out.println(servletResponse.toString());
-        String result = servletResponse.getResult();
-        System.out.println(result);*/
-
-/*        //获取请求的类名
-        String className = joinPoint.getTarget().getClass().getName();
-        //获取请求的方法名
-        String methodName = method.getName();
-        System.out.println("method name="+className + "." + methodName);*/
     }
-
-    /*@Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        chain.doFilter(request,response);
-        ResponseWrapper responseWrapper = new ResponseWrapper((HttpServletResponse) response);
-        System.out.println(responseWrapper.getResult());
-        System.out.println(response.toString());
-    }*/
 }

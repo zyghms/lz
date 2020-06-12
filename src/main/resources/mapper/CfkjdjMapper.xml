@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zygh.lz.dao.CfkjdjMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Cfkjdj" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="qdid" property="qdid" jdbcType="VARCHAR" />
+    <result column="qdlat" property="qdlat" jdbcType="VARCHAR" />
+    <result column="qdlng" property="qdlng" jdbcType="VARCHAR" />
+    <result column="qdsj" property="qdsj" jdbcType="VARCHAR" />
+    <result column="rwid" property="rwid" jdbcType="VARCHAR" />
+    <result column="userid" property="userid" jdbcType="VARCHAR" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="zhxgsj" property="zhxgsj" jdbcType="VARCHAR" />
+    <result column="zzjgdm" property="zzjgdm" jdbcType="VARCHAR" />
+    <result column="zblist" property="zblist" jdbcType="VARCHAR" />
+    <result column="zw" property="zw" jdbcType="VARCHAR" />
+    <result column="zxzt" property="zxzt" jdbcType="VARCHAR" />
+    <result column="rwmc" property="rwmc" jdbcType="VARCHAR" />
+    <result column="rwms" property="rwms" jdbcType="VARCHAR" />
+    <result column="rwzid" property="rwzid" jdbcType="VARCHAR" />
+    <result column="rwzmc" property="rwzmc" jdbcType="VARCHAR" />
+    <result column="rwzms" property="rwzms" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, qdid, qdlat, qdlng, qdsj, rwid, userid, username, zhxgsj, zzjgdm, zblist, zw, 
+    zxzt, rwmc, rwms, rwzid, rwzmc, rwzms
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cfkjdj
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cfkjdj
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zygh.lz.entity.Cfkjdj" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cfkjdj (qdid, qdlat, qdlng, 
+      qdsj, rwid, userid, 
+      username, zhxgsj, zzjgdm, 
+      zblist, zw, zxzt, rwmc, 
+      rwms, rwzid, rwzmc, 
+      rwzms)
+    values (#{qdid,jdbcType=VARCHAR}, #{qdlat,jdbcType=VARCHAR}, #{qdlng,jdbcType=VARCHAR}, 
+      #{qdsj,jdbcType=VARCHAR}, #{rwid,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{zhxgsj,jdbcType=VARCHAR}, #{zzjgdm,jdbcType=VARCHAR}, 
+      #{zblist,jdbcType=VARCHAR}, #{zw,jdbcType=VARCHAR}, #{zxzt,jdbcType=VARCHAR}, #{rwmc,jdbcType=VARCHAR}, 
+      #{rwms,jdbcType=VARCHAR}, #{rwzid,jdbcType=VARCHAR}, #{rwzmc,jdbcType=VARCHAR}, 
+      #{rwzms,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Cfkjdj" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cfkjdj
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="qdid != null" >
+        qdid,
+      </if>
+      <if test="qdlat != null" >
+        qdlat,
+      </if>
+      <if test="qdlng != null" >
+        qdlng,
+      </if>
+      <if test="qdsj != null" >
+        qdsj,
+      </if>
+      <if test="rwid != null" >
+        rwid,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="zhxgsj != null" >
+        zhxgsj,
+      </if>
+      <if test="zzjgdm != null" >
+        zzjgdm,
+      </if>
+      <if test="zblist != null" >
+        zblist,
+      </if>
+      <if test="zw != null" >
+        zw,
+      </if>
+      <if test="zxzt != null" >
+        zxzt,
+      </if>
+      <if test="rwmc != null" >
+        rwmc,
+      </if>
+      <if test="rwms != null" >
+        rwms,
+      </if>
+      <if test="rwzid != null" >
+        rwzid,
+      </if>
+      <if test="rwzmc != null" >
+        rwzmc,
+      </if>
+      <if test="rwzms != null" >
+        rwzms,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="qdid != null" >
+        #{qdid,jdbcType=VARCHAR},
+      </if>
+      <if test="qdlat != null" >
+        #{qdlat,jdbcType=VARCHAR},
+      </if>
+      <if test="qdlng != null" >
+        #{qdlng,jdbcType=VARCHAR},
+      </if>
+      <if test="qdsj != null" >
+        #{qdsj,jdbcType=VARCHAR},
+      </if>
+      <if test="rwid != null" >
+        #{rwid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="zhxgsj != null" >
+        #{zhxgsj,jdbcType=VARCHAR},
+      </if>
+      <if test="zzjgdm != null" >
+        #{zzjgdm,jdbcType=VARCHAR},
+      </if>
+      <if test="zblist != null" >
+        #{zblist,jdbcType=VARCHAR},
+      </if>
+      <if test="zw != null" >
+        #{zw,jdbcType=VARCHAR},
+      </if>
+      <if test="zxzt != null" >
+        #{zxzt,jdbcType=VARCHAR},
+      </if>
+      <if test="rwmc != null" >
+        #{rwmc,jdbcType=VARCHAR},
+      </if>
+      <if test="rwms != null" >
+        #{rwms,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzid != null" >
+        #{rwzid,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzmc != null" >
+        #{rwzmc,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzms != null" >
+        #{rwzms,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Cfkjdj" >
+    update cfkjdj
+    <set >
+      <if test="qdid != null" >
+        qdid = #{qdid,jdbcType=VARCHAR},
+      </if>
+      <if test="qdlat != null" >
+        qdlat = #{qdlat,jdbcType=VARCHAR},
+      </if>
+      <if test="qdlng != null" >
+        qdlng = #{qdlng,jdbcType=VARCHAR},
+      </if>
+      <if test="qdsj != null" >
+        qdsj = #{qdsj,jdbcType=VARCHAR},
+      </if>
+      <if test="rwid != null" >
+        rwid = #{rwid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="zhxgsj != null" >
+        zhxgsj = #{zhxgsj,jdbcType=VARCHAR},
+      </if>
+      <if test="zzjgdm != null" >
+        zzjgdm = #{zzjgdm,jdbcType=VARCHAR},
+      </if>
+      <if test="zblist != null" >
+        zblist = #{zblist,jdbcType=VARCHAR},
+      </if>
+      <if test="zw != null" >
+        zw = #{zw,jdbcType=VARCHAR},
+      </if>
+      <if test="zxzt != null" >
+        zxzt = #{zxzt,jdbcType=VARCHAR},
+      </if>
+      <if test="rwmc != null" >
+        rwmc = #{rwmc,jdbcType=VARCHAR},
+      </if>
+      <if test="rwms != null" >
+        rwms = #{rwms,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzid != null" >
+        rwzid = #{rwzid,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzmc != null" >
+        rwzmc = #{rwzmc,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzms != null" >
+        rwzms = #{rwzms,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Cfkjdj" >
+    update cfkjdj
+    set qdid = #{qdid,jdbcType=VARCHAR},
+      qdlat = #{qdlat,jdbcType=VARCHAR},
+      qdlng = #{qdlng,jdbcType=VARCHAR},
+      qdsj = #{qdsj,jdbcType=VARCHAR},
+      rwid = #{rwid,jdbcType=VARCHAR},
+      userid = #{userid,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      zhxgsj = #{zhxgsj,jdbcType=VARCHAR},
+      zzjgdm = #{zzjgdm,jdbcType=VARCHAR},
+      zblist = #{zblist,jdbcType=VARCHAR},
+      zw = #{zw,jdbcType=VARCHAR},
+      zxzt = #{zxzt,jdbcType=VARCHAR},
+      rwmc = #{rwmc,jdbcType=VARCHAR},
+      rwms = #{rwms,jdbcType=VARCHAR},
+      rwzid = #{rwzid,jdbcType=VARCHAR},
+      rwzmc = #{rwzmc,jdbcType=VARCHAR},
+      rwzms = #{rwzms,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!--未上线-->
+  <select id="findStaffBywsx" resultType="java.lang.String">
+     SELECT staff_num FROM staff WHERE staff_num is not NULL and staff_num != '' and
+     staff_num not in (select userid from cfkjdj where to_days(qdsj) = to_days(now()) ) GROUP BY staff_num
+  </select>
+  <!--上线未签退-->
+  <select id="findCfkjdjbywqt" resultType="java.lang.String">
+     SELECT userid FROM cfkjdj WHERE zxzt=1 AND to_days(qdsj) = to_days(now()) GROUP BY userid
+  </select>
+  
+  <select id="findByUserid" resultType="com.zygh.lz.entity.Cfkjdj" parameterType="java.lang.String">
+    select * from cfkjdj  WHERE zxzt=1 AND to_days(qdsj) = to_days(now()) and userid = #{userid}
+  </select>
+
+  <select id="findByrwmc" resultType="java.lang.Integer">
+    select count(*) from cfkjdj k ,cfrwinfo c where k.rwid=c.rwid and k.rwmc LIKE CONCAT('%',#{rwmc},'%') and to_days(k.qdsj) = to_days(now()) and k.zxzt=1
+    <if test="rwzmc != null and rwzmc != '' ">
+      and k.rwzmc = #{rwzmc}
+    </if>
+  </select>
+  <select id="selectAllStaffInfo" resultType="java.lang.String">
+    SELECT staff_num FROM staff WHERE staff_num is not NULL and staff_num != '' GROUP BY staff_num
+  </select>
+
+  <!--判断当天数据库是否存在该警员的签到信息-->
+  <select id="selectqdBystaff" resultType="java.lang.String">
+    select userid from cfkjdj where  to_days(qdsj) = to_days(now()) and userid = #{staffnum}
+    <if test="zxzt != null and zxzt != '' ">
+      and zxzt = #{zxzt}
+    </if>
+  </select>
+</mapper>

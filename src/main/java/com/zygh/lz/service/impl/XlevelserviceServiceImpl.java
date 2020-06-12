@@ -229,5 +229,10 @@ public class XlevelserviceServiceImpl implements XlevelserviceService {
 
 
     }
+    @Override
+    public List<Xlevelservice> selectXlevelservice(Integer  type) {
+        return xlevelserviceMapper.selectXlevelservice(type);
+
+    }
 
 }

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zygh.lz.dao.CfrwinfoMapper" >
+  <resultMap id="BaseResultMap" type="com.zygh.lz.entity.Cfrwinfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="rwmc" property="rwmc" jdbcType="VARCHAR" />
+    <result column="rwms" property="rwms" jdbcType="VARCHAR" />
+    <result column="rwzid" property="rwzid" jdbcType="VARCHAR" />
+    <result column="kssj" property="kssj" jdbcType="VARCHAR" />
+    <result column="jssj" property="jssj" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, rwmc, rwms, rwzid, kssj, jssj
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from cfrwinfo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from cfrwinfo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zygh.lz.entity.Cfrwinfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cfrwinfo (rwmc, rwms, rwzid, 
+      rwzmc, rwzms, kssj, 
+      jssj)
+    values (#{rwmc,jdbcType=VARCHAR}, #{rwms,jdbcType=VARCHAR}, #{rwzid,jdbcType=VARCHAR}, 
+      #{rwzmc,jdbcType=VARCHAR}, #{rwzms,jdbcType=VARCHAR}, #{kssj,jdbcType=VARCHAR}, 
+      #{jssj,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zygh.lz.entity.Cfrwinfo" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cfrwinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="rwmc != null" >
+        rwmc,
+      </if>
+      <if test="rwms != null" >
+        rwms,
+      </if>
+      <if test="rwzid != null" >
+        rwzid,
+      </if>
+      <if test="rwzmc != null" >
+        rwzmc,
+      </if>
+      <if test="rwzms != null" >
+        rwzms,
+      </if>
+      <if test="kssj != null" >
+        kssj,
+      </if>
+      <if test="jssj != null" >
+        jssj,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="rwmc != null" >
+        #{rwmc,jdbcType=VARCHAR},
+      </if>
+      <if test="rwms != null" >
+        #{rwms,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzid != null" >
+        #{rwzid,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzmc != null" >
+        #{rwzmc,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzms != null" >
+        #{rwzms,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null" >
+        #{kssj,jdbcType=VARCHAR},
+      </if>
+      <if test="jssj != null" >
+        #{jssj,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zygh.lz.entity.Cfrwinfo" >
+    update cfrwinfo
+    <set >
+      <if test="rwmc != null" >
+        rwmc = #{rwmc,jdbcType=VARCHAR},
+      </if>
+      <if test="rwms != null" >
+        rwms = #{rwms,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzid != null" >
+        rwzid = #{rwzid,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzmc != null" >
+        rwzmc = #{rwzmc,jdbcType=VARCHAR},
+      </if>
+      <if test="rwzms != null" >
+        rwzms = #{rwzms,jdbcType=VARCHAR},
+      </if>
+      <if test="kssj != null" >
+        kssj = #{kssj,jdbcType=VARCHAR},
+      </if>
+      <if test="jssj != null" >
+        jssj = #{jssj,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zygh.lz.entity.Cfrwinfo" >
+    update cfrwinfo
+    set rwmc = #{rwmc,jdbcType=VARCHAR},
+      rwms = #{rwms,jdbcType=VARCHAR},
+      rwzid = #{rwzid,jdbcType=VARCHAR},
+      rwzmc = #{rwzmc,jdbcType=VARCHAR},
+      rwzms = #{rwzms,jdbcType=VARCHAR},
+      kssj = #{kssj,jdbcType=VARCHAR},
+      jssj = #{jssj,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

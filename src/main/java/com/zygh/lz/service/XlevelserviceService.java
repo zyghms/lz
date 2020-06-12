@@ -3,6 +3,8 @@ package com.zygh.lz.service;
 import com.zygh.lz.entity.Xlevelservice;
 import com.zygh.lz.vo.ResultBean;
 
+import java.util.List;
+
 public interface XlevelserviceService {
 
     //等级勤务所有应到人数
@@ -23,5 +25,7 @@ public interface XlevelserviceService {
     ResultBean addSpecialService(Xlevelservice xlevelservice);
 
     ResultBean updateSpecialService(Xlevelservice xlevelservice);
+
+    List<Xlevelservice> selectXlevelservice(Integer type);
 }
 

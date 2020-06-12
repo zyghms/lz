@@ -9,6 +9,8 @@ import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SptypeServiceImpl implements SptypeService {
 
@@ -32,9 +34,16 @@ public class SptypeServiceImpl implements SptypeService {
     }
 
     @Override
-    public ResultBean updateSptype(Sptype  sptype) {
+    public ResultBean updateSptype(Sptype sptype) {
         return ResultUtil.execOp(sptypeMapper.updateByPrimaryKey(sptype),"修改");
 
     }
+    @Override
+    public List<Sptype> selectSptypeInfo(Integer type) {
+        return sptypeMapper.selectSptypeInfo(type);
+
+    }
+
+
 
 }

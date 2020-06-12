@@ -1,4 +1,4 @@
-/*
+package com.zygh.lz.controller;/*
 package com.zygh.lz.controller;
 
 import com.zygh.lz.admin.Patrolrecord;

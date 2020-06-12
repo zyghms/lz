@@ -547,7 +547,7 @@
             and x.conment = #{conment}
         </if>
         <if test="gridding!=null and gridding != '' ">
-            and x.gridding LIKE '%${gridding}%'
+            and x.gridding LIKE CONCAT('%',#{gridding},'%')
         </if>
         <if test="type!=null and type!= '' ">
             AND (x.gridding like '%网格%' or x.type = '面')
@@ -586,7 +586,7 @@
             and x.conment = #{conment}
         </if>
         <if test="gridding!=null and gridding != '' ">
-            and x.gridding LIKE '%${gridding}%'
+            and x.gridding LIKE CONCAT('%',#{gridding},'%')
         </if>
         <if test="type!=null and type!= '' ">
             AND (x.gridding like '%网格%' or x.type = '面')
@@ -597,7 +597,7 @@
         AND st.sys_section_id IN
         (
         SELECT sys_section_id FROM section
-        WHERE section_name LIKE '%${battalion}%'
+        WHERE section_name LIKE CONCAT('%',#{battalion},'%')
         )
         and s.sys_section_id=st.sys_section_id
         and p.sys_staff_id = s.sys_staff_id
@@ -632,7 +632,7 @@
             and x.conment = #{conment}
         </if>
         <if test="gridding!=null and gridding != '' ">
-            and x.gridding LIKE '%${gridding}%'
+            and x.gridding LIKE CONCAT('%',#{gridding},'%')
         </if>
         <if test="type!=null and type!= '' ">
             AND (x.gridding like '%网格%' or x.type = '面')
@@ -643,7 +643,7 @@
         AND st.sys_section_id IN
         (
         SELECT sys_section_id FROM section
-        WHERE section_name = '${battalion}'
+        WHERE section_name = #{battalion}
         )
         AND s.sys_section_id=st.sys_section_id
         AND p.sys_staff_id = s.sys_staff_id
@@ -669,5 +669,10 @@
     <select id="selectStaffByInfo" resultType="map">
         SELECT f.sys_staff_id,staff_name,staff_post,staff_tel,f.stafftype,st.sys_section_id,st.section_name
         FROM staff f,section st WHERE f.sys_section_id=st.sys_section_id GROUP BY f.sys_staff_id
+    </select>
+    <!--根据大队查询本大队的人员信息并带出区域-->
+    <select id="findStaffInfo" resultType="map">
+        SELECT s.staff_name,staff_num as staffnum,section_name FROM staff s,section c WHERE s.sys_section_id=c.sys_section_id
+        and c.section_pid=#{id} AND stafftype='民警' AND staff_num is not NULL GROUP BY s.sys_staff_id
     </select>
 </mapper>

@@ -55,5 +55,7 @@ public interface XlevelserviceMapper {
 
     int delSpecialService(@Param("id") Integer id);
 
+    List<Xlevelservice> selectXlevelservice(Integer  type);
+
 
 }

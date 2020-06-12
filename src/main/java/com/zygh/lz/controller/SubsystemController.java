@@ -1,10 +1,13 @@
 package com.zygh.lz.controller;
 
 import com.zygh.lz.service.SubSystemService;
+import com.zygh.lz.util.ViLog;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class SubsystemController {
@@ -13,24 +16,32 @@ public class SubsystemController {
 
     //查询所有子系统
     @GetMapping("selectAllSubsystem")
-    public ResultBean selectAllSubsystem(){
+    @ViLog(logType = "1", module = "子系统>查询所有子系统")
+    public ResultBean selectAllSubsystem(HttpServletRequest request) {
         return subsystemService.selectAllSubsystem();
     }
 
     @GetMapping("selectControlsystem")
-    public ResultBean selectControlsystem(){
+    @ViLog(logType = "1", module = "子系统>查询")
+    public ResultBean selectControlsystem(HttpServletRequest request) {
         return subsystemService.selectControlsystem();
     }
+
     @GetMapping("selectControlsubsystem")
-    public ResultBean selectControlsubsystem(Integer id){
+    @ViLog(logType = "1", module = "子系统>查询")
+    public ResultBean selectControlsubsystem(Integer id, HttpServletRequest request) {
         return subsystemService.selectControlsubsystem(id);
     }
+
     @GetMapping("selectRank")
-    public ResultBean selectRank(){
+    @ViLog(logType = "1", module = "子系统>查询")
+    public ResultBean selectRank(HttpServletRequest request) {
         return subsystemService.selectRank();
     }
+
     @GetMapping("selectRepair")
-    public ResultBean selectRepair(){
+    @ViLog(logType = "1", module = "子系统>查询")
+    public ResultBean selectRepair(HttpServletRequest request) {
         return subsystemService.selectRepair();
     }
 }

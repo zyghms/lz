@@ -34,11 +34,11 @@ public class GpsServiceImpl implements GpsService {
         GPSTransformMars gpsTransformMars = new GPSTransformMars();
         double x= Double.parseDouble(gps.getGpsX());
         double y= Double.parseDouble(gps.getGpsY());
-        double[] m= GCJ2WGSUtils.gcj02towgs84(x,y);
-        gps.setGpsX(String.valueOf(m[0]));
-        gps.setGpsY(String.valueOf(m[1]));
-        location.setGpsX(String.valueOf(m[0]));
-        location.setGpsY(String.valueOf(m[1]));
+        //double[] m= GCJ2WGSUtils.gcj02towgs84(x,y);
+        gps.setGpsX(String.valueOf(x));
+        gps.setGpsY(String.valueOf(y));
+        location.setGpsX(String.valueOf(x));
+        location.setGpsY(String.valueOf(y));
         locationMapper.updateByStaffId(location);
         return ResultUtil.execOp(gpsMapper.insertSelective(gps),"新增");
     }

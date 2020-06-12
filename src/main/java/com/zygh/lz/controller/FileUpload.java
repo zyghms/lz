@@ -61,19 +61,19 @@ public class FileUpload {
                 filename = file[i].getOriginalFilename();
 
                 //存放Tomcat项目路径
-                fileUrl = "D:\\apache-tomcat-8.5.27\\webapps\\video\\" + new Date().getTime() + filename;
+                fileUrl = "C:\\java\\apache-tomcat-8.5.27\\webapps\\video\\" + new Date().getTime() + filename;
                 //fileUrl = "D:\\software\\Tomcat\\apache-tomcat-7.0.93\\webapps\\video\\" + new Date().getTime() + filename;
                 InetAddress addr = InetAddress.getLocalHost();
                 String url1 = "D:\\file\\" + new Date().getTime() + filename;
                 //fileUrlOne = "D:\\software\\Tomcat\\apache-tomcat-7.0.93\\webapps\\photo\\" + new Date().getTime() + filename;
-                fileUrlTwo = "D:\\apache-tomcat-8.5.27\\webapps\\apk\\" + new Date().getTime() + filename;
-                fileUrlOne = "D:\\apache-tomcat-8.5.27\\webapps\\photo\\" + new Date().getTime() + filename;
-                fileUrlThree = "D:\\apache-tomcat-8.5.27\\webapps\\html\\"+ filename;
+                fileUrlTwo = "C:\\java\\apache-tomcat-8.5.27\\webapps\\apk\\" + new Date().getTime() + filename;
+                fileUrlOne = "C:\\java\\apache-tomcat-8.5.27\\webapps\\photo\\" + new Date().getTime() + filename;
+                fileUrlThree = "C:\\java\\apache-tomcat-8.5.27\\webapps\\html\\"+ filename;
                 //访问路径，存数据库路径
-                String video = "http://114.116.52.4:8090/video/" + new Date().getTime() + filename;
-                String photo = "http://114.116.52.4:8090/photo/" + new Date().getTime() + filename;
-                String apk = "http://114.116.52.4:8090/apk/" + new Date().getTime() + filename;
-                String html = "http://114.116.52.4:8090/html/"+ filename;
+                String video = "http://62.66.6.163:8090/video/" + new Date().getTime() + filename;
+                String photo = "http://62.66.6.163:8090/photo/" + new Date().getTime() + filename;
+                String apk = "http://62.66.6.163:8090/apk/" + new Date().getTime() + filename;
+                String html = "http://62.66.6.163:8090/html/"+ filename;
 
                 System.out.println(filename.substring(filename.indexOf(".") + 1));
                 if (filename.substring(filename.indexOf(".") + 1).equals("mp4")) {
@@ -100,5 +100,6 @@ public class FileUpload {
         }
         return ResultUtil.setOK("上传成功", list);
     }
+
 
 }

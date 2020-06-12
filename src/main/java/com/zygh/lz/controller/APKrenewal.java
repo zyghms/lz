@@ -12,19 +12,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
 
 @RestController
 public class APKrenewal {
 
     //APK更新
     @GetMapping("renewal")
+    @ViLog(logType = "6",module = "APK跟新,版本号查询")
     public ResultBean renewal() {
-       /* String file="http://114.116.52.4:8080/移动巡查1.01.apk";
-        String substring = file.substring(29,33);
-        return ResultUtil.setOK("success",substring);*/
-        String filepath = "D:\\apache-tomcat-8.5.27\\webapps\\";
-        //String filepath="D:\\\\software\\\\Tomcat\\\\apache-tomcat-7.0.93\\\\webapps\\\\";
+        //String filepath = "D:\\apache-tomcat-7.0.78\\webapps\\";
+        String filepath="C:\\java\\apache-tomcat-8.5.27\\webapps\\";
         File file = new File(filepath);//File类型可以是文件也可以是文件夹
         File[] fileArray = file.listFiles();//将该目录下的所有文件放置在一个File类型的数组中
         if (fileArray.length != 0) {
@@ -40,7 +38,7 @@ public class APKrenewal {
                         //System.out.println("aasf"+filename);
                         //String filePathB = fileArray[n].getAbsolutePath();//获取绝对路径
                         String filePathB = filename;//获取绝对路径
-                        String substring = filePathB.substring(36,40);
+                        String substring = filePathB.substring(41,45);
                         return ResultUtil.setOK("success", substring);
                     }
                 }
@@ -53,12 +51,13 @@ public class APKrenewal {
 
     //错误日志上传
     @PostMapping("deLogin")
+    @ViLog(logType = "2",module = "错误日志上传")
     public ResultBean deLogin(String log) {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         String time = format.format(new Date());
         //需要写入的文件的路径
-        String filePath = "D:\\apache-tomcat-8.5.27\\webapps\\html\\"+time+"log.html";
-        String path="http://114.116.52.4:8080/html/"+time+"log.html";
+        String filePath = "C:\\java\\apache-tomcat-8.5.27\\webapps\\html\\"+time+"log.html";
+        String path="http://62.66.6.163:8090/html/"+time+"log.html";
         //写入的文件的内容
 
         try {

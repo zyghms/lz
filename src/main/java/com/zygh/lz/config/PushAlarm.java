@@ -2,6 +2,7 @@ package com.zygh.lz.config;
 
 import com.zygh.lz.controller.CommonFunForHttp;
 import com.zygh.lz.entity.Staff;
+import com.zygh.lz.util.StringUtil;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-/*
+/**
  * @author Siona
  * @date 2020/4/9 10:12
  */
 
+
 @Slf4j
-@Component  // 被Spring容器管理
+//@Component  // 被Spring容器管理
 @Order(1)   // 如果多个自定义ApplicationRunner，用来表明执行顺序
 public class PushAlarm implements ApplicationRunner {   // 服务启动后自动加载该类
 
@@ -40,12 +42,13 @@ public class PushAlarm implements ApplicationRunner {   // 服务启动后自动
             @Override
             public void run() {
                 while (true) {
-                    /*Staff staff=new Staff();
-                    String message = commonFunForHttp.findRealTime(staff.getStaffNum()); // 第三方接口返回数据
-                    if(message!=null){
-                        WebSocketServer.sendInfo(message, userId); // 推送
+                    Staff staff = new Staff();
+                    String message = StringUtil.findRealTime(staff.getStaffNum()); // 第三方接口返回数据
+                    if (message != null) {
+                        WebSocketServer.sendInfo(message, "1"); // 推送
                     }
-                    Thread.sleep(5000);*/
+                    Thread.sleep(5000);
+
                 }
             }
         };

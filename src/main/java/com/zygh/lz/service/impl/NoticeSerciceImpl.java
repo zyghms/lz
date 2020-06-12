@@ -82,7 +82,6 @@ public class NoticeSerciceImpl implements NoticeService {
                 }
 
             }
-            //notices.get(k).setNoticeSectionName(sectionname);
 
         }
 
@@ -104,21 +103,16 @@ public class NoticeSerciceImpl implements NoticeService {
             //接受大队
             String sectionid = notice.get(i).getNoticeAccept();
             if (sectionid != null) {
-                System.out.println("大队："+sectionid);
                 String[] secs = sectionid.split(",");
                 for (int j = 0; j < secs.length; j++) {
                     int subsysid = Integer.valueOf(secs[j]);
                     Section section = sectionMapper.selectByPrimaryKey(subsysid);
-                    System.out.println("===="+section.toString());
                     sectionname = sectionname + section.getSectionName() + " ";
                 }
             }
             notice.get(i).setNoticeSectionName(sectionname);
 
         }
-       // System.out.println("个数："+notice.size());
-        /*LinkedHashMap<String, Object> json = new LinkedHashMap<>();
-        json.put("content", notice);*/
         if(notice.size()>0||notice.size()==0){
             return ResultUtil.setOK("success",notice);
         }

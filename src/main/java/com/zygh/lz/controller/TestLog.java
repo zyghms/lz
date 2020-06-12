@@ -2,6 +2,7 @@ package com.zygh.lz.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.util.StringUtil;
+import com.zygh.lz.util.ViLog;
 import net.sf.json.JSONArray;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -10,7 +11,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +21,7 @@ import java.util.*;
 public class TestLog {
 
     @RequestMapping("/test")
+    @ViLog(logType = "1",module = "统一日志测试")
     public void testLog() {
         System.out.println("统一日志");
         try {
@@ -40,7 +41,6 @@ public class TestLog {
             HttpResponse tokenResponse = hc.execute(tokenPost);
             String tokenJson = EntityUtils.toString(tokenResponse.getEntity());
             if (tokenJson != null && tokenJson != "") {
-                //System.out.println(EntityUtils.toString(tokenResponse.getEntity()));// {"code":"1","message":"成功","result":"d480198c33d940129210a268f7aa499d"}
                 JSONObject json = new JSONObject(tokenJson);
                 if (json.has("result")) { // 判断是否存在返回结果
                     String returnToken = json.get("result").toString();

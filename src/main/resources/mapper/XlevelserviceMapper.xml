@@ -219,10 +219,10 @@
         GROUP BY x.section_id) sb
     </select>
     <select id="selectxleveBydj" resultType="map">
-        SELECT * from xlevelservice
+        SELECT * from xlevelservice where  zt=1
         <where>
             <if test="hierarchy!=null and hierarchy!='' ">
-                hierarchy =#{hierarchy}
+               and  hierarchy =#{hierarchy}
             </if>
             <if test="sectionName!=null and sectionName!='' ">
                 AND section_id=(SELECT sys_section_id from section
@@ -269,4 +269,10 @@
         update xlevelservice set zt=2 where id=#{id}
     </update>
 
+    <select id="selectXlevelservice" resultMap="BaseResultMap">
+      select  x.id, x.callsign, x.place, x.suboffice_id, x.number, x.section_id, x.ondutytime, x.location, x.hierarchy, x.conment,x.state,x.zt
+      from xlevelservice  x
+      join sptype s on x.state=s.lx
+     where s.yxzt=1 and x.zt=1 and lx =#{type}
+    </select>
 </mapper>

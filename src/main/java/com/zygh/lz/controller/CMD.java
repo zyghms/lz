@@ -1,12 +1,16 @@
 package com.zygh.lz.controller;
 
 import com.google.gson.GsonBuilder;
-import com.zygh.lz.entity.Video;
 import com.zygh.lz.dao.VideoMapper;
+import com.zygh.lz.entity.Video;
+import com.zygh.lz.util.ViLog;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -23,7 +27,8 @@ public class CMD {
      * @return
      */
     @PostMapping("rtmp")
-    public String rtmp() {
+    @ViLog(logType = "6",module = "流媒体>PC端流媒体推流")
+    public String rtmp(HttpServletRequest request) {
         List<Video> list = videoMapper.selectAllVideode();
         System.out.println(list);
         System.out.println(list.size());
@@ -44,6 +49,7 @@ public class CMD {
                 String host = list.get(i).getHost();
                 streamClass = "ffmpeg -re  -rtsp_transport tcp -i rtsp://" + user + ":" + pass + "@" + ip + ":554/h264/ch1/main/av_stream -vcodec copy -acodec aac -ar 44100 -strict -2 -ac 1 -f flv -s 1920x1080 -q 10 -f flv rtmp://192.168.100.124:1935/live/" + host;
                 stdin.println("cd /d E:/RTMP/ffmpeg-20190312-d227ed5-win64-static/bin");
+                request.setAttribute("result",streamClass);
                 stdin.println(streamClass);
                 stdin.close();
             }
@@ -59,7 +65,8 @@ public class CMD {
      * @return
      */
     @GetMapping("host")
-    public String selectCMD() {
+    @ViLog(logType = "1",module = "流媒体>查询所有摄像头信息")
+    public String selectCMD(HttpServletRequest request) {
         List<Video> list = videoMapper.selectAllVideo();
         GsonBuilder gb = new GsonBuilder();
         gb.disableHtmlEscaping();
@@ -176,6 +183,9 @@ public class CMD {
 
 
     }*/
+
+
+
 
 }
 

@@ -1,13 +1,14 @@
 package com.zygh.lz.controller;
 
 import com.google.gson.GsonBuilder;
-import com.zygh.lz.entity.Basic;
 import com.zygh.lz.dao.BasicMapper;
+import com.zygh.lz.entity.Basic;
+import com.zygh.lz.util.ViLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -28,16 +29,15 @@ public class BasicController {
     /**
      * 查询所有基础设施
      *
-     * @param response
+     * @param request
      * @return java.lang.String
      * @author 研发部
      * @date 2018/11/21 14:25
      */
 
     @RequestMapping(value = "/selectAll")
-    public String selectAsset(HttpServletResponse response) {
-        //解决跨域问题
-        response.setHeader("Access-Control-Allow-Origin", "*");
+    @ViLog(logType = "1",module = "基础设施>查询所有基础设施")
+    public String selectAsset(HttpServletRequest request) {
         List<Basic> basicList = basicMapper.selectAll();
         GsonBuilder gb = new GsonBuilder();
         gb.disableHtmlEscaping();

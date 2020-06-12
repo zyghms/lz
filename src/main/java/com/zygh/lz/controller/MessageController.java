@@ -2,11 +2,14 @@ package com.zygh.lz.controller;
 
 import com.zygh.lz.entity.Message;
 import com.zygh.lz.service.MessageService;
+import com.zygh.lz.util.ViLog;
 import com.zygh.lz.vo.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class MessageController {
@@ -15,28 +18,38 @@ public class MessageController {
 
     //查询所有消息列表
     @GetMapping("slectAllmessage")
-    public ResultBean slectAllmessage(Integer messageState,Integer accpetId){
+    @ViLog(logType = "1",module = "消息列表>查询所有消息列表")
+    public ResultBean slectAllmessage(Integer messageState, Integer accpetId, HttpServletRequest request){
+        //request.setAttribute("result",messageService.slectAllmessage(messageState,accpetId));
         return messageService.slectAllmessage(messageState,accpetId);
     }
 
     //新增消息
     @PostMapping("addMessage")
-    public ResultBean addMessage(Message message){
+    @ViLog(logType = "2",module = "消息列表>新增消息")
+    public ResultBean addMessage(Message message, HttpServletRequest request){
+        //request.setAttribute("result",messageService.addMessage(message));
         return messageService.addMessage(message);
     }
     //修改消息 (逻辑删除)
     @GetMapping("updaMessage")
-    public ResultBean updaMessage(Message message){
+    @ViLog(logType = "3",module = "消息列表>修改消息")
+    public ResultBean updaMessage(Message message, HttpServletRequest request){
+        //request.setAttribute("result",messageService.updaMessage(message));
         return messageService.updaMessage(message);
     }
     //删除
     @GetMapping("delMessage")
-    public ResultBean delMessage(Integer id){
+    @ViLog(logType = "4",module = "消息列表>删除消息")
+    public ResultBean delMessage(Integer id, HttpServletRequest request){
+        //request.setAttribute("result",messageService.delMessage(id));
         return messageService.delMessage(id);
     }
     //与问题任务关联的消息
     @GetMapping("selectAllByPid")
-    public ResultBean selectAllByPid(Integer messagePid, Integer messageType){
+    @ViLog(logType = "1",module = "消息列表>查询与问题任务关联的消息")
+    public ResultBean selectAllByPid(Integer messagePid, Integer messageType, HttpServletRequest request){
+        //request.setAttribute("result",messageService.selectAllByPid(messagePid,messageType));
         return messageService.selectAllByPid(messagePid,messageType);
     }
 
