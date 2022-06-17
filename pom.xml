@@ -98,7 +98,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.6</version>
+            <version>1.2.83</version>
         </dependency>
         <dependency>
             <groupId>net.sf.json-lib</groupId>
@@ -178,12 +178,12 @@
         <!--<dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.12</version>
+            <version>1.2.83</version>
         </dependency>-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.12</version>
+            <version>1.2.83</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
